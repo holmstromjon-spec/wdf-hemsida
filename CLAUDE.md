@@ -52,7 +52,7 @@ uploads/            # rå WordPress-export – ENDAST källa, ignoreras av Git
 - `npm run import-images` plockar ut de bilder som används (listan finns i skriptet), skalar ner till högst 2000 px och skriver till `src/assets/images/<grupp>/`. Utgå alltid från originalet, aldrig från WP:s storleksvarianter.
 - Astros `<Image>` genererar WebP och responsiva storlekar när sajten byggs. Varje bild har en meningsfull `alt`-text.
 - Instruktörer utan foto (Sigge, Elvira, Tindra) visar loggan på röd botten. Lägg till `bild:` i deras `.md` när foton finns.
-- Videon på startsidan (`2026/04/Strike-a-4.mp4`, 53 MB) används inte än: den behöver komprimeras (ffmpeg finns inte på datorn).
+- **Videon på startsidan är viktig för Jon.** Den ligger överst på startsidan, i full bredd och utan ljud, i loop, precis som på gamla sajten. Texten "WILSON DANCE FACTORY" är inbränd i videon. `npm run compress-video` gör `public/video/startsida-1920.mp4` (12 MB), `-1280.mp4` (6,6 MB) och en stillbild från originalet (53 MB) med `ffmpeg-static`. På mobil visas hela 16:9-bilden, så att texten inte klipps. Om användaren valt "minska rörelse" visas stillbilden, och det finns alltid en pausknapp.
 
 ## Design
 - Riktningen kommer från skillen `design-taste-frontend` (taste-skill, MIT, i `.claude/skills/`): **"Loud and flat"**, platta paneler i loggans röda (`#D60008`), svart och vitt. Panchang 700 (versaler) används för rubriker och Switzer för text. Riktningen sparas i `.taste-skill/direction.json` (committas inte).
@@ -91,7 +91,6 @@ Steg för steg för GitHub, Netlify, Resend och DNS finns i **`PUBLICERING.md`**
 2. **Trustindex:** skapa en widget på trustindex.io och klistra in ID:t i `site.yaml` → `trustindex_widget`. Tills dess visas en länk till Google-recensionerna.
 3. **Integritetspolicyn** (`src/texter/integritetspolicy.md`) är ett utkast med `[platshållare]`. Den ska granskas innan lansering. Köpvillkoren har också platshållare från gamla sajten ("[t.ex. 3 dagar]").
 4. **Cookies:** Google Maps (Kontakt) och Trustindex kan sätta cookies från tredje part. Avgör om vi behöver en banner, eller om kartan ska laddas först efter ett klick.
-5. **Video** på startsidan: komprimera `Strike-a-4.mp4` (eller hoppa över den).
 6. **Netlify:** koppla repot, peka domänen och kontrollera `sitemap-index.xml` i Google Search Console.
 
 ## Kontakt / fakta

@@ -20,7 +20,17 @@ const populara = (await getCollection('dansstilar'))
   title="Wilson Dance Factory"
   description="Wilson Dance Factory i Helsingborg är Skånes största dansskola. Danslektioner för alla åldrar från 2 år – hobby och tävlingsdans i över 20 dansstilar."
 >
-  <!-- Hero -->
+  <!-- The start page film, as on the old site. The wordmark is part of the video.
+       Made with `npm run compress-video` from uploads/2026/04/Strike-a-4.mp4. -->
+  <section class="film on-dark" aria-label="Film från Wilson Dance Factory">
+    <video autoplay muted loop playsinline preload="metadata" poster="/video/startsida-poster.jpg" data-film>
+      <source src="/video/startsida-1920.mp4" type="video/mp4" media="(min-width: 1300px)" />
+      <source src="/video/startsida-1280.mp4" type="video/mp4" />
+    </video>
+    <button class="film-toggle" type="button" data-film-toggle aria-label="Pausa filmen">❚❚</button>
+  </section>
+
+  <!-- Welcome -->
   <section class="hero photo-bg on-dark">
     <Image src={heroPhoto} alt="" widths={[800, 1400, 2000]} sizes="100vw" loading="eager" fetchpriority="high" class="bg photo" />
     <div class="container hero-inner">
@@ -123,8 +133,43 @@ const populara = (await getCollection('dansstilar'))
   </section>
 </BaseLayout>
 
+<script>
+  // Respect "reduce motion": show the still frame instead of playing. A pause button for everyone.
+  const film = document.querySelector<HTMLVideoElement>('[data-film]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-film-toggle]');
+  if (film && toggle) {
+    const set = (playing: boolean) => {
+      toggle.textContent = playing ? '❚❚' : '▶';
+      toggle.setAttribute('aria-label', playing ? 'Pausa filmen' : 'Spela filmen');
+    };
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      film.removeAttribute('autoplay');
+      film.pause();
+      set(false);
+    }
+    toggle.addEventListener('click', () => {
+      if (film.paused) film.play();
+      else film.pause();
+      set(!film.paused);
+    });
+  }
+</script>
+
 <style>
-  .hero { min-height: min(92svh, 52rem); display: grid; align-items: center; }
+  /* Phones show the whole 16:9 picture so the wordmark is never cut; larger screens fill the view. */
+  .film { position: relative; background: var(--dark); overflow: hidden; }
+  .film video { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+  @media (min-width: 48rem) {
+    .film video { aspect-ratio: auto; height: min(calc(100svh - 6rem), 56.25vw); }
+  }
+  .film-toggle {
+    position: absolute; right: var(--pad); bottom: 1rem; width: 2.5rem; height: 2.5rem;
+    display: grid; place-items: center; border: 1px solid rgb(255 255 255 / 0.5); border-radius: 50%;
+    background: rgb(32 31 31 / 0.4); color: var(--white); font-size: 0.75rem; cursor: pointer;
+  }
+  .film-toggle:hover { background: rgb(32 31 31 / 0.7); }
+
+  .hero { display: grid; align-items: center; }
   .hero-inner { padding-block: 5rem 9rem; }
   .hero-text { max-width: 38rem; display: grid; gap: 1rem; }
   .hero-text .sub { margin-top: 1.25rem; }
