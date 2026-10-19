@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import Reviews from '../components/Reviews.astro';
+import { site } from '../lib/data';
+import head from '../assets/images/miljo/miljo-1.jpg';
+import inside from '../assets/images/miljo/miljo-4.jpg';
+import { Image } from 'astro:assets';
+---
+
+<BaseLayout
+  title="Kontakt"
+  description="Kontakta Wilson Dance Factory: info@wilsondancefactory.se, 042-13 14 08, Kapplöpningsgatan 6 i Helsingborg."
+>
+  <PageHead lines={['Kontakta', 'oss']} image={head} imageAlt="Entrén till Wilson Dance Factory" />
+
+  <section class="on-red contact-rows" aria-labelledby="kontaktuppgifter">
+    <h2 id="kontaktuppgifter" class="visually-hidden">Kontaktuppgifter</h2>
+    <ul role="list" class="rows display">
+      <li><a href={`mailto:${site.epost}`}>{site.epost}</a></li>
+      <li><a href={site.telefon_href}>{site.telefon}</a></li>
+      <li><a href={site.google.vagbeskrivning} rel="noopener">{site.adress.gata}, {site.adress.postnummer} {site.adress.ort}</a></li>
+    </ul>
+    <p class="wrap note">({site.telefon_not})</p>
+  </section>
+
+  <section class="on-white section">
+    <div class="wrap contact-grid">
+      <div class="stack reveal">
+        <h2 class="display head">Följ oss</h2>
+        <p>Följ oss på sociala medier.</p>
+        <p class="links">
+          <a class="button" href={site.sociala.facebook} rel="noopener"><span>Facebook</span></a>
+          <a class="button" href={site.sociala.instagram} rel="noopener"><span>Instagram</span></a>
+        </p>
+        <h2 class="display head find">Hitta hit</h2>
+        <p>Vill du hitta till våra lokaler?</p>
+        <p><a class="text-link" href={site.google.vagbeskrivning} rel="noopener">Få vägbeskrivning <span class="arrow" aria-hidden="true"></span></a></p>
+        <dl class="hours">
+          {site.oppettider.map((o) => <div><dt>{o.dag}</dt><dd class="tabular">{o.tid}</dd></div>)}
+        </dl>
+        <Image src={inside} alt="Lokalerna hos Wilson Dance Factory" widths={[400, 700]} sizes="(min-width: 60rem) 30vw, 90vw" class="photo inside" />
+      </div>
+      <div class="map">
+        <iframe
+          title="Karta: Kapplöpningsgatan 6, Helsingborg"
+          src={site.google.karta_embed}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <Reviews />
+</BaseLayout>
+
+<style>
+  .contact-rows { padding-block: 0 2rem; }
+  .rows li {
+    display: flex; align-items: flex-end; min-height: clamp(4.5rem, 3rem + 5vw, 8.5rem);
+    padding: 0 var(--margin) 1rem;
+    font-size: clamp(1rem, 0.3rem + 3.2vw, 3.75rem); line-height: 1.05;
+    overflow-wrap: anywhere;
+  }
+  .rows li:nth-child(even) { background: var(--red-deep); }
+  .rows a { text-decoration: none; }
+  .rows a:hover { color: var(--black); }
+  .note { margin-top: 1rem; }
+  .contact-grid { display: grid; gap: 3rem; }
+  .links { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .find { margin-top: 5rem; }
+  .hours { margin-top: 1rem; }
+  .hours div { display: flex; justify-content: space-between; max-width: 22rem; gap: 1rem; }
+  .inside { aspect-ratio: 3 / 2; margin-top: 2rem; max-width: 28rem; }
+  .map { min-height: 24rem; background: var(--paper-deep); }
+  .map iframe { width: 100%; height: 100%; min-height: 24rem; border: 0; display: block; }
+  @media (min-width: 60rem) { .contact-grid { grid-template-columns: 5fr 7fr; } }
+</style>

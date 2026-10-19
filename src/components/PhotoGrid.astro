@@ -1,0 +1,86 @@
+---
+// A grid of photographs. Each thumbnail links to a large version; with JavaScript the
+// large version opens in a lightbox (arrow keys, Esc) instead of a new page.
+import { Image, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  photos: { src: ImageMetadata; alt: string }[];
+  id: string;
+}
+const { photos, id } = Astro.props;
+const large = await Promise.all(photos.map((p) => getImage({ src: p.src, width: 2000, format: 'webp' })));
+---
+
+<ul role="list" class="photo-grid reveal" data-lightbox={id}>
+  {photos.map((p, i) => (
+    <li class:list={[{ wide: i % 7 === 0 }]}>
+      <a href={large[i]!.src} data-index={i}>
+        <Image src={p.src} alt={p.alt} widths={[400, 700, 1000]} sizes="(min-width: 60rem) 30vw, 50vw" class="photo" />
+      </a>
+    </li>
+  ))}
+</ul>
+
+<dialog class="lightbox" data-lightbox-dialog={id} aria-label="Bildvisning">
+  <img alt="" />
+  <p class="lb-caption small"></p>
+  <div class="lb-controls">
+    <button type="button" data-lb="prev">← Föregående</button>
+    <button type="button" data-lb="close">Stäng</button>
+    <button type="button" data-lb="next">Nästa →</button>
+  </div>
+</dialog>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-lightbox]').forEach((grid) => {
+    const dialog = document.querySelector<HTMLDialogElement>(`[data-lightbox-dialog="${grid.dataset.lightbox}"]`);
+    if (!dialog) return;
+    const img = dialog.querySelector('img')!;
+    const caption = dialog.querySelector('.lb-caption')!;
+    const links = [...grid.querySelectorAll<HTMLAnchorElement>('a[data-index]')];
+    let current = 0;
+    const show = (i: number) => {
+      current = (i + links.length) % links.length;
+      const thumb = links[current]!.querySelector('img')!;
+      img.src = links[current]!.href;
+      img.alt = thumb.alt;
+      caption.textContent = `${thumb.alt} (${current + 1}/${links.length})`;
+    };
+    links.forEach((a, i) =>
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        show(i);
+        dialog.showModal();
+      }),
+    );
+    dialog.addEventListener('click', (e) => {
+      const action = (e.target as HTMLElement).dataset.lb;
+      if (action === 'prev') show(current - 1);
+      if (action === 'next') show(current + 1);
+      if (action === 'close' || e.target === dialog) dialog.close();
+    });
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(current - 1);
+      if (e.key === 'ArrowRight') show(current + 1);
+    });
+  });
+</script>
+
+<style>
+  .photo-grid { display: grid; gap: 0.75rem; grid-template-columns: repeat(2, 1fr); }
+  .photo-grid a { display: block; overflow: hidden; }
+  .photo-grid :global(img) { aspect-ratio: 1; transition: scale 400ms var(--ease-out); }
+  .photo-grid a:hover :global(img) { scale: 1.04; }
+  .photo-grid .wide { grid-column: span 2; }
+  .photo-grid .wide :global(img) { aspect-ratio: 2 / 1; }
+  @media (min-width: 60rem) { .photo-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .lightbox { max-width: 96vw; max-height: 96svh; padding: 0; border: 0; background: var(--black); color: var(--white); }
+  .lightbox::backdrop { background: rgb(17 17 17 / 0.9); }
+  .lightbox img { max-width: 96vw; max-height: 80svh; width: auto; margin: 0 auto; }
+  .lb-caption { padding: 0.75rem 1rem 0; }
+  .lb-controls { display: flex; justify-content: space-between; gap: 0.5rem; padding: 0.75rem 1rem 1rem; }
+  .lb-controls button { min-height: 2.75rem; padding: 0 1rem; border: 0; background: var(--white); color: var(--black); font-weight: 500; cursor: pointer; }
+  .lb-controls button:hover { background: var(--red); color: var(--white); }
+</style>

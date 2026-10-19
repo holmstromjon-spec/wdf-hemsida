@@ -1,0 +1,36 @@
+---
+// "Vi vill veta vad du tycker om oss!" + Google reviews via Trustindex.
+// Trustindex is only loaded on the pages that include this component.
+import { Image } from 'astro:assets';
+import { site } from '../lib/data';
+import photo from '../assets/images/miljo/miljo-8.jpg';
+---
+
+<section class="reviews on-white section" aria-labelledby="reviews-title">
+  <div class="wrap reviews-grid">
+    <div class="reveal stack">
+      <h2 id="reviews-title" class="display head">Tyck till</h2>
+      <p class="lead">Vi vill veta vad du tycker om oss!</p>
+      <p>På Wilson Dance Factory är vi väldigt lyhörda och uppskattar alltid möjligheten att kunna förbättra vår verksamhet. Det gör vi bäst genom att lyssna noga på vad våra medlemmar och besökare tycker om oss.</p>
+      <p><a class="button" href={site.google.recension} rel="noopener"><span>Lämna en Google Review</span> <span class="arrow" aria-hidden="true"></span></a></p>
+      <Image src={photo} alt="Lounge hos Wilson Dance Factory" widths={[400, 700]} sizes="(min-width: 60rem) 30vw, 90vw" class="photo reviews-photo tilt-l" />
+    </div>
+    <div class="reviews-widget">
+      <h3 class="display reviews-sub">Se vad andra tycker om oss</h3>
+      {site.trustindex_widget ? (
+        <script defer async src={`https://cdn.trustindex.io/loader.js?${site.trustindex_widget}`}></script>
+      ) : (
+        <p><a class="text-link" href={site.google.recension} rel="noopener">Läs våra recensioner på Google <span class="arrow" aria-hidden="true"></span></a></p>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .reviews-grid { display: grid; gap: 3rem; }
+  .reviews-photo { aspect-ratio: 3 / 2; max-width: 26rem; margin-top: 2rem; }
+  .reviews-sub { font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem); margin-bottom: 1.5rem; }
+  @media (min-width: 60rem) {
+    .reviews-grid { grid-template-columns: 5fr 7fr; align-items: start; }
+  }
+</style>

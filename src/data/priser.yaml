@@ -1,0 +1,36 @@
+# Prislista på /priser/. Ändra pris här – sidan uppdateras automatiskt.
+kurser:
+  intro: "Angivet pris gäller för en hel termin på antingen 12 eller 14 veckor. Priser för tävlingsklasser hittar ni under anmälan. (Tävlingsklasserna är 16 veckor med undantag för gruppklasser som är 14 veckor)"
+  rader:
+    - { namn: "Dansmix (2-3 år)", pris: "1450 kr", info: En termin avser 14 veckor }
+    - { namn: "Dans (4-6 år)", pris: "från 1450 kr", info: En termin avser 14 veckor }
+    - { namn: "Dans (7-9 år)", pris: "från 1500 kr", info: En termin avser 14 veckor }
+    - { namn: "Dans (10-13 år)", pris: "från 1560 kr", info: En termin avser 14 veckor }
+    - { namn: "Dans för ungdom (14+ )", pris: "Från 1720 kr", info: En termin avser 14 veckor }
+    - { namn: Dans för vuxna, pris: "Från 1700 kr", info: En termin avser 14 veckor }
+    - { namn: "10-Klippkort 6 månader, Vuxen", pris: "Från 1300 kr", info: Avser alla kurser utom Sällskapsdans och Bugg }
+    - { namn: "15-Klippkort, 12 månader Vuxen", pris: "Från 1950 kr", info: Avser alla kurser utom Sällskapsdans och Bugg }
+    - { namn: Terminskort, pris: "8450 kr", info: "Kurser som inte igår i TK är markerade under \"Anmälan\"" }
+
+presentkort:
+  intro: "Presentkort kan användas till kurseavgifter, events, läger samt i vår webbshop. Alla presentkort har 1 års giltighet från köpsdatum."
+  rader:
+    - { namn: Large, pris: "1000 kr", info: 1 års giltighet från köpsdatum. }
+    - { namn: Medium, pris: "750 kr", info: 1 års giltighet från köpsdatum. }
+    - { namn: Small, pris: "500 kr", info: 1 års giltighet från köpsdatum. }
+    - { namn: Valfri summa, pris: "??? kr", info: 1 års giltighet från köpsdatum. }
+
+# Villkorstexten under "Information" på /priser/.
+information:
+  - rubrik: Sjukdom
+    text: "Om du avbryter din kurs p.g.a. sjukdom, skada eller flytt skall du omedelbart meddela WDF detta skriftligt via e-post. Läkarintyg skall vara WDF tillhanda inom två veckor från att du meddelat att du avbryter kursen. Återbetalning sker för de gånger som återstår av kursen från och med att du meddelat oss på WDF. WDF tar ut en administrationsavgift på 100:- för att göra återbetalningen."
+  - rubrik: Abryta dansklass
+    text: "Vid avbrott av dansklass efter 3 veckor (från kursstarts vecka) utan sjukdom/skada/flytt, sker ingen återbetalning.\n\nVid avanmälan vid Event/Workshop/Läger ska detta ske senast 72h innan kursdag, för återbetalning. Vid sen avanmälan erbjuds inte återbetalning."
+  - rubrik: Ångerrätt
+    text: "En anmälan är bindande om den inte återtas enligt reglerna om ångerrätten. Ångerrätten innebär att deltagaren har full ångerrätt i 14 dagar efter att deltagagaren har mottagit antagningsbeskedet till den anmälda kursen. För att ångarea köpet skickar deltagaren ett mail till info@wilsondancefactory.se inom 14 dagar från det att deltagaren fått antagningsbeskedet från Wilson Dance Factory. Om kursen har startat och deltagaren har deltagit vid ett kurstillfälle har deltagaren accepterat att avstå sin ångerrätt."
+  - rubrik: Anmälan
+    text: "Man kan anmäla sig till en kurs fram till och med 3e kursveckan vid var termin, önskar man anmäla sig efter den 3:e veckan ska man kontakta kontoret på: info@wilsondancefactory.se"
+  - rubrik: Ändringar
+    text: "WDF förbehåller sig rätten till ev. ändringar i kursschemat både innan kursstart, men även under terminens gång."
+  - rubrik: Presentkort
+    text: "Alla våra presentkort har 1 års giltighet från och med köpesdatum. Det går även bra att använda dem i vår webbshop."

@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import ScheduleGroups from '../components/ScheduleGroups.astro';
+import { schema, termin } from '../lib/data';
+import PhotoBand from '../components/PhotoBand.astro';
+import head from '../assets/images/galleri/dsc03371.jpg';
+import b1 from '../assets/images/galleri/dsc02991.jpg';
+import b2 from '../assets/images/galleri/dsc03607.jpg';
+import b3 from '../assets/images/galleri/dsc04429.jpg';
+---
+
+<BaseLayout
+  title="Schema"
+  description="Veckoschema och tävlingsschema för Wilson Dance Factory i Helsingborg – barndans, dans för 6–13 år, 14+ och vuxna, pardans, breakdance och tävlingsklasser."
+>
+  <PageHead lines={['Schema']} ground="red" image={head} imageAlt="Dansare från Wilson Dance Factory på scen">
+    <div class="term">
+      <p class="display term-title">{termin.rubrik}</p>
+      {termin.notis && <p>{termin.notis}</p>}
+      {termin.punkter.map((p) => <p>{p}</p>)}
+      <dl class="term-dates">
+        {termin.datum.map((d) => <div><dt>{d.etikett}</dt><dd class="display">{d.varde}</dd></div>)}
+      </dl>
+    </div>
+  </PageHead>
+
+  <section class="book on-black">
+    <div class="wrap book-grid">
+      <h2 class="display book-h">Anmälan till våra kurser görs här</h2>
+      <p>{termin.anmalan_text}</p>
+      <a class="button" href="/anmalan/"><span>Gå till anmälan</span> <span class="arrow" aria-hidden="true"></span></a>
+    </div>
+  </section>
+
+  <section class="on-paper section" aria-labelledby="vecka">
+    <div class="wrap">
+      <h2 id="vecka" class="display head">Schema</h2>
+      <p class="lead intro">{schema.veckoschema.intro}</p>
+      <ScheduleGroups grupper={schema.veckoschema.grupper} />
+    </div>
+  </section>
+
+  <PhotoBand photos={[b1, b2, b3]} ground="red" alt="Tävlingsdansare från Wilson Dance Factory på scen" />
+
+  <section id="tavlingsschema" class="on-white section" aria-labelledby="tavling">
+    <div class="wrap">
+      <h2 id="tavling" class="display head" style="--w:15">Tävlingsschema</h2>
+      <p class="lead intro">{schema.tavlingsschema.intro}</p>
+      <ScheduleGroups grupper={schema.tavlingsschema.grupper} />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .term { display: grid; gap: 0.5rem; }
+  .term-title { font-size: clamp(1.25rem, 1rem + 1.2vw, 2rem); margin-bottom: 0.5rem; }
+  .term-dates { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 0.5rem 2.5rem; margin-top: 1.25rem; }
+  .term-dates dd { margin: 0; font-size: clamp(1rem, 0.9rem + 0.6vw, 1.375rem); }
+  .book { padding-block: 2.5rem; }
+  .book-grid { display: grid; gap: 1.25rem; align-items: center; }
+  .book-h { font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem); line-height: 1.05; }
+  @media (min-width: 60rem) { .book-grid { grid-template-columns: 4fr 5fr auto; gap: 3rem; } }
+  .intro { margin: 1rem 0 3rem; max-width: 46ch; }
+  #tavlingsschema { scroll-margin-top: 0; }
+</style>

@@ -1,0 +1,23 @@
+# Raw WordPress export – source only, never committed
+/uploads/
+
+# Dependencies and build output
+node_modules/
+dist/
+.astro/
+.netlify/
+
+# taste-skill working files
+.taste-skill/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/*
+!.vscode/extensions.json

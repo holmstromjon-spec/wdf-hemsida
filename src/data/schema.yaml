@@ -1,0 +1,197 @@
+# Veckoschema och tävlingsschema på /schema/.
+# Struktur: grupp → dagar → pass (tid + klass). Texten är kopierad som den står på gamla sajten.
+
+veckoschema:
+  intro: Detta är vårt ordinarie veckoschema och det gäller varje vecka under hela terminen
+  grupper:
+    - namn: Barndans 2-5 års
+      dagar:
+        - dag: Måndagar
+          pass:
+            - { tid: "16.00-16:30", klass: Dansmix 2-3 år }
+            - { tid: "16.35-17.15", klass: Dansmix 4-5 år }
+        - dag: Torsdagar
+          pass:
+            - { tid: "16.15-16.45", klass: Dansmix 2-3 år }
+            - { tid: "16.45-17.25", klass: Dansmix 4-5 år }
+        - dag: Lördagar
+          pass:
+            - { tid: "10.05-10.35", klass: Dansmix 2-3 år }
+            - { tid: "10.40-11.20", klass: Dansmix 4-5 år }
+        - dag: Söndagar
+          pass:
+            - { tid: "10.00-10.30", klass: Dansmix 2-3 }
+            - { tid: "10.35-11.15", klass: Dansmix 4-5 }
+            - { tid: "11.20-12.00", klass: Dansmix 4-5 }
+    - namn: Dans för 6 år
+      dagar:
+        - dag: Måndag
+          pass:
+            - { tid: "17.15-17.55", klass: Disco 6 år }
+            - { tid: "16.45-17.25", klass: Hiphop 6 år }
+        - dag: Lördagar
+          pass:
+            - { tid: "11.30-12.10", klass: Dansmix 6 år }
+        - dag: Söndagar
+          pass:
+            - { tid: "12.00-12.40", klass: Dansmix 6 år }
+            - { tid: "11.35-12.15", klass: Boys Only 6 år nyb }
+    - namn: Dans 7-9 år
+      dagar:
+        - dag: Tisdagar
+          pass:
+            - { tid: "17.15-18.00", klass: TikTok 7-9 }
+            - { tid: "17.30-18.15", klass: Hiphop 7-9 år Nyb./Forts }
+        - dag: Onsdagar
+          pass:
+            - { tid: "17.15-18.00", klass: Disco Nyb/Forts 7-9 år }
+        - dag: Torsdagar
+          pass:
+            - { tid: "17.45-18.30", klass: Boys Only 7-9 Nybörjare }
+        - dag: Lördagar
+          pass:
+            - { tid: "12.15-13.00", klass: Disco/Hiphop 7-9 år }
+        - dag: Söndagar
+          pass:
+            - { tid: "10.00-10.45", klass: Disco/Hiphop 7-9 år }
+            - { tid: "11.00-11.45", klass: Show 7-9 år }
+            - { tid: "12.15-13.00", klass: Boys Only 7-9 år forts }
+            - { tid: "13.00-13.45", klass: Boys Only Nyb 7-9 år }
+            - { tid: "12.45-13.30", klass: Balett 7-9 år nyb/forts }
+    - namn: Dans 10-13 år
+      dagar:
+        - dag: Måndagar
+          pass:
+            - { tid: "18.00-18.45", klass: Hiphop 10-13 år Forts. 2/Avc }
+            - { tid: "18.45-19.30", klass: Commercial HH 10-13 Forts. 1 }
+        - dag: Tisdagar
+          pass:
+            - { tid: "16.30-17.15", klass: TikTok 10-13 }
+            - { tid: "18.15-19.00", klass: Hiphop 10-13 år Nyb/forts 1 }
+            - { tid: "19.15-20.00", klass: Commercial Hiphop 10-13 Nyb. }
+            - { tid: "18.00-18.45", klass: Dancehall Open Level 10-13 år }
+            - { tid: "18.45-19.30", klass: Commercial Hiphop 10-13 Forts. 2 }
+        - dag: Onsdagar
+          pass:
+            - { tid: "16.30-17.15", klass: Disco Nyb/Forts 10-13 år }
+            - { tid: "18.15-19.15", klass: Modern/Jazz 10-13 Nyb. }
+        - dag: Torsdagar
+          pass:
+            - { tid: "17.30-18.30", klass: Modern/Jazz 10-13 forts. }
+        - dag: Söndagar
+          pass:
+            - { tid: "10.45-11.30", klass: Disco/Hiphop 10-13 år }
+            - { tid: "11.45-12.30", klass: Show 10-13 år }
+            - { tid: "13.30-14.30", klass: Balett 10-13 år Nyb/Forts }
+            - { tid: "13.45-14.45", klass: Boys Only 10-13 år Forts. }
+    - namn: Dans för 14+ & Vuxna
+      dagar:
+        - dag: Måndagar
+          pass:
+            - { tid: "19.30-20.30", klass: Dancehall VUX Open Level }
+            - { tid: "20.30-21.30", klass: Hiphop Vuxna Open Level }
+        - dag: Tisdagar
+          pass:
+            - { tid: "20.00-20.45", klass: Comm Hiphop 14+/vux Nyb/Forts. 1 }
+            - { tid: "19.35-20.20", klass: Commercial Hiphop 14+ Forts. 2 }
+            - { tid: "20.20-21.20", klass: Dancehall 14+ }
+        - dag: Onsdagar
+          pass:
+            - { tid: "19.15-20.15", klass: Modern/Jaxx 14+/Vux Nyb. }
+            - { tid: "20.15-21.15", klass: Balett 14 +/Vux Nyb.. }
+            - { tid: "20.35-21.35", klass: Commercial Hiphop 14+ Avc. }
+        - dag: Torsdagar
+          pass:
+            - { tid: "18.30-19.30", klass: Modern/Jazz 14+/Vux forts. }
+            - { tid: "19.45-20.45", klass: Balett 14+/Vux forts }
+            - { tid: "20.45-21.15", klass: Tåspets }
+        - dag: Söndagar
+          pass:
+            - { tid: "15.00-16.00", klass: Jumps & Turns }
+            - { tid: "16.00-16.45", klass: Stretch & Strength }
+    - namn: Pardans/Bugg/Salsa/Bachata
+      dagar:
+        - dag: Söndagar
+          pass:
+            - { tid: "16.10-16.55", klass: Foxtrot & Cha cha cha Nyb 8vka }
+            - { tid: "18.00-18.45", klass: Bugg Nyb. }
+            - { tid: "18.45-19.30", klass: Bugg Övade 1 }
+            - { tid: "19.30-20.15", klass: Bugg fri träning öppet nivå }
+    - namn: Breakdance
+      dagar:
+        - dag: Söndagar
+          pass:
+            - { tid: "13.00-13.45", klass: Breakdance Nyb (12v) }
+            - { tid: "13.50-14.35", klass: Powermoves (12v) }
+            - { tid: "14.40-15.25", klass: Breakdance forts (12v) }
+
+tavlingsschema:
+  intro: Detta är vårt tävlingsveckoschema och det gäller alla veckor mellan vecka 34 och vecka 50.
+  grupper:
+    - namn: Hip Hop
+      dagar:
+        - dag: Måndagar
+          pass:
+            - { tid: "16.45-17.30", klass: MiniBeatz }
+            - { tid: "17.25-18.25", klass: Hiphop Brons-Guld MK-B4 }
+            - { tid: "17.30-18.15", klass: Hiphop Grupp }
+            - { tid: "18.30-19.15", klass: Hiphop Duo Brons-Guld }
+            - { tid: "19.30-20.30", klass: Hiphop Brons-Guld Junior }
+        - dag: Onsdagar
+          pass:
+            - { tid: "16.45-17.30", klass: ICONIC }
+            - { tid: "17.30-18.30", klass: Hiphop Mini Kids-Barn 4 }
+            - { tid: "18.45-19.45", klass: Star-Champion }
+            - { tid: "19.45-20.30", klass: Hiphop Champion }
+        - dag: Torsdagar
+          pass:
+            - { tid: "16.30-17.30", klass: Hiphop Friträning }
+            - { tid: "16.45-17.45", klass: Brons-Star Jun/Ung/Vux }
+            - { tid: "17.45-18.30", klass: Hiphop Duo SS-Champ }
+            - { tid: "18.30-19.45", klass: Battle Korr+Coach }
+            - { tid: "19.45-20.45", klass: Hiphop Superstar-Champion }
+    - namn: Disco
+      dagar:
+        - dag: Måndagar
+          pass:
+            - { tid: "18.30-19.30", klass: Disco Star-Champion }
+            - { tid: "19.30-20.15", klass: Slow Grupp 2 }
+            - { tid: "20.15-21.00", klass: WDF Infinity }
+        - dag: Tisdagar
+          pass:
+            - { tid: "16.30-17.15", klass: Disco Nya Tävling }
+            - { tid: "17.15-18.00", klass: WDF Cosmos }
+            - { tid: "18.00-19.00", klass: Disco Brons-Guld ALLA }
+            - { tid: "19.00-19.30", klass: Teknik Brons-Guld }
+            - { tid: "19.30-20.15", klass: Disco Duo Brons-Guld }
+        - dag: Onsdagar
+          pass:
+            - { tid: "18.45-19.30", klass: Disco Duo Star-Champion }
+            - { tid: "19.30-20.30", klass: Disco Star-Champion }
+        - dag: Torsdagar
+          pass:
+            - { tid: "19.00-20.00", klass: Disco Star-Champion }
+            - { tid: "20.00-21.00", klass: Disco Superstar-Champion }
+        - dag: Lördagar
+          pass:
+            - { tid: "10.00-12.00", klass: Friträning (14v) }
+        - dag: Söndagar
+          pass:
+            - { tid: "15.00-16.00", klass: Jumps & Turns }
+            - { tid: "16.00-16.45", klass: Stretch & Strength }
+            - { tid: "14.45-16.00", klass: Disco Friträning }
+            - { tid: "17.00-18.00", klass: WDF Dazzle & WDF Ignite }
+            - { tid: "18.00-19.00", klass: Disco Brons-Guld alla }
+            - { tid: "19.00-19.45", klass: Slow Grupp 1 }
+            - { tid: "19.45-20.30", klass: WDF Diamond }
+    - namn: Performing Arts
+      dagar:
+        - dag: Onsdagar
+          pass:
+            - { tid: "16.30-17.15", klass: P.A Friträning 14vka }
+            - { tid: "17.15-18.15", klass: P.A Tävling teknik }
+        - dag: Söndagar
+          pass:
+            - { tid: "15.00-16.00", klass: Jumps & Turns }
+            - { tid: "16.00-16.45", klass: Stretch & Strength }
+            - { tid: "17.00-18.00", klass: P.A tävling Koreografi/Coach }

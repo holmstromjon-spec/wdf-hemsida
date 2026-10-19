@@ -1,0 +1,94 @@
+---
+import { Image } from 'astro:assets';
+import photo from '../assets/images/galleri/dsc04271.jpg';
+import { nav } from '../lib/nav';
+import { site } from '../lib/data';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer on-black">
+  <div class="footer-photo">
+    <Image src={photo} alt="Dansare från Wilson Dance Factory på scen" widths={[640, 960, 1400]} sizes="(min-width: 60rem) 50vw, 100vw" class="photo" />
+  </div>
+
+  <div class="footer-body">
+    <p class="display footer-mark">Wilson Dance Factory</p>
+
+    <nav aria-label="Sidfot">
+      <ul role="list" class="footer-menu">
+        {nav.map((item) => (
+          <li><a href={item.href}>{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <blockquote class="footer-quote">
+      <p>”{site.citat.text}”</p>
+      <footer class="small muted">– {site.citat.namn}, {site.citat.titel}</footer>
+    </blockquote>
+
+    <div class="footer-cols">
+      <div>
+        <h2 class="footer-h">Kontakta oss</h2>
+        <p>
+          <a href={`mailto:${site.epost}`}>{site.epost}</a><br />
+          <a href={site.telefon_href}>{site.telefon}</a><br />
+          <a href={site.google.vagbeskrivning} rel="noopener">{site.adress.gata}<br />{site.adress.postnummer} {site.adress.ort}</a>
+        </p>
+        <p class="footer-social">
+          <a href={site.sociala.facebook} rel="noopener">Facebook</a>
+          <a href={site.sociala.instagram} rel="noopener">Instagram</a>
+        </p>
+      </div>
+      <div>
+        <h2 class="footer-h">Våra öppettider</h2>
+        <dl class="hours">
+          {site.oppettider.map((o) => (
+            <div><dt>{o.dag}</dt><dd>{o.tid}</dd></div>
+          ))}
+        </dl>
+        <p><a class="text-link" href="/shop/">Vår butik <span class="arrow"></span></a></p>
+      </div>
+    </div>
+
+    <p class="legal small muted">
+      © {year} {site.namn} · Org.nr {site.orgnr} ·
+      <a href="/kopvillkor/">Köpvillkor</a> ·
+      <a href="/integritetspolicy/">Integritetspolicy</a>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer { display: grid; }
+  .footer-photo { height: 50svh; overflow: hidden; }
+  .footer-body { padding: 3rem var(--margin) 2rem; display: grid; gap: 2.5rem; align-content: start; }
+  .footer-mark { font-size: 0.875rem; }
+  .footer-menu { display: grid; gap: 0.5rem; }
+  .footer-menu a {
+    font-family: var(--font-display); text-transform: uppercase; text-decoration: none;
+    font-size: clamp(1.375rem, 1rem + 1.6vw, 2.25rem); line-height: 1.1;
+    display: inline-block; transition: transform 200ms var(--ease-out), color 200ms;
+  }
+  .footer-menu:hover a { color: var(--muted); }
+  .footer-menu a:hover { color: var(--white); transform: translateX(12px); }
+  .footer-quote { max-width: 46ch; font-size: var(--step-body); }
+  .footer-quote p { margin-bottom: 0.5rem; }
+  .footer-cols { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+  .footer-cols p + p { margin-top: 1rem; }
+  .footer-h { font-size: var(--step-body); font-weight: 500; margin-bottom: 0.75rem; padding-left: 0.75rem; box-shadow: inset 4px 0 0 var(--red); }
+  .footer-cols a { text-decoration: none; }
+  .footer-cols a:hover { text-decoration: underline; }
+  .footer-social { display: flex; gap: 1.25rem; }
+  .hours div { display: flex; justify-content: space-between; gap: 1rem; max-width: 20rem; }
+  .hours dd { font-variant-numeric: tabular-nums; }
+  .legal a { color: inherit; }
+
+  @media (min-width: 60rem) {
+    .site-footer { grid-template-columns: 1fr 1fr; min-height: 100svh; }
+    .footer-photo { height: auto; }
+    .footer-body { padding: 5rem var(--margin) 2rem; }
+    .legal { align-self: end; }
+  }
+</style>

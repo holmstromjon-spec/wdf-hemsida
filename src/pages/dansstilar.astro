@@ -1,0 +1,69 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import head from '../assets/images/galleri/dsc03680.jpg';
+
+const stilar = (await getCollection('dansstilar', (d) => d.data.visa_pa_dansstilar)).sort(
+  (a, b) => a.data.ordning - b.data.ordning,
+);
+const rendered = await Promise.all(stilar.map(async (s) => ({ ...s, Content: (await render(s)).Content })));
+---
+
+<BaseLayout
+  title="Våra dansstilar"
+  description="Över 20 dansstilar på Wilson Dance Factory i Helsingborg: barndans, dansmix, balett, TikTok, Boys Only, show, breakdance, disco, hiphop, jazz & modernt och mer."
+>
+  <PageHead
+    lines={['Våra', 'dansstilar']}
+    lead="Vi på Wilson Dance Factory har en stor passion för dans och ett väldigt brett spektrum när det kommer till olika dansstilar. Du kommer garanterat att hitta en stil som passar dig om du väljer att dansa med oss."
+    image={head}
+    imageAlt="Dansare från Wilson Dance Factory på scen"
+  />
+
+  <section class="styles on-paper section" aria-labelledby="styles-title">
+    <div class="wrap styles-title">
+      <h2 id="styles-title" class="display head">Alla stilar</h2>
+      <p class="lead">Vi erbjuder ett stort sortiment av dans.</p>
+    </div>
+    <ul role="list" class="style-list">
+      {rendered.map((s, i) => (
+        <li id={s.id} class:list={['style', i % 3 === 0 ? 'on-white' : i % 3 === 1 ? 'on-black' : 'on-red', { 'no-photo': !s.data.bild }]}>
+          {s.data.bild && (
+            <div class="style-photo">
+              <Image src={s.data.bild} alt={`${s.data.namn} – Wilson Dance Factory`} widths={[360, 600]} sizes="(min-width: 60rem) 22vw, 40vw" class="photo" />
+            </div>
+          )}
+          <div class="style-text reveal">
+            <h3 class="display style-name">{s.data.namn}</h3>
+            <div class="stack"><s.Content /></div>
+            <p><a class="text-link" href="/anmalan/">Boka kurs <span class="arrow" aria-hidden="true"></span></a></p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .styles { padding-bottom: 0; }
+  .styles-title { margin-bottom: 3rem; display: grid; gap: 1rem; }
+  .style {
+    display: grid;
+    gap: 1.5rem;
+    padding: clamp(2rem, 1.5rem + 2vw, 3.5rem) var(--margin);
+    scroll-margin-top: 1rem;
+  }
+  .style-photo { width: min(60vw, 18rem); }
+  .style-photo :global(img) { aspect-ratio: 1; }
+  .style-text { display: grid; gap: 1rem; align-content: center; max-width: 46rem; }
+  .style-name { font-size: clamp(1.75rem, 1rem + 3.2vw, 4rem); line-height: 0.95; }
+  @media (min-width: 48rem) {
+    .style { grid-template-columns: minmax(12rem, 22vw) 1fr; gap: var(--gap) 4vw; align-items: center; }
+    .style-photo { width: 100%; }
+    .style:nth-child(even) { grid-template-columns: 1fr minmax(12rem, 22vw); }
+    .style:nth-child(even) .style-photo { order: 2; }
+    .style.no-photo { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,47 @@
+# Kontaktuppgifter, öppettider och länkar som visas i header, footer och på Kontakt.
+namn: Wilson Dance Factory
+orgnr: "559159-4873"
+epost: info@wilsondancefactory.se
+telefon: "042-13 14 08"
+telefon_href: "tel:+4642131408"
+telefon_not: "Begränsad telefontid under Juni, Juli & December"
+adress:
+  gata: Kapplöpningsgatan 6
+  postnummer: "252 30"
+  ort: Helsingborg
+swish: "123 453 16 04"
+
+sociala:
+  facebook: https://www.facebook.com/wilsondancefactoryhelsingborg
+  instagram: https://www.instagram.com/wilsondancefactory/
+
+google:
+  vagbeskrivning: "https://www.google.com/maps/place/Paa+Wilson+Dance+Center+AB/@56.0239839,12.7183512,17z/data=!4m6!3m5!1s0x46523236af9f662b:0x8537cb3c5b839370!8m2!3d56.0247688!4d12.7180124!16s%2Fg%2F1hc1dgc5p"
+  karta_embed: "https://maps.google.com/maps?q=Kappl%C3%B6pningsgatan%206%2C%20252%2030%20Helsingborg&t=m&z=15&output=embed&iwloc=near"
+  recension: "https://www.google.com/search?q=wilson+dance+factory#lrd=0x46523236af9f662b:0x8537cb3c5b839370,3,,,,"
+
+oppettider:
+  - dag: Mån–tors
+    tid: "15:30 – 21:00"
+  - dag: Fredag
+    tid: Endast bokningar
+  - dag: Lördag
+    tid: "09:30 – 13:00"
+  - dag: Söndag
+    tid: "09:30 – 20:00"
+
+# Värdegrundscitatet (footer och Om oss)
+citat:
+  text: "Wilson Dance Factory är en säker, pedagogisk och familjeorienterad plats där alla ska känna sig bekväma. Jag har varit involverad i dansvärlden i över 47 år och min prioritet är att ge alla åldrar dansmöjligheter och lycka genom sin dans."
+  namn: Paul Wilson
+  titel: VD för Wilson Dance Factory
+
+# Google-recensioner via Trustindex (visas på Om oss och Kontakt).
+# Klistra in widget-ID från trustindex.io (koden efter "loader.js?").
+# Tomt = en länk till recensionerna på Google visas i stället.
+trustindex_widget: ""
+
+# Anmälan via dans.se (CogWork). Vi bäddar bara in – innehållet ägs av dans.se.
+dans_se:
+  shop: https://dans.se/wilsondancefactory/shop/
+  script: https://dans.se/api/init.js

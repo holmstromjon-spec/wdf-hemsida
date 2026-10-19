@@ -1,0 +1,203 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import { butik } from '../lib/data';
+
+const files = import.meta.glob<{ default: ImageMetadata }>('../assets/images/butik/*', { eager: true });
+const bild = (name: string) => {
+  const hit = files[`../assets/images/butik/${name}`];
+  if (!hit) throw new Error(`Bilden src/assets/images/butik/${name} saknas (se src/data/butik.yaml)`);
+  return hit.default;
+};
+const kr = (n: number) => `${n.toLocaleString('sv-SE')} kr`;
+---
+
+<BaseLayout
+  title="Butik"
+  description="Wilsons webbshop: hoodies, t-shirts, väskor och vattenflaska med eget namntryck. Beställ online och betala med Swish."
+>
+  <PageHead lines={['Webbshop']} lead="Välkommen till Wilsons webbshop">
+    {butik.meddelande && <p class="notice">{butik.meddelande}</p>}
+  </PageHead>
+
+  <section class="on-paper section" aria-labelledby="produkter">
+    <div class="wrap">
+      <h2 id="produkter" class="display head">Produkter</h2>
+      <p class="lead intro">{butik.namntryck_info}</p>
+      <ul role="list" class="products">
+        {butik.produkter.map((p) => (
+          <li class="product reveal">
+            <div class="product-photo on-white">
+              <Image src={bild(p.bild)} alt={p.namn} widths={[320, 560]} sizes="(min-width: 60rem) 22vw, 45vw" class="photo" />
+            </div>
+            <h3 class="product-name">{p.namn}</h3>
+            <p class="display product-price">{kr(p.pris)}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section id="bestall" class="on-white section" aria-labelledby="bestall-title">
+    <div class="wrap">
+      <h2 id="bestall-title" class="display head">Beställ</h2>
+      {!butik.oppen ? (
+        <p class="lead closed">{butik.stangt_meddelande}</p>
+      ) : (
+        <form class="order" method="post" action="/.netlify/functions/order" data-order-form novalidate>
+          <p class="small muted">Fält markerade med en * är obligatoriska.</p>
+
+          <fieldset class="lines">
+            <legend class="display legend">Produkter *</legend>
+            {butik.produkter.map((p) => (
+              <div class="line" data-pris={p.pris}>
+                <label class="line-name" for={`antal-${p.id}`}>{p.namn} <span class="muted tabular">{kr(p.pris)}</span></label>
+                <div class="line-fields">
+                  <label>
+                    <span class="small">Antal</span>
+                    <input id={`antal-${p.id}`} name={`antal_${p.id}`} type="number" inputmode="numeric" min="0" max="20" value="0" data-antal />
+                  </label>
+                  {p.storlek !== 'ingen' && (
+                    <label>
+                      <span class="small">Storlek</span>
+                      <select name={`storlek_${p.id}`}>
+                        <option value="">Välj</option>
+                        {butik.storlekar[p.storlek].map((s) => <option value={s}>{p.storlek === 'vuxen' ? 'Vuxen' : 'Junior'}: {s}</option>)}
+                      </select>
+                    </label>
+                  )}
+                </div>
+              </div>
+            ))}
+            <p class="total" aria-live="polite">Totalt: <strong class="tabular" data-total>0 kr</strong></p>
+          </fieldset>
+
+          <div class="fields">
+            <label>
+              <span>För- och efternamn *</span>
+              <input name="namn" type="text" autocomplete="name" required maxlength="100" />
+            </label>
+            <label>
+              <span>E-post *</span>
+              <input name="epost" type="email" autocomplete="email" required maxlength="200" />
+            </label>
+            <label>
+              <span>Namntryck * <span class="small muted">(max {butik.namntryck_max} tecken)</span></span>
+              <input name="namntryck" type="text" required maxlength={butik.namntryck_max} />
+            </label>
+            <label class="full">
+              <span>Övrig info</span>
+              <textarea name="info" rows="4" maxlength="2000" placeholder="T.ex. olika namntryck på olika produkter"></textarea>
+            </label>
+            <!-- Spam trap: people never see or fill this field. -->
+            <label class="trap" aria-hidden="true">
+              <span>Lämna tomt</span>
+              <input name="webbplats" type="text" tabindex="-1" autocomplete="off" />
+            </label>
+          </div>
+
+          <p class="terms-note small">Genom att beställa godkänner du våra <a href="/kopvillkor/">köpvillkor</a>. Du får en orderbekräftelse via e-post och betalar med Swish eller i receptionen.</p>
+          <p class="form-error" role="alert" data-error hidden></p>
+          <button class="button" type="submit"><span>Skicka beställning</span> <span class="arrow" aria-hidden="true"></span></button>
+        </form>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-order-form]');
+  if (form) {
+    const totalEl = form.querySelector('[data-total]')!;
+    const errorEl = form.querySelector<HTMLElement>('[data-error]')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+    const lines = [...form.querySelectorAll<HTMLElement>('.line')];
+
+    const update = () => {
+      const sum = lines.reduce((s, l) => {
+        const n = Number(l.querySelector<HTMLInputElement>('[data-antal]')!.value) || 0;
+        return s + n * Number(l.dataset.pris);
+      }, 0);
+      totalEl.textContent = `${sum.toLocaleString('sv-SE')} kr`;
+    };
+    form.addEventListener('input', update);
+
+    const fail = (msg: string, focus?: HTMLElement | null) => {
+      errorEl.textContent = msg;
+      errorEl.hidden = false;
+      focus?.focus();
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorEl.hidden = true;
+
+      const chosen = lines.filter((l) => Number(l.querySelector<HTMLInputElement>('[data-antal]')!.value) > 0);
+      if (chosen.length === 0) return fail('Välj minst en produkt (ange antal).', lines[0]?.querySelector('input'));
+      for (const l of chosen) {
+        const size = l.querySelector('select');
+        if (size && !size.value) return fail(`Välj storlek för ${l.querySelector('.line-name')!.firstChild!.textContent!.trim()}.`, size);
+      }
+      for (const name of ['namn', 'epost', 'namntryck']) {
+        const field = form.elements.namedItem(name) as HTMLInputElement;
+        if (!field.checkValidity()) return fail(field.validationMessage || 'Fyll i alla obligatoriska fält.', field);
+      }
+
+      button.disabled = true;
+      button.querySelector('span')!.textContent = 'Skickar…';
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new URLSearchParams(new FormData(form) as unknown as Record<string, string>),
+          headers: { Accept: 'application/json' },
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) throw new Error(data.error || 'Något gick fel.');
+        location.href = `/tack/?order=${encodeURIComponent(data.order)}&summa=${data.summa}`;
+      } catch (err) {
+        fail(`${(err as Error).message} Försök igen, eller mejla din beställning till info@wilsondancefactory.se.`);
+        button.disabled = false;
+        button.querySelector('span')!.textContent = 'Skicka beställning';
+      }
+    });
+  }
+</script>
+
+<style>
+  .notice { font-weight: 500; font-style: italic; }
+  .intro { margin: 1rem 0 2.5rem; max-width: 44ch; }
+  .products { display: grid; gap: 2rem var(--gap); grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr)); }
+  .product { display: grid; gap: 0.35rem; align-content: start; }
+  .product-photo { margin-bottom: 0.5rem; }
+  .product-photo :global(img) { aspect-ratio: 1; object-fit: contain; }
+  .product-name { font-size: var(--step-body); font-weight: 500; }
+  .product-price { color: var(--red); font-size: 1.25rem; }
+
+  .closed { margin-top: 1.5rem; max-width: 40ch; }
+  .order { display: grid; gap: 2rem; max-width: 56rem; margin-top: 1.5rem; }
+  fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+  .legend { font-size: 1.25rem; margin-bottom: 1rem; padding: 0; }
+  .line { display: grid; gap: 0.75rem; padding-block: 1rem; box-shadow: inset 0 -1px 0 color-mix(in srgb, currentColor 25%, transparent); }
+  .line-name { font-weight: 500; }
+  .line-name .muted { font-weight: 400; margin-left: 0.5rem; }
+  .line-fields { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; }
+  .line-fields label { display: grid; gap: 0.25rem; }
+  @media (min-width: 48rem) { .line { grid-template-columns: 1fr auto; align-items: center; } }
+  .total { margin-top: 1rem; font-size: var(--step-lead); }
+  .fields { display: grid; gap: 1.25rem var(--gap); }
+  .fields label { display: grid; gap: 0.35rem; }
+  .fields > label > span:first-child { font-weight: 500; }
+  @media (min-width: 48rem) { .fields { grid-template-columns: 1fr 1fr; } .fields .full { grid-column: 1 / -1; } }
+  input, select, textarea {
+    min-height: 3rem; padding: 0.6rem 0.8rem; border: 2px solid var(--black); border-radius: 0; background: var(--white);
+  }
+  input[type='number'] { width: 6rem; }
+  textarea { resize: vertical; }
+  input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--red); outline-offset: 1px; }
+  .trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .form-error { background: var(--red); color: var(--white); padding: 1rem 1.25rem; font-weight: 500; }
+  .order .button { justify-self: start; }
+  .order .button:disabled { opacity: 0.6; cursor: wait; }
+</style>

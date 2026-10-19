@@ -1,0 +1,135 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/images/brand/logo.png';
+import { nav, quickNav } from '../lib/nav';
+import { site } from '../lib/data';
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => path === href;
+---
+
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Wilson Dance Factory – till startsidan">
+    <Image src={logo} alt="" width={56} height={51} loading="eager" />
+    <span class="brand-name">Wilson<br />Dance Factory</span>
+  </a>
+
+  <nav class="quick" aria-label="Snabblänkar">
+    {quickNav.map((item) => (
+      <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+    ))}
+    <a class="button book" href="/anmalan/">Boka kurs</a>
+  </nav>
+
+  <button class="menu-toggle" type="button" popovertarget="meny" aria-controls="meny">
+    <span>Meny</span>
+  </button>
+
+  <div id="meny" class="menu on-red" popover>
+    <div class="menu-top">
+      <span class="display menu-mark">WDF</span>
+      <button class="menu-close" type="button" popovertarget="meny" popovertargetaction="hide">Stäng</button>
+    </div>
+    <nav aria-label="Huvudmeny">
+      <ul role="list" class="menu-list">
+        {nav.map((item) => (
+          <li>
+            <a class="display" href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+            {item.children && (
+              <ul role="list" class="menu-sub">
+                {item.children.map((c) => (
+                  <li><a href={c.href} aria-current={isCurrent(c.href) ? 'page' : undefined}>{c.label}</a></li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <div class="menu-contact small">
+      <a href={`mailto:${site.epost}`}>{site.epost}</a>
+      <a href={site.telefon_href}>{site.telefon}</a>
+      <a href={site.sociala.facebook} rel="noopener">Facebook</a>
+      <a href={site.sociala.instagram} rel="noopener">Instagram</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: var(--gap);
+    padding: 1rem var(--margin);
+    background: var(--bg);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    margin-right: auto;
+  }
+  .brand img { width: 52px; height: auto; }
+  .brand-name {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 0.8125rem;
+    line-height: 1.05;
+    letter-spacing: 0;
+  }
+  .quick { display: none; align-items: center; gap: 1.75rem; }
+  .quick a:not(.button) { text-decoration: none; font-weight: 500; }
+  .quick a:not(.button):hover, .quick a[aria-current='page'] { color: var(--red); }
+  .menu-toggle {
+    min-height: 3.25rem;
+    padding: 0 1.25rem;
+    border: 0;
+    background: var(--black);
+    color: var(--white);
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .menu-toggle:hover { background: var(--red); }
+  @media (min-width: 64rem) {
+    .quick { display: flex; }
+  }
+
+  .menu {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    border: 0;
+    padding: 1rem var(--margin) 2rem;
+    overflow-y: auto;
+  }
+  .menu:popover-open { display: flex; flex-direction: column; gap: 2rem; }
+  .menu-top { display: flex; justify-content: space-between; align-items: center; min-height: 3.25rem; }
+  .menu-mark { font-size: 1.25rem; }
+  .menu-close {
+    min-height: 3.25rem; padding: 0 1.25rem; border: 0; cursor: pointer;
+    background: var(--black); color: var(--white); font-weight: 500;
+  }
+  .menu-list { display: grid; gap: 0.35rem; }
+  .menu-list > li > a {
+    font-size: clamp(1.75rem, 0.9rem + 4.2vw, 4.25rem);
+    line-height: 1;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 200ms var(--ease-out), color 200ms;
+  }
+  .menu-list > li > a:hover, .menu-list a[aria-current='page'] { color: var(--black); }
+  .menu-list > li > a:hover { transform: translateX(12px); }
+  .menu-sub { display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; margin: 0.5rem 0 0.75rem; }
+  .menu-sub a { font-weight: 500; font-size: var(--step-lead); }
+  .menu-sub a:hover { color: var(--black); }
+  .menu-contact { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin-top: auto; }
+  .menu-contact a { text-decoration: none; }
+  .menu-contact a:hover { text-decoration: underline; }
+</style>

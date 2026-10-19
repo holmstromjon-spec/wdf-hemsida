@@ -1,0 +1,78 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import favicon from '../assets/images/brand/favicon.png';
+import ogImage from '../assets/images/galleri/dsc04438.jpg';
+import { getImage } from 'astro:assets';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Hide from search engines (e.g. /tack/). */
+  noindex?: boolean;
+}
+
+const { title, description, noindex = false } = Astro.props;
+const fullTitle = title === 'Wilson Dance Factory' ? title : `${title} – Wilson Dance Factory`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const icon32 = await getImage({ src: favicon, width: 32, height: 32, format: 'png' });
+const icon180 = await getImage({ src: favicon, width: 180, height: 180, format: 'png' });
+const og = await getImage({ src: ogImage, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+---
+
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#d60008" />
+    <link rel="icon" type="image/png" sizes="32x32" href={icon32.src} />
+    <link rel="apple-touch-icon" href={icon180.src} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="preload" href="/fonts/panchang-700.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/switzer-400.woff2" as="font" type="font/woff2" crossorigin />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="sv_SE" />
+    <meta property="og:site_name" content="Wilson Dance Factory" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(og.src, Astro.site)} />
+
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#innehall">Hoppa till innehållet</a>
+    <Header />
+    <main id="innehall">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // Signature move: headlines rise from their baselines once the page has loaded.
+      requestAnimationFrame(() => document.body.classList.add('is-loaded'));
+
+      // Section entrances: children of .reveal rise in, staggered, once.
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-in');
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { rootMargin: '0px 0px -10% 0px' },
+      );
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

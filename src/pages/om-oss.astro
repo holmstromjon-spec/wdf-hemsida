@@ -1,0 +1,79 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import Reviews from '../components/Reviews.astro';
+import { site } from '../lib/data';
+import head from '../assets/images/miljo/miljo-11.jpg';
+import paul from '../assets/images/instruktorer/paul-wilson.jpg';
+import room from '../assets/images/miljo/miljo-9.jpg';
+---
+
+<BaseLayout
+  title="Om oss"
+  description="Wilson Dance Factory är ditt säkra val när fötterna inte längre kan vara stilla. Danskurser från 2 år, 21 utbildade instruktörer och assistenter på Kapplöpningsgatan i Helsingborg."
+>
+  <PageHead
+    lines={['Om oss']}
+    lead="Wilson Dance Factory är ditt säkra val när fötterna inte längre kan vara stilla. Vi erbjuder danskurser från 2 års ålder och helt upp till när fötterna inte längre orkar dansa."
+    image={head}
+    imageAlt="Lokalerna hos Wilson Dance Factory"
+  />
+
+  <section class="on-white section">
+    <div class="wrap about-grid">
+      <div class="reveal stack">
+        <h2 class="display head">Dans för alla!</h2>
+        <p>I vårt breda kursutbud finns det flertal dansstilar att välja mellan, och vare sig du är nybörjare, övad eller avancerad dansare är vi säkra på att vi hittar fram till DIN nya dansframtid hos oss.</p>
+      </div>
+      <div class="reveal stack about-card on-black">
+        <h3 class="display about-h">Hos oss</h3>
+        <p>Teamet på Wilson Dance Factory består av 21 utbildade instruktörer och assistenter.</p>
+        <p>Dansskolan som ni finner på Kapplöpningsgatan 6 är på över 900 kvm med 3 stora danssalar samt 2 mindre danssalar ämnade för egen träning.</p>
+      </div>
+      <div class="reveal stack about-card on-red">
+        <h3 class="display about-h">Vår målsättning</h3>
+        <p>Vi strävar alltid efter att ge dansare trygghet, främja självkänsla och hitta glädje genom dans och musik.</p>
+      </div>
+      <div class="about-photo">
+        <Image src={room} alt="Danssal hos Wilson Dance Factory" widths={[480, 800, 1200]} sizes="(min-width: 60rem) 40vw, 100vw" class="photo" />
+      </div>
+    </div>
+  </section>
+
+  <section class="values on-paper section" aria-labelledby="values-title">
+    <div class="wrap values-grid">
+      <div class="values-photo tilt-l">
+        <Image src={paul} alt="Paul Wilson, VD för Wilson Dance Factory" widths={[400, 700]} sizes="(min-width: 60rem) 28vw, 70vw" class="photo" />
+      </div>
+      <div class="reveal">
+        <h2 id="values-title" class="display head">Vår värdegrund</h2>
+        <blockquote class="quote">
+          <p class="lead">”{site.citat.text}”</p>
+          <footer><strong>– {site.citat.namn}</strong><br /><span class="muted">{site.citat.titel}</span></footer>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <Reviews />
+</BaseLayout>
+
+<style>
+  .about-grid { display: grid; gap: var(--gap); }
+  .about-card { padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); }
+  .about-h { font-size: clamp(1.25rem, 1rem + 1vw, 1.875rem); }
+  .about-photo :global(img) { aspect-ratio: 4 / 3; }
+  @media (min-width: 60rem) {
+    .about-grid { grid-template-columns: 1fr 1fr; align-items: stretch; }
+    .about-grid > :first-child { grid-column: 1 / -1; max-width: 46rem; margin-bottom: 2rem; }
+    .about-photo { grid-column: 2; grid-row: 2 / span 2; }
+    .about-photo :global(img) { height: 100%; aspect-ratio: auto; }
+  }
+  .values-grid { display: grid; gap: 3rem; align-items: center; }
+  .values-photo { width: min(70vw, 24rem); }
+  .values-photo :global(img) { aspect-ratio: 1; }
+  .quote { margin-top: 1.5rem; display: grid; gap: 1.25rem; max-width: 40rem; }
+  .quote strong { font-weight: 500; }
+  @media (min-width: 60rem) { .values-grid { grid-template-columns: 5fr 7fr; } .values-photo { width: 100%; } }
+</style>

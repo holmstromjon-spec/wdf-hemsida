@@ -1,0 +1,45 @@
+---
+// Renders one part of src/data/schema.yaml (weekly or competition schedule).
+interface Props {
+  grupper: { namn: string; dagar: { dag: string; pass: { tid: string; klass: string }[] }[] }[];
+}
+const { grupper } = Astro.props;
+---
+
+<div class="groups">
+  {grupper.map((g) => (
+    <section class="group reveal" aria-label={g.namn}>
+      <h3 class="display group-name" set:html={g.namn.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]!).replaceAll('/', '/<wbr>')} />
+      <div class="days">
+        {g.dagar.map((d) => (
+          <div class="day">
+            <h4 class="day-name">{d.dag}</h4>
+            <table>
+              <caption class="visually-hidden">{g.namn} – {d.dag}</caption>
+              <tbody>
+                {d.pass.map((p) => (
+                  <tr>
+                    <td class="tid tabular">{p.tid}</td>
+                    <td>{p.klass}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+</div>
+
+<style>
+  .groups { display: grid; gap: clamp(5rem, 4rem + 3vw, 7rem); }
+  /* "PARDANS/BUGG/SALSA/BACHATA" breaks at its slashes into two 13-letter lines. */
+  .group-name { font-size: min(3rem, calc(100cqi / 14)); line-height: 1; margin-bottom: 1.5rem; }
+  .days { display: grid; gap: 1.5rem var(--gap); grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); }
+  .day-name { font-size: var(--step-body); font-weight: 500; padding: 0.4rem 0.75rem; background: var(--black); color: var(--white); }
+  .on-black .day-name { background: var(--red); }
+  table { width: 100%; border-collapse: collapse; }
+  td { padding: 0.55rem 0.75rem; vertical-align: top; border-bottom: 1px solid color-mix(in srgb, currentColor 22%, transparent); }
+  .tid { white-space: nowrap; width: 1%; font-weight: 500; }
+</style>

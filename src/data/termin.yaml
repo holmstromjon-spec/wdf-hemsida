@@ -1,0 +1,14 @@
+# Terminsinformation som visas på Schema.
+rubrik: HÖSTTERMIN 2026
+notis: "(Observera att det synliga schemat är vårterminens schema och inte höstens)"
+punkter:
+  - "– Schema och anmälan för hösten öppnar 1/7 10.00"
+  - "Första veckan på terminen erbjuder vi gratis prova på (i mån av plats). För bokningsvillkor, se ”Om oss”"
+datum:
+  - etikett: Terminstart
+    varde: vecka 34
+  - etikett: Höstlov
+    varde: vecka 44
+  - etikett: Terminslut
+    varde: vecka 49
+anmalan_text: "Man kan anmäla sig till en kurs fram till och med 3:e kursveckan efter terminstart. Önskar man att anmäla sig efter denna tid så vänligen kontakta oss istället."

@@ -1,0 +1,31 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const nyheter = await getCollection('aktuellt');
+  return nyheter.map((n) => ({ params: { id: n.id }, props: { n } }));
+}
+
+const { n } = Astro.props;
+const { Content } = await render(n);
+const datum = n.data.datum.toLocaleDateString('sv-SE', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<BaseLayout title={n.data.titel} description={n.data.utdrag ?? `${n.data.titel} – nyhet från Wilson Dance Factory.`}>
+  <article class="on-white section">
+    <div class="wrap post">
+      <p><a class="text-link" href="/aktuellt/">← Aktuellt</a></p>
+      <time datetime={n.data.datum.toISOString()} class="muted">{datum}</time>
+      <h1 class="display head">{n.data.titel}</h1>
+      {n.data.bild && <Image src={n.data.bild} alt={n.data.bild_alt ?? ''} widths={[600, 1000, 1400]} sizes="(min-width: 60rem) 60vw, 100vw" class="photo post-img" />}
+      <div class="prose"><Content /></div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .post { display: grid; gap: 1.25rem; max-width: 60rem; }
+  .post-img { margin-block: 1rem; }
+</style>

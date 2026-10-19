@@ -1,0 +1,26 @@
+---
+// A plain text page (terms, policy): poster title and the text from src/texter/*.md.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from './PageHead.astro';
+
+interface Props {
+  title: string;
+  lines: string[];
+  description: string;
+}
+const { title, lines, description } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <PageHead lines={lines} ground="black" />
+  <section class="on-white section">
+    <div class="wrap prose text-page reveal">
+      <slot />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .text-page :global(h1) { display: none; }
+  .text-page :global(h2:first-child) { margin-top: 0; }
+</style>

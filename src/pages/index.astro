@@ -1,0 +1,353 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ClassFinder from '../components/ClassFinder.astro';
+import { site } from '../lib/data';
+
+import heroPhoto from '../assets/images/galleri/dsc04438.jpg';
+import stairA from '../assets/images/miljo/miljo-2.jpg';
+import stairB from '../assets/images/miljo/miljo-5.jpg';
+import slipsPhoto from '../assets/images/galleri/dsc03625.jpg';
+import compPhoto from '../assets/images/galleri/dsc04161.jpg';
+import printA from '../assets/images/galleri/dsc03309.jpg';
+import printB from '../assets/images/galleri/dsc04096.jpg';
+import printC from '../assets/images/galleri/dsc02654.jpg';
+
+const populara = (await getCollection('dansstilar'))
+  .filter((d) => d.data.popular)
+  .sort((a, b) => a.data.ordning - b.data.ordning);
+
+// Real figures from the old start page, one per stair step.
+const stair = ['1000+ medlemmar', '800+ kvm', '20+ dansstilar', 'Från 2 år'];
+---
+
+<BaseLayout
+  title="Wilson Dance Factory"
+  description="Wilson Dance Factory i Helsingborg är Skånes största dansskola. Danslektioner för alla åldrar från 2 år – hobby och tävlingsdans i över 20 dansstilar."
+>
+  <!-- Hero: narrow talk left, wide headline right, photograph cropped by the bottom edge -->
+  <section class="hero">
+    <h1 class="display hero-title">
+      <span class="mask-line"><span>Dans för</span></span>
+      <span class="mask-line"><span>alla</span></span>
+    </h1>
+    <div class="hero-talk after-mask">
+      <p class="lead">Välkommen till oss på Wilson Dance Factory i Helsingborg. Vi har ett stort utbud av dansstilar som passar alla – för alla åldrar från 2 år och uppåt.</p>
+      <a class="button" href="/anmalan/"><span>Boka kurs</span> <span class="arrow" aria-hidden="true"></span></a>
+      <p class="small muted">Osäker? Du är varmt välkommen in för ett gratis prova på-tillfälle. <a href="/kontakt/">Kontakta oss</a></p>
+    </div>
+    <div class="hero-photo">
+        <div class="hero-figure on-red">
+          <p class="display">1000+</p>
+          <p>medlemmar i Skånes största dansskola</p>
+        </div>
+        <Image src={heroPhoto} alt="Hiphopgrupp från Wilson Dance Factory uppträder på scen i blått scenljus" widths={[640, 1000, 1400, 2000]} sizes="(min-width: 60rem) 66vw, 100vw" loading="eager" fetchpriority="high" class="photo" />
+    </div>
+  </section>
+
+  <!-- Intro: staircase statement on red -->
+  <section class="stair on-red" aria-labelledby="stair-title">
+    <div class="stair-main">
+      <h2 id="stair-title" class="stair-lead lead">Idag är vi Skånes största dansskola.</h2>
+      <ul role="list" class="stair-text display reveal">
+        {stair.map((line) => <li>{line}</li>)}
+      </ul>
+    </div>
+    <div class="stair-photos reveal">
+      <Image src={stairA} alt="Danssal hos Wilson Dance Factory" widths={[400, 700]} sizes="(min-width: 60rem) 20vw, 45vw" class="photo" />
+      <Image src={stairB} alt="Lounge och reception hos Wilson Dance Factory" widths={[400, 700]} sizes="(min-width: 60rem) 20vw, 45vw" class="photo" />
+    </div>
+    <p class="stair-note small">Lokaler på över 800 kvm på Kapplöpningsgatan i Helsingborg. Stolt medlem av Sveriges Dansorganisation.</p>
+  </section>
+
+  <ClassFinder />
+
+  <!-- Showcase: the popular styles stand along the bottom edge like slips -->
+  <section class="slips" aria-labelledby="pop-title">
+    <Image src={slipsPhoto} alt="" widths={[800, 1400, 2000]} sizes="100vw" class="photo slips-bg drift" />
+    <div class="slips-text">
+      <h2 id="pop-title" class="display head">Populärt just nu</h2>
+      <p class="lead">Våra mest populära dansstilar just nu! På Wilson Dance Factory erbjuder vi över 20 st olika dansstilar i olika nivåer för alla åldersgrupper. Med andra ord så finns det dans för alla.</p>
+      <a class="button" href="/dansstilar/"><span>Se alla våra dansstilar här</span> <span class="arrow" aria-hidden="true"></span></a>
+    </div>
+    <ul role="list" class="slip-row">
+      {populara.map((d, i) => (
+        <li class:list={['slip', { 'tilt-l': i === 1, 'tilt-r': i === 2 }]} style={`--h:${[34, 42, 30, 38][i % 4]}svh`}>
+          <a href={d.data.visa_pa_dansstilar ? `/dansstilar/#${d.id}` : '/anmalan/'}>
+            <strong class="display">{d.data.popular!.namn}</strong>
+            <span aria-hidden="true" class="slip-rule">· · · · ·</span>
+            <span>{d.data.popular!.text}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- Competition: photograph bleeding off two edges, caption block on a solid bar -->
+  <section class="comp on-white section">
+    <div class="comp-grid wrap">
+      <div class="comp-text reveal">
+        <h2 class="display head">Hobby och tävling</h2>
+        <p class="lead">Skånes största dansskola inom både hobby och tävlingsdans.</p>
+        <p>Wilson Dance Factory är stolt medlem av Sveriges Dansorganisation och är i dagsläget Skånes största medlem, och en av de ledande i hela Sverige. Under våra år som medlem har vi haft nöjet att få se flertal landslagsdansare växa fram och däribland både EM- och VM medaljörer inom Disco och Hiphop, en otroligt stolthet vi bär med oss på vår dansskola.</p>
+        <p>Vi är mer än bara en tävlingsdansskola, vår starka passion för dans ska vara tillgänglig för alla åldrar och nivåer. Inne i våra danssalar erbjuder vi danskurser i olika dansstilar, olika nivåer och något för alla åldrar.</p>
+        <p>Utöver fantastisk dans och utbildade instruktörer är Wilson Dance Factory mer än bara en dansskola. 900 kvm med bra uppehålls områden, kök, café, reception och otroliga danssalar är vad du som dansare eller kund hos oss kan vänta sig. Vi står redo att ta emot er som är redo att ta första steget mot dem nya dansstegen!</p>
+        <p class="comp-links">
+          <a class="button" href="/om-oss/"><span>Läs mer om oss</span> <span class="arrow" aria-hidden="true"></span></a>
+          <a class="text-link" href="/tavlingsdans/">Tävlingsdans <span class="arrow" aria-hidden="true"></span></a>
+        </p>
+      </div>
+      <figure class="comp-photo">
+        <Image src={compPhoto} alt="Tävlingsdansare från Wilson Dance Factory på scen" widths={[640, 1000, 1500]} sizes="(min-width: 60rem) 55vw, 100vw" class="photo" />
+        <figcaption class="on-black">EM- och VM-medaljörer inom Disco och Hiphop har vuxit fram hos oss.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Three statements, each on its own panel of unequal width -->
+  <section class="panels" aria-label="Mer om oss">
+    <a class="panel on-red" href="/dansstilar/" style="--w:10">
+      <h2 class="display head">Våra dansstilar</h2>
+      <p>På Wilson Dance Factory erbjuder vi över 20 st olika dansstilar i olika nivåer för alla åldersgrupper. Med andra ord så finns det dans för alla.</p>
+      <span class="text-link">Se alla våra dansstilar <span class="arrow" aria-hidden="true"></span></span>
+    </a>
+    <a class="panel on-black" href="/instruktorer/" style="--w:12">
+      <h2 class="display head">Våra instruktörer</h2>
+      <p>Med hela 21 medarbetare så kan vi erbjuda en kvalitativ helhetsupplevelse inom dans. Oavsett tävling eller fritidsdans.</p>
+      <span class="text-link">Träffa våra instruktörer <span class="arrow" aria-hidden="true"></span></span>
+    </a>
+    <a class="panel on-paper" href="/jobba-hos-oss/" style="--w:9">
+      <h2 class="display head">Jobba hos oss?</h2>
+      <p>Vi är alltid på jakt efter vår nästa medarbetare. Brinner du för dans eller känner du någon som vill jobba med dans, hör då av er till oss!</p>
+      <span class="text-link">Bli en del av WDF <span class="arrow" aria-hidden="true"></span></span>
+    </a>
+  </section>
+
+  <!-- Prints dropped on the headline -->
+  <section class="prints on-paper" aria-labelledby="prints-title">
+    <h2 id="prints-title" class="display prints-title"><span>Häng med i</span><span>svängarna!</span></h2>
+    <div class="print print-a"><Image src={printA} alt="Dansare på scen" widths={[400, 700]} sizes="26vw" class="photo" /></div>
+    <div class="print print-b"><Image src={printB} alt="Dansgrupp i rörelse" widths={[400, 700]} sizes="26vw" class="photo" /></div>
+    <div class="print print-c"><Image src={printC} alt="Uppträdande på scen" widths={[300, 500]} sizes="16vw" class="photo" /></div>
+    <p class="prints-note">Hos oss på Wilson Dance Factory händer det roliga saker hela tiden! Med jämna mellanrum anordnar vi olika sorters event hos oss – allt ifrån dansläger och högtidsfirande till tävlingar och olika erbjudanden. <a class="text-link" href="/aktuellt/">Gå till Aktuellt <span class="arrow" aria-hidden="true"></span></a></p>
+  </section>
+
+  <!-- Contact: the address in display rows -->
+  <section class="rows on-red" aria-labelledby="hitta-title">
+    <h2 id="hitta-title" class="wrap display head rows-title">Hitta hit</h2>
+    <ul role="list" class="row-list display">
+      <li>Wilson Dance Factory</li>
+      <li><a href={site.google.vagbeskrivning} rel="noopener">{site.adress.gata}</a></li>
+      <li>{site.adress.postnummer} {site.adress.ort}</li>
+      <li><a href={site.telefon_href}>{site.telefon}</a></li>
+      <li class="row-cta"><a href={`mailto:${site.epost}`}>Hej!<span class="round" aria-hidden="true"><svg viewBox="0 0 24 24" width="50%" height="50%"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.5" /></svg></span><span class="visually-hidden"> Mejla oss på {site.epost}</span></a></li>
+    </ul>
+    <div class="wrap rows-facts">
+      <div>
+        <h3 class="rows-h">Hos oss finner du följande:</h3>
+        <ul class="facts">
+          <li>Över 800 kvm lokaler</li>
+          <li>4 st stora danssalar</li>
+          <li>1 liten träningssal</li>
+          <li>Stor lounge / väntrum</li>
+          <li>Omklädningsrum</li>
+          <li>Vårt egna café</li>
+          <li>En härlig och inspirerande känsla i luften</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="rows-h">Våra öppettider</h3>
+        <dl class="facts-hours">
+          {site.oppettider.map((o) => <div><dt>{o.dag}</dt><dd class="tabular">{o.tid}</dd></div>)}
+        </dl>
+        <p><a class="text-link" href={site.google.vagbeskrivning} rel="noopener">Vägbeskrivning <span class="arrow" aria-hidden="true"></span></a></p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .hero {
+    display: grid;
+    grid-template-areas: 'title' 'talk' 'photo';
+    gap: 2rem;
+    padding: clamp(1.5rem, 1rem + 2vw, 3rem) var(--margin) 0;
+  }
+  /* Panchang runs ~1em per capital: size the longest line ("DANS FÖR", 8) to the column. */
+  .hero-title {
+    grid-area: title;
+    font-size: calc((100vw - 2 * var(--margin)) / 8.6);
+    line-height: 0.84;
+  }
+  .hero-talk { grid-area: talk; display: grid; gap: 1.5rem; justify-items: start; max-width: 30rem; }
+  .hero-talk .lead { max-width: 24ch; }
+  .hero-photo { grid-area: photo; position: relative; margin: 3.5rem calc(var(--margin) * -1) 0; }
+  .hero-photo :global(img) { aspect-ratio: 4 / 3; }
+  .hero-figure {
+    position: absolute; z-index: 1; left: var(--margin); bottom: 1rem;
+    width: min(60vw, 16.25rem); padding: 1rem 1.25rem;
+  }
+  @media (min-width: 60rem) { .hero-figure { bottom: auto; top: 0; translate: 0 -50%; } }
+  .hero-figure .display { font-size: 2.5rem; line-height: 1; }
+  .hero-figure p + p { margin-top: 0.35rem; font-size: var(--step-small); }
+
+  @media (min-width: 60rem) {
+    .hero {
+      grid-template-columns: 34% minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
+      grid-template-areas: 'talk title' 'talk photo';
+      gap: 5.5rem var(--gap);
+      min-height: calc(100svh - 5.25rem);
+      padding-bottom: 0;
+    }
+    .hero-talk { align-self: start; margin-top: 18vh; }
+    .hero-title { font-size: min(9.5rem, calc((66vw - 2 * var(--margin)) / 8.6)); }
+    .hero-photo { margin: 0 calc(var(--margin) * -1) 0 0; height: 100%; min-height: 34vh; }
+    .hero-photo :global(img) { aspect-ratio: auto; height: 100%; position: absolute; inset: 0; }
+  }
+
+  /* ---------- Staircase ---------- */
+  .stair {
+    position: relative;
+    display: grid;
+    align-content: center;
+    gap: 3rem;
+    padding: var(--section) max(var(--margin), 4vw);
+  }
+  /* Each step is one line; the longest ("1000+ MEDLEMMAR", 15) fits after its indent. */
+  .stair-main { container-type: inline-size; }
+  .stair-lead { font-weight: 500; margin-bottom: 1.5rem; }
+  .stair-text { font-size: calc(80cqi / 15.5); line-height: 1.08; letter-spacing: -0.01em; }
+  .stair-text li { white-space: nowrap; }
+  .stair-text li:nth-child(2) { padding-left: 6cqi; color: var(--black); }
+  .stair-text li:nth-child(3) { padding-left: 12cqi; }
+  .stair-text li:nth-child(4) { padding-left: 18cqi; color: var(--black); }
+  .stair-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .stair-photos :global(img) { aspect-ratio: 3 / 2; }
+  .stair-note { max-width: 26ch; }
+  @media (min-width: 60rem) {
+    .stair { min-height: 100svh; grid-template-columns: 1fr 20vw; align-items: start; column-gap: 4vw; }
+    .stair-photos { grid-template-columns: 1fr; }
+    .stair-note { grid-column: 1; }
+  }
+
+  /* ---------- Slips ---------- */
+  .slips { position: relative; min-height: 96svh; overflow: hidden; color: var(--white); display: grid; }
+  .slips-bg { position: absolute; inset: 0; }
+  .slips-text {
+    position: relative; z-index: 1; align-self: start;
+    margin: clamp(3rem, 2rem + 5vw, 7rem) var(--margin) 0;
+    max-width: 40rem; display: grid; gap: 1.5rem; justify-items: start;
+    background: rgb(17 17 17 / 0.82); padding: clamp(1.25rem, 1rem + 1.5vw, 2.25rem);
+  }
+  .slip-row {
+    position: relative; z-index: 1; align-self: end;
+    display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: 12px;
+    padding: 3rem var(--margin) 0;
+  }
+  .slip { height: calc(var(--h) * 0.75); min-height: 12rem; }
+  .slip a {
+    display: flex; flex-direction: column; gap: 0.6rem; height: 100%;
+    background: var(--white); color: var(--black); padding: 1.25rem; text-decoration: none;
+    font-size: 15px; line-height: 1.45; transition: translate 200ms var(--ease-out);
+  }
+  .slip a:hover { translate: 0 -8px; }
+  .slip strong { font-size: 1.25rem; line-height: 1; }
+  .slip-rule { color: var(--red); letter-spacing: 0.1em; }
+  @media (min-width: 60rem) {
+    .slips-text { margin-left: 18vw; }
+    .slip-row { grid-template-columns: repeat(4, 1fr); }
+    .slip { height: var(--h); min-height: 15rem; }
+  }
+
+  /* ---------- Competition ---------- */
+  .comp-grid { display: grid; gap: 3rem; }
+  .comp-text { display: grid; gap: 1.25rem; max-width: 40rem; }
+  .comp-links { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 2rem; margin-top: 0.75rem; }
+  .comp-photo { position: relative; margin-inline: calc(var(--margin) * -1); }
+  .comp-photo :global(img) { aspect-ratio: 4 / 3; }
+  .comp-photo figcaption { padding: 1rem var(--margin); font-weight: 500; }
+  @media (min-width: 60rem) {
+    .comp-grid { grid-template-columns: 5fr 6fr; align-items: center; }
+    .comp-photo { margin: 0 calc(var(--margin) * -1) 0 0; }
+    .comp-photo :global(img) { aspect-ratio: 5 / 6; }
+    .comp-photo figcaption { position: absolute; left: -3rem; bottom: 2rem; max-width: 22rem; padding: 1.25rem 1.5rem; }
+  }
+
+  /* ---------- Panels ---------- */
+  .panels { display: grid; }
+  .panel {
+    display: grid; align-content: space-between; gap: 1.5rem;
+    min-height: 26rem; padding: clamp(4rem, 3rem + 2vw, 5rem) var(--margin) clamp(2rem, 1.5rem + 2vw, 3.5rem);
+    text-decoration: none; container-type: inline-size;
+  }
+  .panel p { max-width: 34ch; }
+  /* Sized to the panel: --w is the panel's longest word, so it always fits on one line. */
+  .panel .head { font-size: min(4.5rem, calc(100cqi / (var(--w) * 1.08))); }
+  .panel:hover .text-link { text-decoration: underline; }
+  @media (min-width: 60rem) {
+    .panels { grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr); }
+    .panel { min-height: 34rem; padding-inline: clamp(1.5rem, 1rem + 2vw, 3rem); }
+  }
+
+  /* ---------- Prints ---------- */
+  /* Headline on top, the prints dropped below it: nothing covers the words. */
+  .prints {
+    position: relative; overflow: hidden;
+    display: grid; gap: 2.5rem; padding: var(--section) var(--margin);
+    grid-template-columns: 1fr 1fr;
+  }
+  .prints-title {
+    grid-column: 1 / -1;
+    display: grid; justify-items: center; text-align: center;
+    font-size: min(11rem, calc((100vw - 2 * var(--margin)) / 11.2)); line-height: 0.88;
+  }
+  .print { border: 8px solid var(--white); transition: rotate 200ms var(--ease-out); }
+  .print :global(img) { aspect-ratio: 3 / 4; }
+  .print:hover { rotate: 0deg; }
+  .print-a { rotate: -5deg; }
+  .print-b { rotate: 4deg; margin-top: 2.5rem; }
+  .print-c { display: none; }
+  .prints-note { grid-column: 1 / -1; max-width: 46ch; }
+  @media (min-width: 60rem) {
+    .prints { grid-template-columns: 1fr 22vw 22vw 14vw 1fr; align-items: start; column-gap: 2vw; }
+    .print-a { grid-column: 2; rotate: -8deg; }
+    .print-b { grid-column: 3; rotate: 6deg; margin-top: 4rem; }
+    .print-c { display: block; grid-column: 4; rotate: 3deg; margin-top: 9rem; }
+    .prints-note { grid-column: 1 / -1; }
+  }
+
+  /* ---------- Address rows ---------- */
+  .rows { padding-top: var(--section); }
+  .rows-title { margin-bottom: 2.5rem; }
+  .row-list li {
+    display: flex; align-items: flex-end;
+    min-height: clamp(5rem, 3rem + 6vw, 9.5rem);
+    padding: 0 var(--margin) 1rem;
+    /* Longest row ("WILSON DANCE FACTORY", 20) fits on one line from tablets up; phones hyphenate. */
+    font-size: min(5rem, max(1.75rem, calc((100vw - 2 * var(--margin)) / 21)));
+    line-height: 1;
+    hyphens: auto;
+    overflow-wrap: anywhere;
+  }
+  .row-list li:nth-child(even) { background: var(--red-deep); }
+  .row-list a { text-decoration: none; }
+  .row-list a:hover { color: var(--black); }
+  .row-cta a { display: inline-flex; align-items: center; gap: 1.5rem; }
+  .round {
+    display: inline-grid; place-items: center; width: 0.9em; height: 0.9em; border-radius: 50%;
+    background: var(--black); color: var(--white); font-family: var(--font-text); font-size: 0.8em;
+    transition: transform 200ms var(--ease-out);
+  }
+  .row-cta a:hover .round { transform: translateX(8px); }
+  .rows-facts { display: grid; gap: 2.5rem; padding-block: 4rem var(--section); }
+  .rows-h { font-size: var(--step-lead); font-weight: 500; margin-bottom: 1rem; }
+  .facts { padding-left: 1.2em; }
+  .facts-hours div { display: flex; justify-content: space-between; max-width: 22rem; gap: 1rem; }
+  .facts-hours + p { margin-top: 1.25rem; }
+  @media (min-width: 60rem) {
+    .rows-facts { grid-template-columns: 1fr 1fr; }
+  }
+</style>

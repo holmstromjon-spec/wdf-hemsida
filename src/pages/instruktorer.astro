@@ -1,0 +1,128 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import head from '../assets/images/miljo/miljo-7.jpg';
+import logo from '../assets/images/brand/logo.png';
+
+const people = (await getCollection('instruktorer')).sort((a, b) => a.data.ordning - b.data.ordning);
+
+// The card shows the start of the biography; the whole text opens in a popover.
+const excerpt = (body = '') => {
+  const first = body.trim().split(/\n\s*\n/)[0]?.replace(/\s+/g, ' ') ?? '';
+  if (first.length <= 130) return first;
+  return first.slice(0, first.lastIndexOf(' ', 130)) + '…';
+};
+
+const cards = await Promise.all(
+  people.map(async (p) => ({
+    ...p,
+    hasBio: Boolean(p.body?.trim()),
+    utdrag: excerpt(p.body),
+    Content: (await render(p)).Content,
+  })),
+);
+---
+
+<BaseLayout
+  title="Våra instruktörer"
+  description="Träffa instruktörerna på Wilson Dance Factory i Helsingborg – landslagsdansare, EM- och VM-finalister och erfarna danslärare."
+>
+  <PageHead
+    lines={['Våra', 'instruktörer']}
+    lead="Med hela 21 medarbetare så kan vi erbjuda en kvalitativ helhetsupplevelse inom dans. Oavsett tävling eller fritidsdans."
+    image={head}
+    imageAlt="Danssal hos Wilson Dance Factory"
+  />
+
+  <section class="people on-paper section" aria-label="Instruktörer">
+    <ul role="list" class="wrap people-grid">
+      {cards.map((p) => (
+        <li class="person reveal">
+          <div class="person-photo">
+            {p.data.bild ? (
+              <Image src={p.data.bild} alt={`Porträtt av ${p.data.namn}`} widths={[320, 520]} sizes="(min-width: 75rem) 22vw, (min-width: 40rem) 45vw, 90vw" class="photo" />
+            ) : (
+              <span class="no-photo on-red" title={`Bild på ${p.data.namn} kommer snart`}>
+                <Image src={logo} alt="" width={160} class="no-photo-mark" />
+              </span>
+            )}
+          </div>
+          <h2 class="person-name">{p.data.namn}</h2>
+          <p class="person-role muted">{p.data.roll}</p>
+          {p.hasBio ? <p class="person-excerpt">{p.utdrag}</p> : <p class="person-excerpt muted">Mer info snart</p>}
+          {p.data.dansstilar.length > 0 && (
+            <ul role="list" class="tags" aria-label="Dansstilar">
+              {p.data.dansstilar.map((d) => <li>{d}</li>)}
+            </ul>
+          )}
+          {p.hasBio && (
+            <button class="text-link more" type="button" popovertarget={`bio-${p.id}`}>
+              Läs mer<span class="visually-hidden"> om {p.data.namn}</span> <span class="arrow" aria-hidden="true"></span>
+            </button>
+          )}
+
+          {p.hasBio && (
+            <div id={`bio-${p.id}`} class="bio on-white" popover>
+              <div class="bio-head">
+                <div>
+                  <p class="display bio-name">{p.data.namn}</p>
+                  <p class="muted">{p.data.roll}</p>
+                </div>
+                <button class="bio-close" type="button" popovertarget={`bio-${p.id}`} popovertargetaction="hide">Stäng</button>
+              </div>
+              <div class="prose"><p.Content /></div>
+              {p.data.dansstilar.length > 0 && (
+                <p class="bio-styles"><strong>Dansstilar:</strong> {p.data.dansstilar.join(', ')}</p>
+              )}
+            </div>
+          )}
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section id="team" class="join on-red section">
+    <div class="wrap join-grid reveal">
+      <h2 class="display head">Vårt team</h2>
+      <div class="stack">
+        <p class="lead">Vill du också vara en del av vårt team?</p>
+        <p>Tveka då inte på att höra av dig till oss. Vår dörr är alltid öppen och vi letar ständigt efter nästa möjlighet i vår verksamhet. Om du gillar att dansa och lära ut dans till andra så är du varmt välkommen till oss på Wilson Dance Factory!</p>
+        <p><a class="button" href="/jobba-hos-oss/#jobba"><span>Skicka in din jobbansökan</span> <span class="arrow" aria-hidden="true"></span></a></p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Two columns even on a phone: twenty people in one column is a very long scroll. */
+  .people-grid { display: grid; gap: 3.5rem var(--gap); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (min-width: 48rem) { .people-grid { grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 4.5rem var(--gap); } }
+  .person { display: grid; gap: 0.5rem; align-content: start; container-type: inline-size; }
+  .person-photo { aspect-ratio: 1; overflow: hidden; margin-bottom: 0.75rem; background: var(--white); }
+  .person-photo :global(img) { aspect-ratio: 1; }
+  .no-photo { display: grid; place-items: center; width: 100%; height: 100%; }
+  .no-photo-mark { width: 42%; filter: brightness(0) invert(1); }
+  .person-name { font-family: var(--font-display); text-transform: uppercase; font-size: min(1.25rem, 8.5cqi); line-height: 1.05; overflow-wrap: anywhere; }
+  .person-role { font-weight: 500; }
+  .person-excerpt { line-height: 1.5; }
+  @media (max-width: 47.99rem) { .person-excerpt { display: none; } }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.25rem; }
+  .tags li { background: var(--black); color: var(--white); font-size: var(--step-small); padding: 0.2rem 0.55rem; }
+  .more { justify-self: start; margin-top: 0.25rem; background: none; border: 0; padding: 0.5rem 0; cursor: pointer; }
+
+  .bio {
+    width: min(92vw, 44rem); max-height: 88svh; overflow-y: auto;
+    margin: auto; border: 0; padding: clamp(1.5rem, 1rem + 2vw, 3rem);
+  }
+  .bio::backdrop { background: rgb(17 17 17 / 0.7); }
+  .bio-head { display: flex; justify-content: space-between; align-items: start; gap: 1rem; margin-bottom: 1.5rem; }
+  .bio-name { font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.5rem); line-height: 1; }
+  .bio-close { min-height: 2.75rem; padding: 0 1rem; border: 0; background: var(--black); color: var(--white); font-weight: 500; cursor: pointer; flex: none; }
+  .bio-close:hover { background: var(--red); }
+  .bio-styles { margin-top: 1.5rem; }
+
+  .join-grid { display: grid; gap: 2rem; }
+  @media (min-width: 60rem) { .join-grid { grid-template-columns: 1fr 1fr; align-items: end; } }
+</style>

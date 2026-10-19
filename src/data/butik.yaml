@@ -1,0 +1,23 @@
+# Webbshoppen på /shop/.
+# Sätt oppen: false för att stänga beställningar – då visas stangt_meddelande i stället för formuläret.
+oppen: true
+meddelande: "Butiken har sommaruppehåll mellan 15/6-1/8"
+stangt_meddelande: "Butiken är stängd och inga beställningar kan göras. Vi kommer öppna snart igen!"
+
+namntryck_max: 12
+namntryck_info: "Alla produkter levereras med namntryck. Skriv in ditt önskade namntryck nedan i formuläret."
+
+# storlek: vuxen | junior | ingen  (vilken storlekslista kunden får välja från)
+# bild: filnamn i src/assets/images/butik/
+produkter:
+  - { id: junior-hoodie, namn: Junior Hoodie svart med zip, pris: 600, storlek: junior, bild: junior-hoodie.jpg }
+  - { id: vuxen-hoodie, namn: Vuxen Hoodie svart med zip, pris: 650, storlek: vuxen, bild: vuxen-hoodie.jpg }
+  - { id: vuxen-t-shirt, namn: Vuxen T-shirt svart, pris: 280, storlek: vuxen, bild: vuxen-t-shirt.jpg }
+  - { id: junior-t-shirt, namn: Junior T-shirt svart, pris: 280, storlek: junior, bild: junior-t-shirt.jpg }
+  - { id: totebag, namn: Tot bag svart, pris: 180, storlek: ingen, bild: totebag.jpg }
+  - { id: sportbag, namn: Svart sportbag, pris: 460, storlek: ingen, bild: sportbag.jpg }
+  - { id: vattenflaska, namn: Vattenflaska, pris: 100, storlek: ingen, bild: vattenflaska.jpg }
+
+storlekar:
+  vuxen: [XS, S, M, L, XL]
+  junior: [90-100, 110-120, 130-140, 150-160]

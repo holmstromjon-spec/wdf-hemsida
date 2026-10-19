@@ -1,0 +1,19 @@
+# Bokningsvillkor på /anmalan/ (#bokningsvillkor). Text som på gamla sajten.
+- rubrik: Anmälan
+  text: "Du kan anmäla dig till en kurs fram till och med den tredje kursveckan varje termin. Önskar du anmäla dig efter den tredje veckan är du välkommen att kontakta oss på info@wilsondancefactory.se."
+- rubrik: Prova På
+  text: "Vill du prova en kurs? Då anmäler du dig till kursen precis som vanligt och betalar kursavgiften för att säkra din plats.\n\nOm du väljer att inte fortsätta och meddelar oss innan det andra kurstillfället, återbetalas hela kursavgiften.\n\nDu kan även välja att vänta med din anmälan till kursstart, men då kan vi inte garantera att det finns platser kvar på den kurs du önskar."
+- rubrik: Sjukdom, skada eller flytt
+  text: "Om du behöver avbryta din kurs på grund av sjukdom, skada eller flytt ska du meddela oss skriftligen via e-post så snart som möjligt.\n\nLäkarintyg ska skickas till oss inom två veckor från det att du meddelat avbrottet. Återbetalning sker för de återstående kurstillfällena från och med den dag du kontaktat oss. En administrationsavgift på 100 kr dras vid återbetalning."
+- rubrik: Avbryta en kurs
+  text: "Om du avbryter en kurs senare än tre veckor efter kursstart och orsaken inte är sjukdom, skada eller flytt sker ingen återbetalning."
+- rubrik: Workshop & Event
+  text: "Vid avbokning tidigare än 72 timmar före evenemangets start återbetalas hela beloppet.\n\nVid avbokning senare än 72 timmar före start sker ingen återbetalning."
+- rubrik: Privatlektioner
+  text: "Avbokning senare än 24 timmar före lektionens start debiteras med 65 % av kostnaden.\n\nAvbokning senare än 6 timmar före lektionens start debiteras med 100 % av kostnaden."
+- rubrik: Ångerrätt
+  text: "Din anmälan är bindande om den inte återtas enligt reglerna om ångerrätt.\n\nDu har 14 dagars ångerrätt från det att du mottagit ditt antagningsbesked. Om du vill utnyttja ångerrätten skickar du ett e-postmeddelande till info@wilsondancefactory.se inom dessa 14 dagar.\n\nHar kursen startat och du har deltagit på ett kurstillfälle anses du ha accepterat att avstå från din ångerrätt."
+- rubrik: Presentkort
+  text: "Presentkort är giltiga i ett år från inköpsdatum och kan även användas i vår webbshop."
+- rubrik: Ändringar
+  text: "Wilson Dance Factory förbehåller sig rätten att göra ändringar i kursutbud, schema och lärare både före och under pågående termin."
