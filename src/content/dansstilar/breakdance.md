@@ -1,6 +1,7 @@
 ---
 namn: Breakdance
 ordning: 8
+foto: ../../assets/images/galleri/dsc04085.jpg
 bild: ../../assets/images/dansstilar/breakdance.jpg
 ---
 

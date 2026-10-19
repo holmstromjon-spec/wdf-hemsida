@@ -1,6 +1,7 @@
 ---
 namn: Dansmix 6års
 ordning: 3
+foto: ../../assets/images/galleri/dsc03457.jpg
 bild: ../../assets/images/dansstilar/dansmix-6-ar.jpg
 ---
 

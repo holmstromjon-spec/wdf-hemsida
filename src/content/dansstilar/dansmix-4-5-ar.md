@@ -1,6 +1,7 @@
 ---
 namn: Dansmix 4-5års
 ordning: 2
+foto: ../../assets/images/galleri/dsc03309.jpg
 bild: ../../assets/images/dansstilar/dansmix-4-5-ar.jpg
 ---
 

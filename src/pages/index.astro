@@ -1,19 +1,27 @@
 ---
-// Start page: same sections, order and wording as the old start page,
-// plus "Hitta din klass" (the week's classes by age).
+// Start page: the old start page's video, sections and wording, made lighter,
+// plus a red fact band, real stage photos and "Hitta din klass".
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ClassFinder from '../components/ClassFinder.astro';
 import { site } from '../lib/data';
 
-import heroPhoto from '../assets/images/headers/header-2.jpg';
-import trioPhoto from '../assets/images/galleri/dsc03625.jpg';
-import bottomPhoto from '../assets/images/miljo/miljo-2.jpg';
+import welcomePhoto from '../assets/images/galleri/dsc04161.jpg';
+import aboutPhoto from '../assets/images/headers/header-2.jpg';
+import findPhoto from '../assets/images/miljo/miljo-9.jpg';
 
 const populara = (await getCollection('dansstilar'))
   .filter((d) => d.data.popular)
   .sort((a, b) => a.data.ordning - b.data.ordning);
+
+// Figures from the old start page.
+const fakta = [
+  { tal: '1000+', text: 'medlemmar' },
+  { tal: '800+', text: 'kvm lokaler' },
+  { tal: '20+', text: 'dansstilar' },
+  { tal: 'Från 2 år', text: 'och uppåt' },
+];
 ---
 
 <BaseLayout
@@ -31,12 +39,11 @@ const populara = (await getCollection('dansstilar'))
   </section>
 
   <!-- Welcome -->
-  <section class="hero photo-bg on-dark">
-    <Image src={heroPhoto} alt="" widths={[800, 1400, 2000]} sizes="100vw" loading="eager" fetchpriority="high" class="bg photo" />
-    <div class="container hero-inner">
-      <div class="hero-text">
+  <section class="section welcome">
+    <div class="container split">
+      <div class="stack">
         <h1>Välkommen till oss på Wilson Dance Factory i Helsingborg</h1>
-        <p>Vi har ett stort utbud av dansstilar som passar alla. Vi erbjuder danslektioner för alla åldrar mellan 2 och uppåt. Idag är vi Skånes största dansskola med över 1000 medlemmar och lokaler på över 800 kvm.</p>
+        <p class="lead">Vi har ett stort utbud av dansstilar som passar alla. Vi erbjuder danslektioner för alla åldrar mellan 2 och uppåt.</p>
         <h2 class="h3 sub">Har du koll på dina dancemoves?</h2>
         <p>Är du osäker så är du varmt välkommen in till oss för ett gratis prova på tillfälle inom valfri dansstil.</p>
         <p class="button-row">
@@ -44,57 +51,80 @@ const populara = (await getCollection('dansstilar'))
           <a class="button button--ghost" href="/anmalan/">Boka kurs <span class="arrow" aria-hidden="true"></span></a>
         </p>
       </div>
+      <Image src={welcomePhoto} alt="Tävlingsdansare från Wilson Dance Factory på scen" widths={[600, 900, 1300]} sizes="(min-width: 64rem) 34rem, 100vw" loading="eager" class="photo rounded welcome-photo" />
     </div>
   </section>
 
-  <!-- About box, overlapping the hero like before -->
-  <section class="about">
+  <!-- Red fact band -->
+  <section class="facts on-red" aria-label="Wilson Dance Factory i siffror">
+    <ul role="list" class="container fact-list">
+      {fakta.map((f) => (
+        <li>
+          <span class="fact-num">{f.tal}</span>
+          <span class="fact-text">{f.text}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- Popular styles, with real stage photos -->
+  <section class="section popular" aria-labelledby="pop-title">
     <div class="container">
-      <div class="about-box on-dark center reveal">
+      <div class="head-row">
+        <h2 id="pop-title">Våra mest populära dansstilar just nu!</h2>
+        <a class="text-link" href="/dansstilar/">Se alla våra dansstilar här <span class="arrow" aria-hidden="true"></span></a>
+      </div>
+      <ul role="list" class="tiles">
+        {populara.map((d) => {
+          const img = d.data.foto ?? d.data.bild;
+          return (
+            <li class="tile reveal">
+              <a href={d.data.visa_pa_dansstilar ? `/dansstilar/#${d.id}` : '/anmalan/'}>
+                <span class="tile-photo rounded">
+                  {img && <Image src={img} alt="" widths={[320, 520, 760]} sizes="(min-width: 64rem) 17rem, 45vw" class="photo" />}
+                  <span class="tile-name">{d.data.popular!.namn}</span>
+                </span>
+                <span class="tile-text muted">{d.data.popular!.text}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </section>
+
+  <!-- About, on a darkened stage photo -->
+  <section class="about photo-bg on-dark">
+    <Image src={aboutPhoto} alt="" widths={[800, 1400, 2000]} sizes="100vw" class="bg photo" />
+    <div class="container about-inner section">
+      <div class="stack reveal">
         <h2>Skånes största dansskola inom både hobby och tävlingsdans</h2>
         <p>Wilson Dance Factory är stolt medlem av Sveriges Dansorganisation och är i dagsläget Skånes största medlem, och en av de ledande i hela Sverige. Under våra år som medlem har vi haft nöjet att få se flertal landslagsdansare växa fram och däribland både EM- och VM medaljörer inom Disco och Hiphop, en otroligt stolthet vi bär med oss på vår dansskola.</p>
         <p>Vi är mer än bara en tävlingsdansskola, vår starka passion för dans ska vara tillgänglig för alla åldrar och nivåer. Inne i våra danssalar erbjuder vi danskurser i olika dansstilar, olika nivåer och något för alla åldrar.</p>
         <p>Utöver fantastisk dans och utbildade instruktörer är Wilson Dance Factory mer än bara en dansskola. 900 kvm med bra uppehålls områden, kök, café, reception och otroliga danssalar är vad du som dansare eller kund hos oss kan vänta sig. Vi står redo att ta emot er som är redo att ta första steget mot dem nya dansstegen!</p>
-        <p class="button-row"><a class="button" href="/om-oss/">Läs mer om oss <span class="arrow" aria-hidden="true"></span></a></p>
+        <p class="button-row">
+          <a class="button" href="/om-oss/">Läs mer om oss <span class="arrow" aria-hidden="true"></span></a>
+          <a class="text-link" href="/tavlingsdans/">Tävlingsdans <span class="arrow" aria-hidden="true"></span></a>
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- Popular styles -->
-  <section class="popular section" aria-labelledby="pop-title">
-    <div class="container center">
-      <h2 id="pop-title">Våra mest populära dansstilar just nu!</h2>
-      <ul role="list" class="tiles">
-        {populara.map((d) => (
-          <li class="tile reveal">
-            <a href={d.data.visa_pa_dansstilar ? `/dansstilar/#${d.id}` : '/anmalan/'}>
-              {d.data.bild && <Image src={d.data.bild} alt="" widths={[300, 500]} sizes="(min-width: 64rem) 16rem, 45vw" class="photo rounded" />}
-              <h3 class="h4">{d.data.popular!.namn}</h3>
-              <p class="muted">{d.data.popular!.text}</p>
-            </a>
-          </li>
-        ))}
-      </ul>
-      <p class="button-row"><a class="button" href="/dansstilar/">Se alla våra dansstilar här <span class="arrow" aria-hidden="true"></span></a></p>
-    </div>
-  </section>
-
-  <!-- Three cards on a photograph -->
-  <section class="trio photo-bg" aria-label="Mer om oss">
-    <Image src={trioPhoto} alt="" widths={[800, 1400, 2000]} sizes="100vw" class="bg photo" />
+  <!-- Three cards -->
+  <section class="section">
     <div class="container">
       <ul role="list" class="cards">
-        <li class="on-dark-2 reveal">
+        <li class="card reveal">
           <h2 class="h3">Våra dansstilar</h2>
           <p>På Wilson Dance Factory erbjuder vi över 20 st olika dansstilar i olika nivåer för alla åldersgrupper. Med andra ord så finns det dans för alla.</p>
           <a class="button" href="/dansstilar/">Se alla våra dansstilar <span class="arrow" aria-hidden="true"></span></a>
         </li>
-        <li class="on-dark reveal">
+        <li class="card reveal">
           <h2 class="h3">Våra instruktörer</h2>
           <p>Med hela 21 medarbetare så kan vi erbjuda en kvalitativ helhetsupplevelse inom dans. Oavsett tävling eller fritidsdans.</p>
           <a class="button" href="/instruktorer/">Träffa våra instruktörer <span class="arrow" aria-hidden="true"></span></a>
         </li>
-        <li class="on-red reveal">
+        <li class="card card--red on-red reveal">
           <h2 class="h3">Jobba hos oss?</h2>
           <p>Vi är alltid på jakt efter vår nästa medarbetare. Brinner du för dans eller känner du någon som vill jobba med dans, hör då av er till oss!</p>
           <a class="button" href="/jobba-hos-oss/">Bli en del av WDF <span class="arrow" aria-hidden="true"></span></a>
@@ -106,28 +136,30 @@ const populara = (await getCollection('dansstilar'))
   <ClassFinder />
 
   <!-- News + find us -->
-  <section class="bottom photo-bg on-dark" aria-label="Aktuellt och hitta hit">
-    <Image src={bottomPhoto} alt="" widths={[800, 1400, 2000]} sizes="100vw" class="bg photo" />
-    <div class="container bottom-grid section">
+  <section class="section on-light" aria-label="Aktuellt och hitta hit">
+    <div class="container bottom-grid">
       <div class="stack reveal">
         <h2>Häng med i svängarna!</h2>
-        <p>Hos oss på Wilson Dance Factory händer det roliga saker hela tiden! Med jämna mellanrum anordnar vi olika sorters event hos oss. Det kan vara allt ifrån dansläger och högtidsfirande till tävlingar och olika erbjudanden. För att hålla dig ”up to date” med vad som kommer ske framöver så kan du gå till <a href="/aktuellt/"><strong>aktuellt »</strong></a></p>
+        <p>Hos oss på Wilson Dance Factory händer det roliga saker hela tiden! Med jämna mellanrum anordnar vi olika sorters event hos oss. Det kan vara allt ifrån dansläger och högtidsfirande till tävlingar och olika erbjudanden. För att hålla dig ”up to date” med vad som kommer ske framöver så kan du gå till <a class="text-link" href="/aktuellt/">aktuellt »</a></p>
         <p><a class="button" href="/aktuellt/">Gå till Aktuellt <span class="arrow" aria-hidden="true"></span></a></p>
       </div>
-      <div class="stack reveal">
-        <h2>Hitta till våra lokaler</h2>
-        <p><strong>{site.adress.gata}, {site.adress.postnummer} {site.adress.ort}</strong></p>
-        <p><a class="button" href={site.google.vagbeskrivning} rel="noopener">Vägbeskrivning <span class="arrow" aria-hidden="true"></span></a></p>
-        <h3 class="h4">Hos oss finner du följande:</h3>
-        <ul class="facts">
-          <li>Över 800 kvm lokaler</li>
-          <li>4 st stora danssalar</li>
-          <li>1 liten träningssal</li>
-          <li>Stor lounge / väntrum</li>
-          <li>Omklädningsrum</li>
-          <li>Vårt egna café</li>
-          <li>En härlig och inspirerande känsla i luften</li>
-        </ul>
+      <div class="find card reveal">
+        <Image src={findPhoto} alt="Lokalerna hos Wilson Dance Factory" widths={[480, 800]} sizes="(min-width: 64rem) 34rem, 100vw" class="photo find-photo" />
+        <div class="find-body stack">
+          <h2>Hitta till våra lokaler</h2>
+          <p><strong>{site.adress.gata}, {site.adress.postnummer} {site.adress.ort}</strong></p>
+          <h3 class="h4">Hos oss finner du följande:</h3>
+          <ul class="facts-list">
+            <li>Över 800 kvm lokaler</li>
+            <li>4 st stora danssalar</li>
+            <li>1 liten träningssal</li>
+            <li>Stor lounge / väntrum</li>
+            <li>Omklädningsrum</li>
+            <li>Vårt egna café</li>
+            <li>En härlig och inspirerande känsla i luften</li>
+          </ul>
+          <p><a class="button" href={site.google.vagbeskrivning} rel="noopener">Vägbeskrivning <span class="arrow" aria-hidden="true"></span></a></p>
+        </div>
       </div>
     </div>
   </section>
@@ -169,39 +201,43 @@ const populara = (await getCollection('dansstilar'))
   }
   .film-toggle:hover { background: rgb(32 31 31 / 0.7); }
 
-  .hero { display: grid; align-items: center; }
-  .hero-inner { padding-block: 5rem 9rem; }
-  .hero-text { max-width: 38rem; display: grid; gap: 1rem; }
-  .hero-text .sub { margin-top: 1.25rem; }
-  .hero-text .button-row { margin-top: 0.5rem; }
+  .split { display: grid; gap: 2.5rem; align-items: center; }
+  @media (min-width: 64rem) { .split { grid-template-columns: 1.1fr 1fr; gap: 5rem; } }
+  .welcome .sub { margin-top: 1.5rem; }
+  .welcome .button-row { margin-top: 1.25rem; }
+  .welcome-photo { aspect-ratio: 4 / 5; max-height: 36rem; }
 
-  .about { position: relative; z-index: 2; margin-top: -5rem; }
-  .about-box {
-    padding: clamp(2rem, 1.5rem + 3vw, 3.5rem) clamp(1.25rem, 1rem + 4vw, 5rem);
-    border-radius: var(--radius); display: grid; gap: 1rem; justify-items: center;
-    box-shadow: 0 20px 40px rgb(0 0 0 / 0.18);
-  }
-  .about-box p { max-width: 62rem; }
-  @media (max-width: 40rem) { .about-box { text-align: left; justify-items: start; } }
-  .about-box .button-row { margin-top: 0.75rem; }
+  /* Red band with the big figures */
+  .facts { padding-block: clamp(2.5rem, 2rem + 2vw, 3.5rem); }
+  .fact-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem 1rem; }
+  .fact-list li { display: grid; gap: 0.15rem; }
+  .fact-num { font-size: clamp(2.25rem, 1.6rem + 2.6vw, 3.75rem); font-weight: 300; line-height: 1; letter-spacing: -0.02em; }
+  .fact-text { font-size: var(--fs-lead); opacity: 0.9; }
+  @media (min-width: 64rem) { .fact-list { grid-template-columns: repeat(4, 1fr); } }
 
-  .popular h2 { margin-bottom: 2.5rem; }
-  .tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 1.25rem; margin-bottom: 2.5rem; }
-  .tile a { display: grid; gap: 0.5rem; text-decoration: none; }
-  .tile :global(img) { aspect-ratio: 1; margin-bottom: 0.5rem; transition: transform 300ms var(--ease); }
-  .tile a:hover :global(img) { transform: scale(1.02); }
-  .tile p { font-size: 0.9375rem; line-height: 1.5; }
-  @media (min-width: 64rem) { .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem; } }
+  /* Popular styles */
+  .head-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.75rem 2rem; margin-bottom: 2rem; }
+  .tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem 1rem; }
+  @media (min-width: 64rem) { .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem 1.5rem; } }
+  .tile a { display: grid; gap: 0.75rem; text-decoration: none; }
+  .tile-photo { position: relative; display: block; aspect-ratio: 4 / 5; isolation: isolate; }
+  .tile-photo :global(img) { position: absolute; inset: 0; transition: transform 500ms var(--ease); }
+  .tile-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 50%, rgb(32 31 31 / 0.75)); }
+  .tile a:hover :global(img) { transform: scale(1.05); }
+  .tile-name { position: absolute; left: 1rem; bottom: 0.85rem; z-index: 1; color: var(--white); font-size: var(--fs-h3); font-weight: 300; }
+  .tile-text { font-size: 0.9375rem; line-height: 1.5; }
 
-  .trio { padding-block: var(--section); }
-  .cards { display: grid; border-radius: var(--radius); overflow: hidden; box-shadow: 0 20px 40px rgb(0 0 0 / 0.25); }
+  .about-inner { max-width: min(100% - 2 * var(--pad), 52rem); margin-left: max(var(--pad), calc((100% - var(--container)) / 2)); }
+
+  .cards { display: grid; gap: 1.25rem; }
   .cards li { padding: 2rem clamp(1.25rem, 1rem + 1.5vw, 2rem); display: grid; gap: 1rem; align-content: start; justify-items: start; }
-  .cards li p { flex: 1; }
-  .cards .button { margin-top: auto; }
+  .card--red { border-color: var(--red); }
   @media (min-width: 64rem) { .cards { grid-template-columns: repeat(3, 1fr); } .cards li { grid-template-rows: auto 1fr auto; } }
 
-  .bottom-grid { display: grid; gap: 3rem; }
-  .bottom a:not(.button) { color: inherit; }
-  .facts { padding-left: 1.2em; display: grid; gap: 0.2rem; }
-  @media (min-width: 64rem) { .bottom-grid { grid-template-columns: 1fr 1fr; gap: 5rem; } }
+  .bottom-grid { display: grid; gap: 3rem; align-items: start; }
+  .find { overflow: hidden; }
+  .find-photo { aspect-ratio: 16 / 9; }
+  .find-body { padding: 1.5rem clamp(1.25rem, 1rem + 1.5vw, 2rem) 2rem; }
+  .facts-list { padding-left: 1.2em; display: grid; gap: 0.15rem; }
+  @media (min-width: 64rem) { .bottom-grid { grid-template-columns: 1fr 1fr; gap: 4rem; } }
 </style>

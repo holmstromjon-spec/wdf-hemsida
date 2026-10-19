@@ -1,14 +1,15 @@
 ---
-// "Hitta din klass": choose an age group and see the week's classes from
-// src/data/schema.yaml. Works without JavaScript (radio buttons + CSS).
+// "Hitta din klass": choose an age group and the week's classes from src/data/schema.yaml
+// appear as poster lines – big class names left, day and time right.
+// Works without JavaScript (radio buttons + CSS); the full schedule is one link away.
 import { schema } from '../lib/data';
 
 const grupper = schema.veckoschema.grupper;
 ---
 
-<section class="finder on-light section" aria-labelledby="finder-title">
+<section class="finder on-dark section" aria-labelledby="finder-title">
   <div class="container">
-    <div class="finder-head center">
+    <div class="finder-head">
       <h2 id="finder-title">Hitta din klass</h2>
       <p class="muted">Välj ålder eller dansstil så ser du veckans pass.</p>
     </div>
@@ -24,24 +25,18 @@ const grupper = schema.veckoschema.grupper;
 
     <div class="panels">
       {grupper.map((g, i) => (
-        <div class="panel card" data-grupp={i}>
+        <div class="panel" data-grupp={i}>
           <h3 class="visually-hidden">{g.namn}</h3>
-          <table>
-            <thead>
-              <tr><th scope="col">Dag</th><th scope="col">Tid</th><th scope="col">Klass</th></tr>
-            </thead>
-            <tbody>
-              {g.dagar.flatMap((d) =>
-                d.pass.map((p, j) => (
-                  <tr class:list={{ 'new-day': j === 0 }}>
-                    <td class="day">{j === 0 ? d.dag : ''}</td>
-                    <td class="tabular time">{p.tid}</td>
-                    <td>{p.klass}</td>
-                  </tr>
-                )),
-              )}
-            </tbody>
-          </table>
+          <ul role="list" class="lines">
+            {g.dagar.flatMap((d) =>
+              d.pass.map((p) => (
+                <li>
+                  <span class="name">{p.klass}</span>
+                  <span class="when tabular">{d.dag} <strong>{p.tid}</strong></span>
+                </li>
+              )),
+            )}
+          </ul>
         </div>
       ))}
     </div>
@@ -54,18 +49,19 @@ const grupper = schema.veckoschema.grupper;
 </section>
 
 <style>
+  .finder { background: #141313; }
   .finder-head { display: grid; gap: 0.5rem; margin-bottom: 2rem; }
-  .tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-bottom: 1.5rem; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
   .tabs label { cursor: pointer; }
   .tabs input { position: absolute; opacity: 0; pointer-events: none; }
   .tabs span {
     display: inline-flex; align-items: center; min-height: 2.5rem; padding: 0.4rem 0.95rem;
-    border: 1px solid var(--line); border-radius: 999px; background: var(--white);
-    font-size: 0.9375rem; font-weight: 500; transition: background-color 150ms, color 150ms, border-color 150ms;
+    border: 1px solid rgb(255 255 255 / 0.35); border-radius: 999px;
+    font-size: 0.9375rem; font-weight: 500; transition: background-color 150ms, border-color 150ms;
   }
-  .tabs label:hover span { border-color: var(--dark); }
-  .tabs input:checked + span { background: var(--red); border-color: var(--red); color: var(--white); }
-  .tabs input:focus-visible + span { outline: 2px solid var(--red); outline-offset: 2px; }
+  .tabs label:hover span { border-color: var(--white); }
+  .tabs input:checked + span { background: var(--red); border-color: var(--red); }
+  .tabs input:focus-visible + span { outline: 2px solid var(--white); outline-offset: 2px; }
 
   /* Show only the chosen group. Without :has() support every group is listed. */
   @supports selector(:has(*)) {
@@ -81,20 +77,23 @@ const grupper = schema.veckoschema.grupper;
     .finder:has(input[value='8']:checked) [data-grupp='8'],
     .finder:has(input[value='9']:checked) [data-grupp='9'] { display: block; }
   }
-  .panel { max-width: 46rem; margin-inline: auto; padding: 0.5rem 1.25rem; }
-  .panel + .panel { margin-top: 1rem; }
-  table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
-  th { text-align: left; font-weight: 500; color: var(--muted); font-size: var(--fs-small); padding: 0.6rem 0.5rem; }
-  td { padding: 0.55rem 0.5rem; vertical-align: top; }
-  tr.new-day td { border-top: 1px solid var(--line); }
-  .day { font-weight: 500; width: 7.5rem; }
-  .time { white-space: nowrap; width: 7rem; }
-  @media (max-width: 40rem) {
-    .panel { padding-inline: 0.5rem; }
-    table { font-size: 0.875rem; }
-    .day { width: 5.25rem; }
-    .time { width: 5.5rem; }
-    td, th { padding-inline: 0.35rem; }
+
+  /* Poster lines */
+  .lines li {
+    display: grid; gap: 0.15rem; padding-block: 0.8rem;
+    border-top: 1px solid rgb(255 255 255 / 0.12);
   }
-  .actions { justify-content: center; margin-top: 2rem; }
+  .lines li:last-child { border-bottom: 1px solid rgb(255 255 255 / 0.12); }
+  .name {
+    font-size: clamp(1.25rem, 0.9rem + 1.6vw, 2.25rem); font-weight: 600; line-height: 1.1;
+    text-transform: uppercase; letter-spacing: -0.01em; transition: color 150ms;
+  }
+  .lines li:hover .name { color: #ff6f61; }
+  .when { color: var(--muted); font-size: 0.9375rem; }
+  .when strong { color: var(--white); font-weight: 500; margin-left: 0.35rem; }
+  @media (min-width: 48rem) {
+    .lines li { grid-template-columns: 1fr auto; align-items: baseline; gap: 2rem; }
+    .when { text-align: right; white-space: nowrap; }
+  }
+  .actions { margin-top: 2.5rem; }
 </style>

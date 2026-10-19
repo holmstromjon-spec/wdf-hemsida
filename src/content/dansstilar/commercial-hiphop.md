@@ -1,6 +1,7 @@
 ---
 namn: Commercial HipHop
 ordning: 12
+foto: ../../assets/images/galleri/dsc04429.jpg
 bild: ../../assets/images/dansstilar/commercial-hiphop.jpg
 ---
 

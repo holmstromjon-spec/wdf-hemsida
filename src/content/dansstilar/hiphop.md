@@ -1,6 +1,7 @@
 ---
 namn: HipHop
 ordning: 10
+foto: ../../assets/images/galleri/dsc04438.jpg
 bild: ../../assets/images/dansstilar/hiphop.jpg
 ---
 

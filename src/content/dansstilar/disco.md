@@ -1,6 +1,7 @@
 ---
 namn: Disco
 ordning: 9
+foto: ../../assets/images/galleri/dsc02513.jpg
 bild: ../../assets/images/dansstilar/disco.jpg
 popular:
   namn: Disco

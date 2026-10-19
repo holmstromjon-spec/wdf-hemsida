@@ -24,6 +24,8 @@ const dansstilar = defineCollection({
       namn: z.string(),
       ordning: z.number(),
       bild: image().optional(),
+      // A real photograph of the style (preferred over the old text tile in `bild`).
+      foto: image().optional(),
       visa_pa_dansstilar: z.boolean().default(true),
       // Set to show the style under "Våra mest populära dansstilar just nu!" on the start page.
       popular: z.object({ namn: z.string(), text: z.string() }).optional(),

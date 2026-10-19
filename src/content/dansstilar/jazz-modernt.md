@@ -1,6 +1,7 @@
 ---
 namn: Jazz & Modernt
 ordning: 11
+foto: ../../assets/images/galleri/dsc04233.jpg
 bild: ../../assets/images/dansstilar/jazz-modernt.jpg
 ---
 

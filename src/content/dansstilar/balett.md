@@ -1,6 +1,7 @@
 ---
 namn: Balett
 ordning: 4
+foto: ../../assets/images/galleri/dsc04216.jpg
 bild: ../../assets/images/dansstilar/balett.jpg
 popular:
   namn: Balett

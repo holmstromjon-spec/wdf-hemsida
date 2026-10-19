@@ -1,6 +1,7 @@
 ---
 namn: TikTok dans
 ordning: 5
+foto: ../../assets/images/galleri/dsc03702.jpg
 bild: ../../assets/images/dansstilar/tiktok.jpg
 popular:
   namn: Tik Tok

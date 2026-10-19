@@ -26,17 +26,17 @@ const strip = [
   <section class="section">
     <div class="container">
       <ul role="list" class="cards">
-        <li class="on-dark-2 reveal">
+        <li class="card reveal">
           <h2 class="h3">Våra dansstilar</h2>
           <p>På Wilson Dance Factory erbjuder vi över 20 st olika dansstilar i olika nivåer för alla åldersgrupper. Med andra ord så finns det dans för alla.</p>
           <a class="button" href="/dansstilar/">Se alla våra dansstilar <span class="arrow" aria-hidden="true"></span></a>
         </li>
-        <li class="on-dark reveal">
+        <li class="card reveal">
           <h2 class="h3">Våra instruktörer</h2>
           <p>Med hela 21 medarbetare så kan vi erbjuda en kvalitativ helhetsupplevelse inom dans. Oavsett tävling eller fritidsdans.</p>
           <a class="button" href="/instruktorer/">Träffa våra instruktörer <span class="arrow" aria-hidden="true"></span></a>
         </li>
-        <li class="on-red reveal">
+        <li class="card on-red reveal">
           <h2 class="h3">Jobba hos oss?</h2>
           <p>Vi är alltid på jakt efter vår nästa medarbetare. Brinner du för dans eller känner du någon som vill jobba med dans, hör då av er till oss!</p>
           <a class="button" href="/jobba-hos-oss/">Bli en del av WDF <span class="arrow" aria-hidden="true"></span></a>
@@ -67,7 +67,7 @@ const strip = [
     </div>
   </section>
 
-  <section class="section on-dark">
+  <section class="section on-red">
     <div class="container center stack">
       <h2>Vill du se mer av oss?</h2>
       <p>Följ oss på Facebook och Instagram för att hänga med i vår vardag!</p>
@@ -80,7 +80,8 @@ const strip = [
 </BaseLayout>
 
 <style>
-  .cards { display: grid; border-radius: var(--radius); overflow: hidden; box-shadow: 0 16px 36px rgb(0 0 0 / 0.14); }
+  .cards { display: grid; gap: 1.25rem; }
+  .cards .on-red { border-color: var(--red); }
   .cards li { padding: 2rem clamp(1.25rem, 1rem + 1.5vw, 2rem); display: grid; gap: 1rem; align-content: start; justify-items: start; }
   @media (min-width: 64rem) { .cards { grid-template-columns: repeat(3, 1fr); } .cards li { grid-template-rows: auto 1fr auto; } }
 

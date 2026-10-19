@@ -27,7 +27,7 @@ const rendered = await Promise.all(stilar.map(async (s) => ({ ...s, Content: (aw
       <ul role="list" class="styles">
         {rendered.map((s) => (
           <li id={s.id} class="style card reveal">
-            {s.data.bild && <Image src={s.data.bild} alt="" widths={[360, 600]} sizes="(min-width: 64rem) 22rem, (min-width: 40rem) 45vw, 90vw" class="photo" />}
+            {(s.data.foto ?? s.data.bild) && <Image src={(s.data.foto ?? s.data.bild)!} alt="" widths={[360, 600, 900]} sizes="(min-width: 64rem) 22rem, (min-width: 40rem) 45vw, 90vw" class="photo" />}
             <div class="style-text">
               <h3 class="h4">{s.data.namn}</h3>
               <div class="stack"><s.Content /></div>
@@ -44,7 +44,7 @@ const rendered = await Promise.all(stilar.map(async (s) => ({ ...s, Content: (aw
   .intro { max-width: 46rem; margin-bottom: 2.5rem; }
   .styles { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); }
   .style { display: grid; grid-template-rows: auto 1fr; overflow: hidden; scroll-margin-top: 7rem; }
-  .style :global(img) { aspect-ratio: 1; }
+  .style :global(img) { aspect-ratio: 4 / 3; }
   .style-text { display: grid; gap: 0.75rem; align-content: start; padding: 1.25rem 1.25rem 1.5rem; font-size: 0.9375rem; }
   .style-text p:last-child { margin-top: 0.5rem; }
 </style>

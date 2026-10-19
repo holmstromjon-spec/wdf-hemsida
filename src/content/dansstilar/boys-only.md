@@ -1,6 +1,7 @@
 ---
 namn: Boys Only
 ordning: 6
+foto: ../../assets/images/galleri/dsc03680.jpg
 bild: ../../assets/images/dansstilar/boys-only.jpg
 ---
 

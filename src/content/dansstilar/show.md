@@ -1,6 +1,7 @@
 ---
 namn: Show
 ordning: 7
+foto: ../../assets/images/galleri/dsc03581.jpg
 bild: ../../assets/images/dansstilar/show.jpg
 ---
 
