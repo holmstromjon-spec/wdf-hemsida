@@ -12,9 +12,9 @@ const { photos, id } = Astro.props;
 const large = await Promise.all(photos.map((p) => getImage({ src: p.src, width: 2000, format: 'webp' })));
 ---
 
-<ul role="list" class="photo-grid reveal" data-lightbox={id}>
+<ul role="list" class="photo-grid" data-lightbox={id}>
   {photos.map((p, i) => (
-    <li class:list={[{ wide: i % 7 === 0 }]}>
+    <li>
       <a href={large[i]!.src} data-index={i}>
         <Image src={p.src} alt={p.alt} widths={[400, 700, 1000]} sizes="(min-width: 60rem) 30vw, 50vw" class="photo" />
       </a>
@@ -69,18 +69,17 @@ const large = await Promise.all(photos.map((p) => getImage({ src: p.src, width: 
 
 <style>
   .photo-grid { display: grid; gap: 0.75rem; grid-template-columns: repeat(2, 1fr); }
-  .photo-grid a { display: block; overflow: hidden; }
-  .photo-grid :global(img) { aspect-ratio: 1; transition: scale 400ms var(--ease-out); }
+  .photo-grid a { display: block; overflow: hidden; border-radius: var(--radius); }
+  .photo-grid :global(img) { aspect-ratio: 1; transition: scale 400ms var(--ease); }
   .photo-grid a:hover :global(img) { scale: 1.04; }
-  .photo-grid .wide { grid-column: span 2; }
-  .photo-grid .wide :global(img) { aspect-ratio: 2 / 1; }
-  @media (min-width: 60rem) { .photo-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 48rem) { .photo-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 64rem) { .photo-grid { grid-template-columns: repeat(4, 1fr); gap: 1rem; } }
 
-  .lightbox { max-width: 96vw; max-height: 96svh; padding: 0; border: 0; background: var(--black); color: var(--white); }
+  .lightbox { max-width: 96vw; max-height: 96svh; padding: 0; border: 0; border-radius: var(--radius); background: var(--dark); color: var(--white); }
   .lightbox::backdrop { background: rgb(17 17 17 / 0.9); }
   .lightbox img { max-width: 96vw; max-height: 80svh; width: auto; margin: 0 auto; }
   .lb-caption { padding: 0.75rem 1rem 0; }
   .lb-controls { display: flex; justify-content: space-between; gap: 0.5rem; padding: 0.75rem 1rem 1rem; }
-  .lb-controls button { min-height: 2.75rem; padding: 0 1rem; border: 0; background: var(--white); color: var(--black); font-weight: 500; cursor: pointer; }
+  .lb-controls button { min-height: 2.75rem; padding: 0 1rem; border: 0; border-radius: var(--radius); background: var(--white); color: var(--dark); font-weight: 500; cursor: pointer; }
   .lb-controls button:hover { background: var(--red); color: var(--white); }
 </style>

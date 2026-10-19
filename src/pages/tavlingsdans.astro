@@ -4,14 +4,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHead from '../components/PageHead.astro';
 import { site } from '../lib/data';
 import head from '../assets/images/galleri/dsc04233.jpg';
-import bleed from '../assets/images/galleri/dsc03457.jpg';
 import h1 from '../assets/images/headers/header-1.jpg';
 import h2 from '../assets/images/headers/header-2.jpg';
 import h3 from '../assets/images/headers/header-3.jpg';
 import h4 from '../assets/images/headers/header-4.jpg';
 
-// The competition ladder, as used in the class names on /schema/.
-const ladder = ['Brons', 'Silver', 'Guld', 'Star', 'Superstar', 'Champion'];
 const strip = [h1, h2, h3, h4];
 ---
 
@@ -19,121 +16,84 @@ const strip = [h1, h2, h3, h4];
   title="Tävlingsdans"
   description="Tävlingsverksamhet på Wilson Dance Factory: solo och duo i disco och hiphop, förberedande kurs för nya tävlingsdansare och privatlektioner."
 >
-  <PageHead
-    lines={['Tävlings-', 'dans']}
-    lead="På Wilson Dance Factory vill vi skapa möjligheter för alla dansare att utvecklas och utmanas på sin egen nivå. Vår tävlingsverksamhet är öppen för alla med danserfarenhet – oavsett ålder. Det är aldrig för sent att börja tävla!"
-    ground="black"
-    image={head}
-    imageAlt="Tävlingsdansare från Wilson Dance Factory på scen"
-  />
+  <PageHead title="Tävlingsverksamhet på Wilson Dance Factory" image={head} />
 
-  <section class="ladder on-red" aria-label="Tävlingsklasser">
-    <ol role="list" class="ladder-list display">
-      {ladder.map((step) => <li>{step}</li>)}
-    </ol>
-  </section>
+  <section class="section">
+    <div class="container">
+      <p class="lead intro">På Wilson Dance Factory vill vi skapa möjligheter för alla dansare att utvecklas och utmanas på sin egen nivå. Vår tävlingsverksamhet är öppen för alla med danserfarenhet – oavsett ålder. Det är aldrig för sent att börja tävla!</p>
 
-  <section class="info on-white section">
-    <div class="wrap info-grid">
-      <h2 class="visually-hidden">Tävlingsverksamhet på Wilson Dance Factory</h2>
-      <article class="reveal stack">
-        <h3 class="display info-h">Tävlingsformer</h3>
-        <p>Vi fokuserar i första hand på tävlingar inom solo- och duokategorier.</p>
-        <p>Längre fram kan vi även komma att erbjuda tävlande i grupp/crew, vilket sker när våra danslärare ser möjlighet att sätta samman en grupp där rörelsemönster, nivå och ålder matchar på ett bra sätt.</p>
-      </article>
-      <article class="reveal stack">
-        <h3 class="display info-h">Förberedande kurs – ”Nya Tävlingsdansare”</h3>
-        <p>För dig som är ny inom tävlingsdans rekommenderar vi kursen ”Nya tävling”, som är en introduktion till tävlingsvärlden.</p>
-        <p>Här fokuserar vi på att:</p>
-        <ul>
-          <li>öva in en tävlingskoreografi,</li>
-          <li>förbereda dansaren mentalt och praktiskt inför sin första tävling,</li>
-          <li>gå igenom hur en tävlingsdag går till – allt från nummerlappar till bedömning och uppträdande på scen.</li>
-        </ul>
-        <p>Syftet är att skapa trygghet och förståelse så att den första tävlingen blir en rolig och positiv upplevelse.</p>
-        <p>Det finns inget krav på att tävla när man går denna kurs, men möjligheten finns alltid för den som vill.</p>
-      </article>
-      <article class="reveal stack">
-        <h3 class="display info-h">Tävlingar och resor</h3>
-        <p>Danstävlingar arrangeras runt om i landet, och ibland kräver det att man reser en bit – exempelvis till orter som Borås, Kalmar eller Falköping.</p>
-        <p>Vi försöker dock varje år arrangera minst en tävling på närmare håll, vanligtvis i Höganäs, vilket ger både dansare och familjer en chans att tävla på hemmaplan.</p>
-      </article>
-      <article class="reveal stack">
-        <h3 class="display info-h">Utveckling och ambition</h3>
-        <p>Vårt främsta fokus är varje dansares utveckling och dansglädje. Vi arbetar för att bygga en trygg relation mellan elev och lärare, där dansaren får växa i sin egen takt.</p>
-        <p>Vissa dansare siktar mot tydliga tävlingsmål och högre nivåer, medan andra främst ser tävlingsdansen som en rolig och motiverande del av sin hobby. Hos oss är alla ambitioner välkomna, och vi möter varje elev där de befinner sig.</p>
-      </article>
-      <article class="reveal stack info-meet on-red">
-        <h3 class="display info-h">Informationsmöte</h3>
-        <p>Inför vårterminen kommer vi att hålla ett informationsmöte om tävlingsdans för alla som är nyfikna och vill veta mer.</p>
-        <p><strong>Datum:</strong> 18 januari<br /><strong>Tid:</strong> meddelas senare</p>
-        <p>Vi rekommenderar alla intresserade att delta för att få en tydlig bild av hur tävlingsverksamheten fungerar och vilka möjligheter som finns.</p>
-      </article>
-    </div>
-  </section>
-
-  <section class="private" aria-labelledby="private-title">
-    <Image src={bleed} alt="" widths={[800, 1400, 2000]} sizes="100vw" class="photo private-bg" />
-    <div class="private-bar on-black">
-      <div class="wrap stack">
-        <h2 id="private-title" class="display head" style="--w:15">Privatlektioner</h2>
-        <p class="lead">I Disco och Hiphop.</p>
-        <p>Önskar du privatlektion i Disco eller Hiphop så bokar du detta under schema/anmälan. Efter bokad lektion får du en faktura på din mail som ska vara betald innan privatlektionen.</p>
-        <p><strong>Finns det inga tillgängliga tider?</strong> Vi uppdaterar med nya tider så fort vi vet!</p>
-        <p class="private-links">
-          <a class="button" href="/schema/#tavlingsschema"><span>Gå till schema för tävlingsdans</span> <span class="arrow" aria-hidden="true"></span></a>
-          <a class="text-link" href="/anmalan/">Anmälan <span class="arrow" aria-hidden="true"></span></a>
-        </p>
+      <div class="info">
+        <article class="stack">
+          <h2 class="h4">Tävlingsformer</h2>
+          <p>Vi fokuserar i första hand på tävlingar inom solo- och duokategorier.</p>
+          <p>Längre fram kan vi även komma att erbjuda tävlande i grupp/crew, vilket sker när våra danslärare ser möjlighet att sätta samman en grupp där rörelsemönster, nivå och ålder matchar på ett bra sätt.</p>
+        </article>
+        <article class="stack">
+          <h2 class="h4">Förberedande kurs – ”Nya Tävlingsdansare”</h2>
+          <p>För dig som är ny inom tävlingsdans rekommenderar vi kursen ”Nya tävling”, som är en introduktion till tävlingsvärlden.</p>
+          <p>Här fokuserar vi på att:</p>
+          <ul>
+            <li>öva in en tävlingskoreografi,</li>
+            <li>förbereda dansaren mentalt och praktiskt inför sin första tävling,</li>
+            <li>gå igenom hur en tävlingsdag går till – allt från nummerlappar till bedömning och uppträdande på scen.</li>
+          </ul>
+          <p>Syftet är att skapa trygghet och förståelse så att den första tävlingen blir en rolig och positiv upplevelse.</p>
+          <p>Det finns inget krav på att tävla när man går denna kurs, men möjligheten finns alltid för den som vill.</p>
+        </article>
+        <article class="stack">
+          <h2 class="h4">Tävlingar och resor</h2>
+          <p>Danstävlingar arrangeras runt om i landet, och ibland kräver det att man reser en bit – exempelvis till orter som Borås, Kalmar eller Falköping.</p>
+          <p>Vi försöker dock varje år arrangera minst en tävling på närmare håll, vanligtvis i Höganäs, vilket ger både dansare och familjer en chans att tävla på hemmaplan.</p>
+        </article>
+        <article class="stack">
+          <h2 class="h4">Utveckling och ambition</h2>
+          <p>Vårt främsta fokus är varje dansares utveckling och dansglädje. Vi arbetar för att bygga en trygg relation mellan elev och lärare, där dansaren får växa i sin egen takt.</p>
+          <p>Vissa dansare siktar mot tydliga tävlingsmål och högre nivåer, medan andra främst ser tävlingsdansen som en rolig och motiverande del av sin hobby. Hos oss är alla ambitioner välkomna, och vi möter varje elev där de befinner sig.</p>
+        </article>
+        <article class="stack meet card">
+          <h2 class="h4">Informationsmöte</h2>
+          <p>Inför vårterminen kommer vi att hålla ett informationsmöte om tävlingsdans för alla som är nyfikna och vill veta mer.</p>
+          <p><strong>Datum:</strong> 18 januari<br /><strong>Tid:</strong> meddelas senare</p>
+          <p>Vi rekommenderar alla intresserade att delta för att få en tydlig bild av hur tävlingsverksamheten fungerar och vilka möjligheter som finns.</p>
+        </article>
       </div>
     </div>
   </section>
 
-  <section class="more on-paper section" aria-labelledby="more-title">
-    <div class="wrap more-grid">
-      <div class="stack reveal">
-        <h2 id="more-title" class="display head">Se mer</h2>
-        <p class="lead">Vill du se mer av våra tävlande?</p>
-        <p>Följ oss på Facebook och Instagram. Där lägger vi regelbundet upp bilder och filmer på våra tävlande dansare!</p>
-        <p class="more-links">
-          <a class="button" href={site.sociala.facebook} rel="noopener"><span>Facebook</span></a>
-          <a class="button" href={site.sociala.instagram} rel="noopener"><span>Instagram</span></a>
-          <a class="text-link" href="/aktuellt/#bilder">Gå till bildgalleri <span class="arrow" aria-hidden="true"></span></a>
-        </p>
-      </div>
-      <ul role="list" class="more-strip">
-        {strip.map((s) => <li><Image src={s} alt="Dansare hos Wilson Dance Factory" widths={[360, 600]} sizes="(min-width: 60rem) 14vw, 45vw" class="photo" /></li>)}
+  <section class="section on-dark">
+    <div class="container center stack narrow">
+      <h2>Privatlektioner i Disco och Hiphop</h2>
+      <p>Önskar du privatlektion i Disco eller Hiphop så bokar du detta under schema/anmälan.</p>
+      <p>Efter bokad lektion får du en faktura på din mail som ska vara betald innan privatlektionen.</p>
+      <p><strong>Finns det inga tillgängliga tider?</strong><br />Vi uppdaterar med nya tider så fort vi vet!</p>
+      <p class="button-row"><a class="button" href="/schema/#tavlingsschema">Gå till schema för tävlingsdans <span class="arrow" aria-hidden="true"></span></a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container center stack">
+      <h2>Vill du se mer av våra tävlande?</h2>
+      <p>Följ oss på Facebook och Instagram. Där lägger vi regelbundet upp bilder och filmer på våra tävlande dansare!</p>
+      <ul role="list" class="strip">
+        {strip.map((s) => <li><Image src={s} alt="Dansare hos Wilson Dance Factory" widths={[360, 600]} sizes="(min-width: 64rem) 17rem, 45vw" class="photo rounded" /></li>)}
       </ul>
+      <p class="button-row">
+        <a class="button" href={site.sociala.facebook} rel="noopener">Facebook <span class="arrow" aria-hidden="true"></span></a>
+        <a class="button" href={site.sociala.instagram} rel="noopener">Instagram <span class="arrow" aria-hidden="true"></span></a>
+        <a class="text-link" href="/aktuellt/#bilder">Gå till bildgalleri <span class="arrow" aria-hidden="true"></span></a>
+      </p>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .ladder { padding: 1.5rem var(--margin); overflow: hidden; }
-  .ladder-list { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; font-size: clamp(1.125rem, 0.6rem + 2.6vw, 3rem); line-height: 1.05; }
-  .ladder-list li:not(:last-child)::after { content: '→'; font-family: var(--font-text); margin-left: 1.25rem; color: var(--black); }
-
-  .info-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 3.5rem var(--gap); }
-  .info-h { font-size: clamp(1.25rem, 1rem + 1vw, 1.875rem); line-height: 1.05; overflow-wrap: anywhere; }
-  .info-grid ul { padding-left: 1.2em; }
-  .info-grid strong { font-weight: 500; }
-  .info-meet { padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); }
-  @media (min-width: 60rem) {
-    .info-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
-    .info-grid article:nth-child(odd) { padding-right: 4vw; }
-  }
-
-  .private { position: relative; display: grid; min-height: 90svh; }
-  .private-bg { position: absolute; inset: 0; }
-  .private-bar { position: relative; align-self: end; padding-block: 2.5rem; }
-  .private-bar .stack { max-width: 52rem; }
-  .private-links, .more-links { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
-
-  .more-grid { display: grid; gap: 3rem; align-items: center; }
-  .more-strip { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
-  .more-strip :global(img) { aspect-ratio: 3 / 4; }
-  @media (min-width: 60rem) {
-    .more-grid { grid-template-columns: 5fr 7fr; }
-    .more-strip { grid-template-columns: repeat(4, 1fr); }
-    .more-strip li:nth-child(even) { translate: 0 2rem; }
-  }
+  .intro { max-width: 52rem; margin-bottom: 3rem; }
+  .info { display: grid; gap: 2.5rem 4rem; }
+  .info ul { padding-left: 1.2em; }
+  .meet { padding: 1.5rem; background: var(--light); border-color: var(--light); }
+  @media (min-width: 64rem) { .info { grid-template-columns: 1fr 1fr; align-items: start; } }
+  .narrow { max-width: 44rem; }
+  .strip { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-block: 2rem !important; }
+  .strip :global(img) { aspect-ratio: 4 / 3; }
+  @media (min-width: 64rem) { .strip { grid-template-columns: repeat(4, 1fr); } }
 </style>

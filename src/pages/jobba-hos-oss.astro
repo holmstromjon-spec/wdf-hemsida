@@ -3,9 +3,8 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHead from '../components/PageHead.astro';
 import { site } from '../lib/data';
-import head from '../assets/images/miljo/miljo-3.jpg';
+import head from '../assets/images/headers/header-4.jpg';
 import photo from '../assets/images/galleri/dsc04118.jpg';
-import teamPhoto from '../assets/images/miljo/miljo-6.jpg';
 
 // No form (decision 3): a mail button with a ready subject line and the points to include.
 const subject = encodeURIComponent('Jobbansökan – Wilson Dance Factory');
@@ -17,56 +16,38 @@ const mailto = `mailto:${site.epost}?subject=${subject}&body=${body}`;
   title="Jobba hos oss?"
   description="Wilson Dance Factory växer och söker kontinuerligt nya medarbetare – assistenter, receptionister och danslärare. Skicka din ansökan till oss."
 >
-  <PageHead
-    lines={['Jobba', 'hos oss']}
-    lead="Wilson Dance Factory växer – och vi söker kontinuerligt nya medarbetare!"
-    image={head}
-    imageAlt="Lokalerna hos Wilson Dance Factory"
-  />
+  <PageHead title="Jobba hos oss" image={head} />
 
-  <section class="apply on-white section">
-    <div class="wrap apply-grid">
-      <div class="stack reveal">
-        <p class="lead">Vi välkomnar ansökningar till tjänster som assistent, receptionist och danslärare.</p>
-        <h2 class="display apply-h">När du skickar in din ansökan vill vi att du inkluderar:</h2>
-        <ul class="apply-list">
+  <section class="section">
+    <div class="container split">
+      <div class="stack">
+        <p class="lead"><strong>Wilson Dance Factory växer – och vi söker kontinuerligt nya medarbetare!</strong></p>
+        <p>Vi välkomnar ansökningar till tjänster som assistent, receptionist och danslärare.</p>
+        <p>När du skickar in din ansökan vill vi att du inkluderar:</p>
+        <ul class="list">
           <li><strong>Erfarenhet</strong> – tidigare arbete, dansbakgrund eller annan relevant kompetens.</li>
           <li><strong>Ålder</strong> – för att vi ska kunna matcha dig med rätt uppdrag.</li>
           <li><strong>Motivering</strong> – berätta varför du vill arbeta hos oss och vad just du kan bidra med.</li>
         </ul>
         <p>Skicka in din ansökan till oss och bli en del av ett kreativt, energifyllt och välkomnande team!</p>
       </div>
-      <div class="apply-photo tilt-r">
-        <Image src={photo} alt="Dansare från Wilson Dance Factory" widths={[480, 800]} sizes="(min-width: 60rem) 34vw, 90vw" class="photo" />
-      </div>
+      <Image src={photo} alt="Dansare från Wilson Dance Factory" widths={[480, 800]} sizes="(min-width: 64rem) 30rem, 100vw" class="photo rounded split-photo" />
     </div>
   </section>
 
-  <section id="jobba" class="send on-red section">
-    <div class="wrap send-grid reveal">
-      <h2 class="display head">Skicka in din jobbansökan</h2>
-      <div class="stack">
-        <p>Du mailar in din jobbansökan till oss på <a href={`mailto:${site.epost}`}>{site.epost}</a>. Knappen nedan öppnar ett färdigt mejl med det vi vill veta.</p>
-        <p><a class="button" href={mailto}><span>Bli en del av WDF</span> <span class="arrow" aria-hidden="true"></span></a></p>
-      </div>
-      <div class="send-photo tilt-l">
-        <Image src={teamPhoto} alt="Danssal hos Wilson Dance Factory" widths={[480, 800]} sizes="(min-width: 60rem) 30vw, 90vw" class="photo" />
-      </div>
+  <section id="jobba" class="section on-dark">
+    <div class="container center stack">
+      <h2>Skicka in din jobbansökan</h2>
+      <p>Du mailar in din jobbansökan till oss på <a href={`mailto:${site.epost}`}>{site.epost}</a>. Knappen öppnar ett färdigt mejl med det vi vill veta.</p>
+      <p class="button-row"><a class="button" href={mailto}>Bli en del av WDF <span class="arrow" aria-hidden="true"></span></a></p>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .apply-grid { display: grid; gap: 3.5rem; align-items: center; }
-  .apply-h { font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem); line-height: 1.1; margin-top: 2rem; }
-  .apply-list { padding-left: 1.2em; display: grid; gap: 0.6rem; }
-  .apply-list strong { font-weight: 500; }
-  .apply-photo { width: min(100%, 30rem); justify-self: center; }
-  .apply-photo :global(img) { aspect-ratio: 4 / 5; }
-  @media (min-width: 60rem) { .apply-grid { grid-template-columns: 7fr 5fr; } }
-  .send { scroll-margin-top: 0; }
-  .send-grid { display: grid; gap: 2rem; align-items: center; }
-  .send-photo { width: min(100%, 26rem); }
-  .send-photo :global(img) { aspect-ratio: 3 / 2; }
-  @media (min-width: 60rem) { .send-grid { grid-template-columns: 4fr 5fr 4fr; } }
+  .split { display: grid; gap: 2.5rem; align-items: center; }
+  .split-photo { aspect-ratio: 4 / 5; max-height: 34rem; }
+  .list { padding-left: 1.2em; display: grid; gap: 0.4rem; }
+  @media (min-width: 64rem) { .split { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  #jobba a:not(.button) { color: inherit; }
 </style>

@@ -18,31 +18,31 @@ const kr = (n: number) => `${n.toLocaleString('sv-SE')} kr`;
   title="Butik"
   description="Wilsons webbshop: hoodies, t-shirts, väskor och vattenflaska med eget namntryck. Beställ online och betala med Swish."
 >
-  <PageHead lines={['Webbshop']} lead="Välkommen till Wilsons webbshop">
+  <PageHead title="Välkommen till Wilsons webbshop">
     {butik.meddelande && <p class="notice">{butik.meddelande}</p>}
   </PageHead>
 
-  <section class="on-paper section" aria-labelledby="produkter">
-    <div class="wrap">
-      <h2 id="produkter" class="display head">Produkter</h2>
-      <p class="lead intro">{butik.namntryck_info}</p>
+  <section class="section" aria-labelledby="produkter">
+    <div class="container">
+      <h2 id="produkter">Produkter</h2>
+      <p class="intro muted">{butik.namntryck_info}</p>
       <ul role="list" class="products">
         {butik.produkter.map((p) => (
-          <li class="product reveal">
-            <div class="product-photo on-white">
-              <Image src={bild(p.bild)} alt={p.namn} widths={[320, 560]} sizes="(min-width: 60rem) 22vw, 45vw" class="photo" />
+          <li class="product card reveal">
+            <div class="product-photo">
+              <Image src={bild(p.bild)} alt={p.namn} widths={[320, 560]} sizes="(min-width: 64rem) 16rem, 45vw" class="photo" />
             </div>
             <h3 class="product-name">{p.namn}</h3>
-            <p class="display product-price">{kr(p.pris)}</p>
+            <p class="product-price">{kr(p.pris)}</p>
           </li>
         ))}
       </ul>
     </div>
   </section>
 
-  <section id="bestall" class="on-white section" aria-labelledby="bestall-title">
-    <div class="wrap">
-      <h2 id="bestall-title" class="display head">Beställ</h2>
+  <section id="bestall" class="on-light section" aria-labelledby="bestall-title">
+    <div class="container">
+      <h2 id="bestall-title">Beställ</h2>
       {!butik.oppen ? (
         <p class="lead closed">{butik.stangt_meddelande}</p>
       ) : (
@@ -50,7 +50,7 @@ const kr = (n: number) => `${n.toLocaleString('sv-SE')} kr`;
           <p class="small muted">Fält markerade med en * är obligatoriska.</p>
 
           <fieldset class="lines">
-            <legend class="display legend">Produkter *</legend>
+            <legend class="h4 legend">Produkter *</legend>
             {butik.produkter.map((p) => (
               <div class="line" data-pris={p.pris}>
                 <label class="line-name" for={`antal-${p.id}`}>{p.namn} <span class="muted tabular">{kr(p.pris)}</span></label>
@@ -167,37 +167,39 @@ const kr = (n: number) => `${n.toLocaleString('sv-SE')} kr`;
 
 <style>
   .notice { font-weight: 500; font-style: italic; }
-  .intro { margin: 1rem 0 2.5rem; max-width: 44ch; }
-  .products { display: grid; gap: 2rem var(--gap); grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr)); }
-  .product { display: grid; gap: 0.35rem; align-content: start; }
-  .product-photo { margin-bottom: 0.5rem; }
+  .intro { margin: 0.5rem 0 2rem; max-width: 52ch; }
+  .products { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 12rem), 1fr)); }
+  .product { display: grid; gap: 0.25rem; align-content: start; padding: 0 0 1rem; overflow: hidden; }
+  .product-photo { margin-bottom: 0.5rem; background: var(--white); }
   .product-photo :global(img) { aspect-ratio: 1; object-fit: contain; }
-  .product-name { font-size: var(--step-body); font-weight: 500; }
-  .product-price { color: var(--red); font-size: 1.25rem; }
+  .product-name, .product-price { padding-inline: 1rem; }
+  .product-name { font-size: 1rem; font-weight: 400; }
+  .product-price { color: var(--red); font-weight: 600; }
 
   .closed { margin-top: 1.5rem; max-width: 40ch; }
   .order { display: grid; gap: 2rem; max-width: 56rem; margin-top: 1.5rem; }
   fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
-  .legend { font-size: 1.25rem; margin-bottom: 1rem; padding: 0; }
-  .line { display: grid; gap: 0.75rem; padding-block: 1rem; box-shadow: inset 0 -1px 0 color-mix(in srgb, currentColor 25%, transparent); }
+  .legend { margin-bottom: 0.5rem; padding: 0; }
+  .line { display: grid; gap: 0.75rem; padding-block: 1rem; border-bottom: 1px solid var(--line); }
   .line-name { font-weight: 500; }
   .line-name .muted { font-weight: 400; margin-left: 0.5rem; }
   .line-fields { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; }
   .line-fields label { display: grid; gap: 0.25rem; }
   @media (min-width: 48rem) { .line { grid-template-columns: 1fr auto; align-items: center; } }
-  .total { margin-top: 1rem; font-size: var(--step-lead); }
-  .fields { display: grid; gap: 1.25rem var(--gap); }
+  .total { margin-top: 1rem; font-size: var(--fs-lead); }
+  .fields { display: grid; gap: 1.25rem 1.5rem; }
   .fields label { display: grid; gap: 0.35rem; }
   .fields > label > span:first-child { font-weight: 500; }
   @media (min-width: 48rem) { .fields { grid-template-columns: 1fr 1fr; } .fields .full { grid-column: 1 / -1; } }
   input, select, textarea {
-    min-height: 3rem; padding: 0.6rem 0.8rem; border: 2px solid var(--black); border-radius: 0; background: var(--white);
+    min-height: 2.75rem; padding: 0.55rem 0.8rem; border: 1px solid #bdbaba; border-radius: var(--radius); background: var(--white);
   }
   input[type='number'] { width: 6rem; }
   textarea { resize: vertical; }
-  input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--red); outline-offset: 1px; }
+  input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--red); outline-offset: 1px; border-color: var(--red); }
   .trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-  .form-error { background: var(--red); color: var(--white); padding: 1rem 1.25rem; font-weight: 500; }
+  .form-error { background: var(--red); color: var(--white); padding: 1rem 1.25rem; font-weight: 500; border-radius: var(--radius); }
+  .terms-note a { color: var(--red); }
   .order .button { justify-self: start; }
   .order .button:disabled { opacity: 0.6; cursor: wait; }
 </style>

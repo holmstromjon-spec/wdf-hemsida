@@ -1,79 +1,74 @@
-/* Wilson Dance Factory – "loud and flat" poster system.
-   Three flat brand colours (diamond red, black, white) on a light paper ground.
-   Display: Panchang 700, uppercase. Text: Switzer 400/500. */
+/* Wilson Dance Factory – close to the old site, polished.
+   Dark photo sections, white content, a light geometric sans (Outfit, standing in for
+   Hero New), and the old site's red as a sparing accent. */
 
 @font-face {
-  font-family: 'Panchang';
-  src: url('/fonts/panchang-700.woff2') format('woff2');
-  font-weight: 700;
+  font-family: 'Outfit';
+  src: url('/fonts/outfit-latin.woff2') format('woff2');
+  font-weight: 300 600;
   font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
-  font-family: 'Switzer';
-  src: url('/fonts/switzer-400.woff2') format('woff2');
-  font-weight: 400;
+  font-family: 'Outfit';
+  src: url('/fonts/outfit-latin-ext.woff2') format('woff2');
+  font-weight: 300 600;
   font-display: swap;
-}
-@font-face {
-  font-family: 'Switzer';
-  src: url('/fonts/switzer-500.woff2') format('woff2');
-  font-weight: 500;
-  font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
 :root {
-  --red: #d60008;
-  --red-deep: #b30007;
-  --black: #111111;
-  --black-soft: #1d1d1d;
+  /* The old site's colours */
+  --red: #c42a20;
+  --red-dark: #a8231b;
+  --dark: #201f1f;
+  --dark-2: #363535;
   --white: #ffffff;
-  --paper: #efefed;
-  --paper-deep: #e3e3e0;
+  --light: #f4f3f3;
+  --line: #e2e0e0;
 
-  --bg: var(--paper);
-  --ink: var(--black);
-  --muted: #4a4a4a;
-  --accent: var(--red);
+  --ink: var(--dark);
+  --muted: #5d5b5b;
 
-  --font-display: 'Panchang', 'Arial Black', system-ui, sans-serif;
-  --font-text: 'Switzer', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font: 'Outfit', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
-  --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
-  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
-  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
-  --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
-  --step-poster: clamp(2.75rem, 1rem + 8vw, 9.5rem);
+  --fs-small: 0.875rem;
+  --fs-body: 1rem;
+  --fs-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --fs-h4: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
+  --fs-h3: clamp(1.375rem, 1.2rem + 0.6vw, 1.75rem);
+  --fs-h2: clamp(1.625rem, 1.3rem + 1.2vw, 2.25rem);
+  --fs-h1: clamp(2rem, 1.5rem + 2vw, 3.25rem);
 
-  --margin: clamp(1.25rem, 0.6rem + 2.6vw, 3rem);
-  --gap: clamp(1rem, 0.6rem + 1.5vw, 2rem);
-  --section: clamp(5rem, 3rem + 7vw, 11rem);
-  --radius: 0px;
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --container: 72rem;
+  --pad: clamp(1.25rem, 0.8rem + 2vw, 2rem);
+  --section: clamp(3.5rem, 2.5rem + 4vw, 6rem);
+  --radius: 4px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 7rem; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
   margin: 0;
-  background: var(--bg);
+  background: var(--white);
   color: var(--ink);
-  font-family: var(--font-text);
-  font-size: var(--step-body);
-  line-height: 1.5;
-  overflow-x: hidden;
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: 1.6;
 }
 
 img, video { display: block; max-width: 100%; height: auto; }
-a { color: inherit; text-underline-offset: 0.18em; text-decoration-thickness: 0.06em; }
+a { color: inherit; text-underline-offset: 0.2em; }
 h1, h2, h3, h4, p, ul, ol, figure, blockquote, dl, dd { margin: 0; }
-/* :where() keeps the reset at zero specificity, so .wrap and component padding win. */
 :where(ul, ol)[role='list'] { list-style: none; padding: 0; }
 button, input, select, textarea { font: inherit; color: inherit; }
 
-:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-.on-red :focus-visible, .on-black :focus-visible { outline-color: var(--white); }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+.on-dark :focus-visible, .on-red :focus-visible { outline-color: var(--white); }
 ::selection { background: var(--red); color: var(--white); }
 
 .visually-hidden {
@@ -81,105 +76,91 @@ button, input, select, textarea { font: inherit; color: inherit; }
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 .skip-link {
-  position: absolute; left: var(--margin); top: -4rem; z-index: 100;
-  background: var(--black); color: var(--white); padding: 0.75rem 1rem; text-decoration: none;
+  position: absolute; left: var(--pad); top: -4rem; z-index: 100;
+  background: var(--dark); color: var(--white); padding: 0.75rem 1rem; text-decoration: none;
 }
 .skip-link:focus { top: 0.75rem; }
 
-/* ---------- Grounds: each panel is one colour, text on it is one other ---------- */
-.on-paper { background: var(--paper); color: var(--black); --muted: #4a4a4a; }
-.on-white { background: var(--white); color: var(--black); --muted: #4a4a4a; }
-.on-red { background: var(--red); color: var(--white); --muted: #ffe3e3; --accent: var(--black); }
-.on-black { background: var(--black); color: var(--white); --muted: #c9c9c9; }
-
-/* ---------- Type ---------- */
-.display {
-  font-family: var(--font-display);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  line-height: 0.92;
-  overflow-wrap: normal;
-  hyphens: none;
-}
-.poster { font-size: var(--step-poster); line-height: 0.86; }
-/* Panchang is ~1em per capital: cap the size so the longest word (--w letters, default 12) fits its container. */
-.head { font-size: min(var(--step-head), calc(100cqi / (var(--w, 12) * 1.07))); line-height: 1; }
-.lead { font-size: var(--step-lead); line-height: 1.35; }
-.small { font-size: var(--step-small); }
+/* ---------- Headings: light weight, sentence case, like the old site ---------- */
+h1, h2, h3, h4, .h1, .h2, .h3, .h4 { font-weight: 300; line-height: 1.2; letter-spacing: -0.005em; text-wrap: balance; }
+h1, .h1 { font-size: var(--fs-h1); line-height: 1.12; }
+h2, .h2 { font-size: var(--fs-h2); }
+h3, .h3 { font-size: var(--fs-h3); }
+h4, .h4 { font-size: var(--fs-h4); }
+.lead { font-size: var(--fs-lead); line-height: 1.55; }
+.small { font-size: var(--fs-small); }
 .muted { color: var(--muted); }
 .tabular { font-variant-numeric: tabular-nums; }
+strong, b { font-weight: 600; }
 
 .prose { max-width: 68ch; }
 .prose > * + * { margin-top: 1em; }
-/* Running-text headings use the text face: long legal headings stay readable. */
-.prose h2, .prose h3 { font-weight: 500; line-height: 1.2; overflow-wrap: anywhere; }
-.prose h2 { font-size: var(--step-lead); margin-top: 2em; }
-.prose h3 { font-size: var(--step-body); margin-top: 1.6em; }
+.prose h2 { font-size: var(--fs-h3); margin-top: 1.8em; }
+.prose h3 { font-size: var(--fs-h4); margin-top: 1.5em; }
 .prose ul { padding-left: 1.2em; }
 .prose li + li { margin-top: 0.35em; }
-.prose strong { font-weight: 500; }
+.prose a { color: var(--red); }
+
+/* ---------- Grounds ---------- */
+.on-white { background: var(--white); color: var(--ink); --muted: #5d5b5b; }
+.on-light { background: var(--light); color: var(--ink); --muted: #5d5b5b; }
+.on-dark { background: var(--dark); color: var(--white); --muted: #c9c7c7; }
+.on-dark-2 { background: var(--dark-2); color: var(--white); --muted: #d2d0d0; }
+.on-red { background: var(--red); color: var(--white); --muted: #fbe3e1; }
 
 /* ---------- Frame ---------- */
-.wrap { padding-inline: var(--margin); container-type: inline-size; }
+.container { width: min(100% - 2 * var(--pad), var(--container)); margin-inline: auto; }
 .section { padding-block: var(--section); }
-.grid {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--gap);
-}
-.stack > * + * { margin-top: var(--stack, 1.25rem); }
+.stack > * + * { margin-top: var(--stack, 1rem); }
+.center { text-align: center; }
+.center .button-row { justify-content: center; }
 
-/* ---------- Buttons: one shape on the whole site ---------- */
+/* ---------- Buttons: small, red, 4px corners, arrow in a ring (as before) ---------- */
 .button {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.6em;
-  min-height: 3.25rem; padding: 0.9rem 1.6rem;
-  background: var(--accent); color: var(--white);
-  font-family: var(--font-text); font-weight: 500; font-size: var(--step-body);
+  min-height: 2.75rem; padding: 0.55rem 1.1rem;
+  background: var(--red); color: var(--white);
+  font-family: var(--font); font-weight: 600; font-size: 0.9375rem; line-height: 1.2;
   text-decoration: none; border: 0; border-radius: var(--radius); cursor: pointer;
-  transition: transform 160ms var(--ease-out), background-color 160ms;
+  transition: background-color 150ms, transform 150ms var(--ease);
 }
-.on-red .button { background: var(--black); }
-.button:hover { transform: translateY(-2px); }
+.button:hover { background: var(--red-dark); }
 .button:active { transform: translateY(1px); }
-.button--ghost { background: transparent; color: inherit; box-shadow: inset 0 0 0 2px currentColor; }
-.button--ghost:hover { background: currentColor; }
-.button--ghost:hover > span { color: var(--white); mix-blend-mode: normal; }
-.on-red .button--ghost:hover > span, .on-black .button--ghost:hover > span { color: var(--black); }
-.arrow::after { content: '→'; display: inline-block; transition: transform 160ms var(--ease-out); }
-a:hover > .arrow::after, .button:hover .arrow::after { transform: translateX(4px); }
+.on-red .button { background: var(--white); color: var(--red); }
+.on-red .button:hover { background: var(--light); }
+.button--ghost { background: transparent; color: inherit; box-shadow: inset 0 0 0 1.5px currentColor; }
+.button--ghost:hover { background: rgb(255 255 255 / 0.1); }
+.on-white .button--ghost:hover, .on-light .button--ghost:hover { background: var(--light); }
+.button-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; }
 
-.text-link { font-weight: 500; }
-.text-link:hover { color: var(--accent); }
-.on-red .text-link:hover { color: var(--black); }
+/* The ring with an arrow, used inside buttons and links */
+.arrow {
+  display: inline-grid; place-items: center; flex: none;
+  width: 1.15em; height: 1.15em; border: 1.5px solid currentColor; border-radius: 50%;
+  font-size: 0.85em; line-height: 1;
+  transition: transform 150ms var(--ease);
+}
+.arrow::after { content: '→'; font-size: 0.75em; }
+a:hover > .arrow, .button:hover .arrow { transform: translateX(3px); }
+
+.text-link { color: var(--red); font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: 0.45em; }
+.text-link:hover { text-decoration: underline; }
+.on-dark .text-link, .on-dark-2 .text-link, .on-red .text-link { color: var(--white); }
 
 /* ---------- Photographs ---------- */
 .photo { width: 100%; height: 100%; object-fit: cover; }
-/* `rotate` (not transform) so tilts survive the entrance animations. */
-.tilt-l { rotate: -4deg; }
-.tilt-r { rotate: 3deg; }
+.rounded { border-radius: var(--radius); overflow: hidden; }
 
-/* ---------- Motion (content is never hidden without JS) ---------- */
+/* A photo behind a section, darkened like the old site's banners */
+.photo-bg { position: relative; isolation: isolate; overflow: hidden; }
+.photo-bg > .bg { position: absolute; inset: 0; z-index: -2; }
+.photo-bg::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgb(32 31 31 / 0.9) 0%, rgb(32 31 31 / 0.65) 55%, rgb(32 31 31 / 0.45) 100%); }
+
+/* ---------- Cards ---------- */
+.card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); }
+
+/* ---------- Motion: a quiet fade-up, never hiding content without JS ---------- */
 @media (prefers-reduced-motion: no-preference) {
-  .js .reveal > * { opacity: 0; transform: translateY(24px); }
-  .js .reveal.is-in > * {
-    opacity: 1; transform: none;
-    transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out);
-  }
-  .js .reveal.is-in > :nth-child(2) { transition-delay: 80ms; }
-  .js .reveal.is-in > :nth-child(3) { transition-delay: 160ms; }
-  .js .reveal.is-in > :nth-child(4) { transition-delay: 240ms; }
-  .js .reveal.is-in > :nth-child(n + 5) { transition-delay: 300ms; }
-
-  .mask-line { display: block; overflow: hidden; padding-bottom: 0.06em; margin-bottom: -0.06em; }
-  .js .mask-line > span { display: block; transform: translateY(105%); }
-  .js .is-loaded .mask-line > span { transform: none; transition: transform 900ms var(--ease-out); }
-  .js .is-loaded .mask-line:nth-child(2) > span { transition-delay: 110ms; }
-  .js .is-loaded .mask-line:nth-child(3) > span { transition-delay: 220ms; }
-  .js .after-mask { opacity: 0; transform: translateY(16px); }
-  .js .is-loaded .after-mask { opacity: 1; transform: none; transition: opacity 600ms 450ms var(--ease-out), transform 600ms 450ms var(--ease-out); }
-
-  .drift { animation: drift 18s ease-in-out infinite alternate; }
-  @keyframes drift { from { transform: scale(1.02) translate3d(0, 0, 0); } to { transform: scale(1.08) translate3d(-1.5%, -1%, 0); } }
+  .js .reveal { opacity: 0; transform: translateY(12px); }
+  .js .reveal.is-in { opacity: 1; transform: none; transition: opacity 600ms var(--ease), transform 600ms var(--ease); }
 }
-.mask-line > span { display: block; }

@@ -1,26 +1,18 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
 import { nav } from '../lib/nav';
 ---
 
 <BaseLayout title="Sidan hittades inte" description="Sidan du letar efter finns inte." noindex>
-  <section class="nf on-red">
-    <div class="wrap stack">
-      <h1 class="display nf-title">
-        <span class="mask-line"><span>Ingen dans</span></span>
-        <span class="mask-line"><span>här</span></span>
-      </h1>
-      <p class="lead after-mask">Sidan du letar efter finns inte längre. Prova någon av de här:</p>
-      <ul role="list" class="nf-links after-mask">
-        <li><a class="button" href="/"><span>Startsidan</span></a></li>
-        {nav.slice(1, 6).map((n) => <li><a class="button" href={n.href}><span>{n.label}</span></a></li>)}
-      </ul>
+  <PageHead title="Den sidan kan inte hittas" />
+  <section class="section">
+    <div class="container stack">
+      <p class="lead">Sidan du letar efter finns inte längre. Prova någon av de här:</p>
+      <p class="button-row">
+        <a class="button" href="/">Startsidan <span class="arrow" aria-hidden="true"></span></a>
+        {nav.slice(1, 6).map((n) => <a class="button button--ghost" href={n.href}>{n.label}</a>)}
+      </p>
     </div>
   </section>
 </BaseLayout>
-
-<style>
-  .nf { padding-block: clamp(4rem, 3rem + 6vw, 9rem); }
-  .nf-title { font-size: calc((100vw - 2 * var(--margin)) / 11.5); line-height: 0.88; }
-  .nf-links { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-</style>

@@ -1,94 +1,85 @@
 ---
+// White footer as on the old site: the diamond centred on its top edge, four columns,
+// and a red bar along the bottom.
 import { Image } from 'astro:assets';
-import photo from '../assets/images/galleri/dsc04271.jpg';
-import { nav } from '../lib/nav';
+import logo from '../assets/images/brand/logo.png';
 import { site } from '../lib/data';
+import Icon from './Icon.astro';
 
 const year = new Date().getFullYear();
 ---
 
-<footer class="site-footer on-black">
-  <div class="footer-photo">
-    <Image src={photo} alt="Dansare från Wilson Dance Factory på scen" widths={[640, 960, 1400]} sizes="(min-width: 60rem) 50vw, 100vw" class="photo" />
-  </div>
+<footer class="site-footer on-white">
+  <div class="mark"><Image src={logo} alt="Wilson Dance Factory" width={140} height={127} /></div>
 
-  <div class="footer-body">
-    <p class="display footer-mark">Wilson Dance Factory</p>
-
-    <nav aria-label="Sidfot">
-      <ul role="list" class="footer-menu">
-        {nav.map((item) => (
-          <li><a href={item.href}>{item.label}</a></li>
-        ))}
-      </ul>
-    </nav>
-
-    <blockquote class="footer-quote">
-      <p>”{site.citat.text}”</p>
-      <footer class="small muted">– {site.citat.namn}, {site.citat.titel}</footer>
-    </blockquote>
-
-    <div class="footer-cols">
-      <div>
-        <h2 class="footer-h">Kontakta oss</h2>
-        <p>
-          <a href={`mailto:${site.epost}`}>{site.epost}</a><br />
-          <a href={site.telefon_href}>{site.telefon}</a><br />
-          <a href={site.google.vagbeskrivning} rel="noopener">{site.adress.gata}<br />{site.adress.postnummer} {site.adress.ort}</a>
-        </p>
-        <p class="footer-social">
-          <a href={site.sociala.facebook} rel="noopener">Facebook</a>
-          <a href={site.sociala.instagram} rel="noopener">Instagram</a>
-        </p>
-      </div>
-      <div>
-        <h2 class="footer-h">Våra öppettider</h2>
-        <dl class="hours">
-          {site.oppettider.map((o) => (
-            <div><dt>{o.dag}</dt><dd>{o.tid}</dd></div>
-          ))}
-        </dl>
-        <p><a class="text-link" href="/shop/">Vår butik <span class="arrow"></span></a></p>
-      </div>
+  <div class="container cols">
+    <div>
+      <h2 class="h4">Wilson Dance Factory</h2>
+      <blockquote class="quote">
+        <p>”{site.citat.text}”</p>
+        <footer>– {site.citat.namn}<br />{site.citat.titel}</footer>
+      </blockquote>
     </div>
 
-    <p class="legal small muted">
-      © {year} {site.namn} · Org.nr {site.orgnr} ·
-      <a href="/kopvillkor/">Köpvillkor</a> ·
-      <a href="/integritetspolicy/">Integritetspolicy</a>
-    </p>
+    <div>
+      <h2 class="h4">Kontakta oss</h2>
+      <ul role="list" class="contact">
+        <li><Icon name="mail" /><a href={`mailto:${site.epost}`}>{site.epost}</a></li>
+        <li><Icon name="phone" /><a href={site.telefon_href}>{site.telefon}</a></li>
+        <li><Icon name="pin" /><a href={site.google.vagbeskrivning} rel="noopener">{site.adress.gata}<br />{site.adress.postnummer} {site.adress.ort}</a></li>
+      </ul>
+      <p class="social">
+        <a href={site.sociala.facebook} rel="noopener" aria-label="Facebook"><Icon name="facebook" size={22} /></a>
+        <a href={site.sociala.instagram} rel="noopener" aria-label="Instagram"><Icon name="instagram" size={22} /></a>
+      </p>
+    </div>
+
+    <div>
+      <h2 class="h4">Våra öppettider</h2>
+      <dl class="hours">
+        {site.oppettider.map((o) => (
+          <div><dt>{o.dag}</dt><dd class="tabular">{o.tid}</dd></div>
+        ))}
+      </dl>
+    </div>
+
+    <div class="shop">
+      <a class="button" href="/shop/">Vår butik <span class="arrow" aria-hidden="true"></span></a>
+    </div>
+  </div>
+
+  <div class="legal on-red">
+    <div class="container legal-row small">
+      <span>© {year} {site.namn} · Org.nr {site.orgnr}</span>
+      <span><a href="/kopvillkor/">Köpvillkor</a> · <a href="/integritetspolicy/">Integritetspolicy</a></span>
+    </div>
   </div>
 </footer>
 
 <style>
-  .site-footer { display: grid; }
-  .footer-photo { height: 50svh; overflow: hidden; }
-  .footer-body { padding: 3rem var(--margin) 2rem; display: grid; gap: 2.5rem; align-content: start; }
-  .footer-mark { font-size: 0.875rem; }
-  .footer-menu { display: grid; gap: 0.5rem; }
-  .footer-menu a {
-    font-family: var(--font-display); text-transform: uppercase; text-decoration: none;
-    font-size: clamp(1.375rem, 1rem + 1.6vw, 2.25rem); line-height: 1.1;
-    display: inline-block; transition: transform 200ms var(--ease-out), color 200ms;
-  }
-  .footer-menu:hover a { color: var(--muted); }
-  .footer-menu a:hover { color: var(--white); transform: translateX(12px); }
-  .footer-quote { max-width: 46ch; font-size: var(--step-body); }
-  .footer-quote p { margin-bottom: 0.5rem; }
-  .footer-cols { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
-  .footer-cols p + p { margin-top: 1rem; }
-  .footer-h { font-size: var(--step-body); font-weight: 500; margin-bottom: 0.75rem; padding-left: 0.75rem; box-shadow: inset 4px 0 0 var(--red); }
-  .footer-cols a { text-decoration: none; }
-  .footer-cols a:hover { text-decoration: underline; }
-  .footer-social { display: flex; gap: 1.25rem; }
-  .hours div { display: flex; justify-content: space-between; gap: 1rem; max-width: 20rem; }
-  .hours dd { font-variant-numeric: tabular-nums; }
+  .site-footer { position: relative; padding-top: 5rem; border-top: 1px solid var(--line); }
+  .mark { position: absolute; left: 50%; top: 0; translate: -50% -45%; width: 90px; }
+  .mark img { width: 100%; height: auto; filter: drop-shadow(0 4px 10px rgb(0 0 0 / 0.2)); }
+  .cols { display: grid; gap: 2.5rem; padding-bottom: 3rem; }
+  .cols .h4 { margin-bottom: 0.9rem; }
+  .quote { font-style: italic; color: var(--muted); font-size: 0.9375rem; max-width: 32ch; }
+  .quote footer { margin-top: 0.75rem; font-style: normal; }
+  .contact { display: grid; gap: 0.6rem; font-size: 0.9375rem; }
+  .contact li { display: flex; gap: 0.6rem; align-items: flex-start; }
+  .contact .icon { margin-top: 0.2rem; color: var(--muted); }
+  .contact a { text-decoration: none; }
+  .contact a:hover { color: var(--red); }
+  .social { display: flex; gap: 0.9rem; margin-top: 1rem; }
+  .social a:hover { color: var(--red); }
+  .hours { font-size: 0.9375rem; }
+  .hours div { display: flex; justify-content: space-between; gap: 1rem; max-width: 16rem; }
+  .hours dt { color: var(--muted); }
+  .legal { padding-block: 0.9rem; }
+  .legal-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 1.5rem; }
   .legal a { color: inherit; }
-
-  @media (min-width: 60rem) {
-    .site-footer { grid-template-columns: 1fr 1fr; min-height: 100svh; }
-    .footer-photo { height: auto; }
-    .footer-body { padding: 5rem var(--margin) 2rem; }
-    .legal { align-self: end; }
+  @media (min-width: 48rem) { .cols { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 64rem) {
+    .cols { grid-template-columns: 1.3fr 1fr 1fr auto; }
+    .mark { width: 110px; }
   }
 </style>

@@ -1,5 +1,5 @@
 ---
-// A list of headed text blocks (terms, conditions, info), heading left and text right.
+// Headed text blocks (terms, conditions, info), as on the old site.
 interface Props {
   items: { rubrik: string; text: string }[];
 }
@@ -7,23 +7,17 @@ const { items } = Astro.props;
 const paragraphs = (t: string) => t.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
 ---
 
-<dl class="terms">
+<div class="terms">
   {items.map((i) => (
-    <div class="term reveal">
-      <dt class="display">{i.rubrik}</dt>
-      <dd>{paragraphs(i.text).map((p) => <p>{p}</p>)}</dd>
-    </div>
+    <section class="term">
+      <h3 class="h4">{i.rubrik}</h3>
+      {paragraphs(i.text).map((p) => <p>{p}</p>)}
+    </section>
   ))}
-</dl>
+</div>
 
 <style>
-  .terms { display: grid; }
-  .term { display: grid; gap: 0.75rem; padding-block: 1.75rem; }
-  .term + .term { box-shadow: inset 0 2px 0 currentColor; }
-  dt { font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem); line-height: 1.1; }
-  dd { margin: 0; max-width: 62ch; }
-  dd p + p { margin-top: 0.75em; }
-  @media (min-width: 48rem) {
-    .term { grid-template-columns: minmax(12rem, 4fr) 8fr; gap: var(--gap); }
-  }
+  .terms { display: grid; gap: 1.75rem; }
+  .term { display: grid; gap: 0.5rem; max-width: 68ch; }
+  .term p { font-size: 0.9375rem; }
 </style>

@@ -1,95 +1,77 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHead from '../components/PageHead.astro';
 import Terms from '../components/Terms.astro';
-import { priser, site } from '../lib/data';
+import Icon from '../components/Icon.astro';
+import { priser } from '../lib/data';
 import head from '../assets/images/headers/header-3.jpg';
-import hoodie from '../assets/images/butik/vuxen-hoodie.jpg';
-import { Image } from 'astro:assets';
-import PhotoBand from '../components/PhotoBand.astro';
-import b1 from '../assets/images/galleri/dsc02513.jpg';
-import b2 from '../assets/images/galleri/dsc03327.jpg';
-import b3 from '../assets/images/galleri/dsc03361.jpg';
+import shopPhoto from '../assets/images/galleri/dsc03626.jpg';
 ---
 
 <BaseLayout
   title="Priser"
   description="Priser för kurser, terminskort, klippkort och presentkort hos Wilson Dance Factory i Helsingborg."
 >
-  <PageHead lines={['Prislista']} lead={priser.kurser.intro} image={head} imageAlt="Dansare hos Wilson Dance Factory" />
+  <PageHead title="Prislista" image={head} />
 
-  <section class="on-paper section" aria-labelledby="kurser-title">
-    <div class="wrap">
-      <h2 id="kurser-title" class="display head" style="--w:15">Kurser och terminsavgifter</h2>
-      <ul role="list" class="prices">
-        {priser.kurser.rader.map((r) => (
-          <li class="price reveal">
-            <span class="display price-name">{r.namn}</span>
-            <span class="display price-value tabular">{r.pris}</span>
-            <span class="price-info muted">{r.info}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
+  <section class="section">
+    <div class="container layout">
+      <div class="price-panel on-dark">
+        <h2 class="h3">Kurser och terminsavgifter</h2>
+        <p class="small muted">{priser.kurser.intro}</p>
+        <ul role="list" class="prices">
+          {priser.kurser.rader.map((r) => (
+            <li>
+              <span class="row"><span class="name">{r.namn}</span><span class="dots" aria-hidden="true"></span><strong class="price tabular">{r.pris}</strong></span>
+              <span class="note small muted">{r.info}</span>
+            </li>
+          ))}
+        </ul>
 
-  <PhotoBand photos={[b1, b2, b3]} />
+        <h2 class="h3 pk">Presentkort</h2>
+        <p class="small muted">{priser.presentkort.intro}</p>
+        <ul role="list" class="prices">
+          {priser.presentkort.rader.map((r) => (
+            <li>
+              <span class="row"><span class="name">{r.namn}</span><span class="dots" aria-hidden="true"></span><strong class="price tabular">{r.pris}</strong></span>
+              <span class="note small muted">{r.info}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="small">Har du övriga frågor så kan du höra av dig till oss</p>
+        <p><a class="button" href="/kontakt/">Kontakta oss <span class="arrow" aria-hidden="true"></span></a></p>
+      </div>
 
-  <section class="on-red section" aria-labelledby="pk-title">
-    <div class="wrap">
-      <h2 id="pk-title" class="display head">Presentkort</h2>
-      <p class="lead pk-intro">{priser.presentkort.intro}</p>
-      <ul role="list" class="cards">
-        {priser.presentkort.rader.map((r) => (
-          <li class="card on-white reveal">
-            <span class="display card-value">{r.pris}</span>
-            <span class="display card-name">{r.namn}</span>
-            <span class="small">{r.info}</span>
-          </li>
-        ))}
-      </ul>
-      <p class="pk-more">Har du övriga frågor så kan du höra av dig till oss. <a class="text-link" href="/kontakt/">Kontakta oss <span class="arrow" aria-hidden="true"></span></a></p>
-    </div>
-  </section>
-
-  <section class="on-black shop-band">
-    <div class="wrap shop-grid">
-      <Image src={hoodie} alt="Svart hoodie med namntryck från Wilsons webbshop" widths={[200, 400]} sizes="10rem" class="shop-img" />
-      <h2 class="display shop-h">Priserna för våra produkter finns i butiken</h2>
-      <a class="button" href="/shop/"><span>Gå till webbshoppen</span> <span class="arrow" aria-hidden="true"></span></a>
-    </div>
-  </section>
-
-  <section class="on-white section" aria-labelledby="info-title">
-    <div class="wrap">
-      <h2 id="info-title" class="display head">Information</h2>
-      <Terms items={priser.information} />
-      <p class="mail">Frågor? Mejla <a href={`mailto:${site.epost}`}>{site.epost}</a></p>
+      <div class="side">
+        <div class="stack">
+          <h2 class="h3">Priserna för våra produkter finns i butiken</h2>
+          <p><a class="button" href="/shop/">Gå till webbshoppen <Icon name="cart" size={16} /></a></p>
+          <Image src={shopPhoto} alt="Dansare från Wilson Dance Factory på scen" widths={[480, 800]} sizes="(min-width: 64rem) 30rem, 100vw" class="photo rounded side-photo" />
+        </div>
+        <div class="info">
+          <h2 class="h3">Information</h2>
+          <Terms items={priser.information} />
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .prices { margin-top: 2.5rem; }
-  .price {
-    display: grid; gap: 0.25rem 1.5rem; align-items: baseline;
-    padding-block: 1.25rem; box-shadow: inset 0 -2px 0 var(--black);
-  }
-  @media (min-width: 48rem) { .price { grid-template-columns: 1fr auto; } }
-  .price-name { font-size: clamp(1.125rem, 0.8rem + 1.6vw, 2.25rem); line-height: 1.05; }
-  .price-value { font-size: clamp(1.125rem, 0.8rem + 1.6vw, 2.25rem); color: var(--red); white-space: nowrap; }
-  .price-info { grid-column: 1 / -1; font-size: var(--step-small); }
-  .pk-intro { margin: 1rem 0 2.5rem; max-width: 44ch; }
-  .cards { display: grid; gap: 3rem 1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr)); }
-  .card { display: grid; gap: 0.5rem; padding: 1.5rem; aspect-ratio: 1.6; align-content: space-between; }
-  .card-name { font-size: 1.125rem; }
-  .card-value { font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem); color: var(--red); line-height: 1; }
-  .pk-more { margin-top: 2.5rem; }
-  .shop-band { padding-block: 3rem; }
-  .shop-grid { display: grid; gap: 1.5rem; align-items: center; }
-  .shop-h { font-size: clamp(1.25rem, 1rem + 1.2vw, 2rem); line-height: 1.05; }
-  .shop-img { width: 10rem; background: var(--white); rotate: -4deg; }
-  @media (min-width: 60rem) { .shop-grid { grid-template-columns: auto 1fr auto; gap: 3rem; } }
-  .mail { margin-top: 2rem; }
-  #info-title { margin-bottom: 1.5rem; }
+  .layout { display: grid; gap: 3rem; align-items: start; }
+  @media (min-width: 64rem) { .layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 3rem; } }
+
+  .price-panel { padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); border-radius: var(--radius); display: grid; gap: 0.75rem; }
+  .prices { display: grid; gap: 1rem; margin: 1rem 0 0.5rem; }
+  .prices li { display: grid; gap: 0.15rem; }
+  .row { display: flex; align-items: baseline; gap: 0.6rem; }
+  .name { font-size: 1.0625rem; font-weight: 300; }
+  .dots { flex: 1; min-width: 1.5rem; border-bottom: 1px solid rgb(255 255 255 / 0.4); translate: 0 -0.3em; }
+  .price { white-space: nowrap; font-weight: 500; }
+  .pk { margin-top: 1.5rem; }
+
+  .side { display: grid; gap: 3rem; }
+  .side-photo { aspect-ratio: 16 / 10; margin-top: 1.5rem !important; }
+  .info .h3 { margin-bottom: 1.25rem; }
 </style>

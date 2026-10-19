@@ -4,6 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHead from '../components/PageHead.astro';
 import PhotoGrid from '../components/PhotoGrid.astro';
 import type { ImageMetadata } from 'astro';
+import head from '../assets/images/galleri/dsc04438.jpg';
 
 const files = import.meta.glob<{ default: ImageMetadata }>('../assets/images/galleri/*.jpg', { eager: true });
 const photos = Object.keys(files)
@@ -15,9 +16,9 @@ const photos = Object.keys(files)
   title="Galleri"
   description="Bilder från Wilson Dance Factory – uppvisningar, tävlingar och vardag i danssalarna i Helsingborg."
 >
-  <PageHead lines={['Galleri']} lead="Se hur vi har det hos oss – från scenen och danssalarna." ground="black" />
-  <section class="on-paper section" aria-label="Bilder">
-    <div class="wrap">
+  <PageHead title="Galleri" image={head} />
+  <section class="section" aria-label="Bilder">
+    <div class="container">
       <PhotoGrid photos={photos} id="galleri" />
     </div>
   </section>

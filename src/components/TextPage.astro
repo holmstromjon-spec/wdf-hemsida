@@ -1,20 +1,19 @@
 ---
-// A plain text page (terms, policy): poster title and the text from src/texter/*.md.
+// A plain text page (terms, policy): banner title and the text from src/texter/*.md.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHead from './PageHead.astro';
 
 interface Props {
   title: string;
-  lines: string[];
   description: string;
 }
-const { title, lines, description } = Astro.props;
+const { title, description } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
-  <PageHead lines={lines} ground="black" />
-  <section class="on-white section">
-    <div class="wrap prose text-page reveal">
+  <PageHead title={title} />
+  <section class="section">
+    <div class="container prose text-page">
       <slot />
     </div>
   </section>

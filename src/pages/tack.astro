@@ -1,33 +1,27 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
 import { site } from '../lib/data';
 import swish from '../assets/images/brand/swish.png';
 ---
 
 <BaseLayout title="Tack för din beställning" description="Tack för din beställning hos Wilson Dance Factory." noindex>
-  <section class="thanks on-red">
-    <div class="wrap">
-      <h1 class="display thanks-title">
-        <span class="mask-line"><span>Tack för din</span></span>
-        <span class="mask-line"><span>beställning!</span></span>
-      </h1>
-      <div class="after-mask stack thanks-text">
-        <p class="lead">Vi kommer att behandla din beställning när vi ser att betalning har kommit in.</p>
-        <p data-order hidden>Ditt ordernummer: <strong class="tabular" data-order-nr></strong><span data-sum hidden> · Att betala: <strong class="tabular" data-sum-nr></strong></span></p>
-        <p>En orderbekräftelse har skickats till din e-post.</p>
-      </div>
+  <PageHead title="Tack för din beställning!" />
+
+  <section class="section">
+    <div class="container center stack">
+      <h2 class="h3">Vi kommer att behandla din beställning när vi ser att betalning har kommit in</h2>
+      <p data-order hidden class="lead">Ditt ordernummer: <strong class="tabular" data-order-nr></strong><span data-sum hidden> · Att betala: <strong class="tabular" data-sum-nr></strong></span></p>
+      <p>Det går att betala via Swish eller i receptionen i vår dansstudio. Ange ditt ordernummer som meddelande när du betalar med Swish. En orderbekräftelse har skickats till din e-post.</p>
     </div>
   </section>
 
-  <section class="pay on-black section">
-    <div class="wrap pay-grid reveal">
-      <div class="stack">
-        <p>Det går att betala via Swish eller i receptionen i vår dansstudio. Ange alltid ditt ordernummer som meddelande när du betalar med Swish.</p>
-        <h2 class="pay-h">Vårt Swish nummer:</h2>
-        <p class="display swish-nr">{site.swish}</p>
-      </div>
-      <Image src={swish} alt="Swish" width={360} class="swish-logo" />
+  <section class="section on-dark">
+    <div class="container center stack">
+      <h2>Vårt Swish nummer:</h2>
+      <p class="h1">{site.swish}</p>
+      <Image src={swish} alt="Swish" width={280} class="swish" />
     </div>
   </section>
 </BaseLayout>
@@ -47,13 +41,6 @@ import swish from '../assets/images/brand/swish.png';
 </script>
 
 <style>
-  .thanks { padding-block: clamp(3rem, 2rem + 5vw, 7rem); }
-  .thanks-title { font-size: calc((100vw - 2 * var(--margin)) / 13.5); line-height: 0.9; }
-  .thanks-text { margin-top: 2rem; max-width: 40rem; }
-  .thanks-text strong { font-weight: 500; }
-  .pay-grid { display: grid; gap: 3rem; align-items: center; }
-  .pay-h { font-size: var(--step-lead); font-weight: 500; margin-top: 1.5rem; }
-  .swish-nr { font-size: clamp(2rem, 1rem + 5vw, 5rem); line-height: 1; }
-  .swish-logo { width: min(100%, 22rem); }
-  @media (min-width: 60rem) { .pay-grid { grid-template-columns: 2fr 1fr; } }
+  .stack { max-width: 46rem; }
+  .swish { width: min(70%, 16rem); margin: 1.5rem auto 0 !important; }
 </style>

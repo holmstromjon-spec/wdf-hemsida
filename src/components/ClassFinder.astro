@@ -1,20 +1,19 @@
 ---
-// "Hitta din klass": choose an age group and the week's real classes from
-// src/data/schema.yaml appear as poster lines. Works without JavaScript
-// (radio buttons + CSS); the full schedule is always one link away.
+// "Hitta din klass": choose an age group and see the week's classes from
+// src/data/schema.yaml. Works without JavaScript (radio buttons + CSS).
 import { schema } from '../lib/data';
 
 const grupper = schema.veckoschema.grupper;
 ---
 
-<section class="finder on-black section" aria-labelledby="finder-title">
-  <div class="wrap">
-    <div class="finder-top reveal">
-      <h2 id="finder-title" class="display head">Hitta din klass</h2>
-      <p class="lead muted">Välj ålder eller stil – så ser du veckans pass.</p>
+<section class="finder on-light section" aria-labelledby="finder-title">
+  <div class="container">
+    <div class="finder-head center">
+      <h2 id="finder-title">Hitta din klass</h2>
+      <p class="muted">Välj ålder eller dansstil så ser du veckans pass.</p>
     </div>
 
-    <form class="finder-tabs" aria-label="Välj grupp">
+    <form class="tabs" aria-label="Välj grupp">
       {grupper.map((g, i) => (
         <label>
           <input type="radio" name="grupp" value={i} checked={i === 0} />
@@ -23,48 +22,54 @@ const grupper = schema.veckoschema.grupper;
       ))}
     </form>
 
-    <div class="finder-panels">
+    <div class="panels">
       {grupper.map((g, i) => (
-        <div class="finder-panel" data-grupp={i}>
+        <div class="panel card" data-grupp={i}>
           <h3 class="visually-hidden">{g.namn}</h3>
-          <ul role="list" class="poster-lines">
-            {g.dagar.flatMap((d) =>
-              d.pass.map((p) => (
-                <li>
-                  <span class="pl-name display">{p.klass}</span>
-                  <span class="pl-fact tabular">{d.dag} {p.tid}</span>
-                </li>
-              )),
-            )}
-          </ul>
+          <table>
+            <thead>
+              <tr><th scope="col">Dag</th><th scope="col">Tid</th><th scope="col">Klass</th></tr>
+            </thead>
+            <tbody>
+              {g.dagar.flatMap((d) =>
+                d.pass.map((p, j) => (
+                  <tr class:list={{ 'new-day': j === 0 }}>
+                    <td class="day">{j === 0 ? d.dag : ''}</td>
+                    <td class="tabular time">{p.tid}</td>
+                    <td>{p.klass}</td>
+                  </tr>
+                )),
+              )}
+            </tbody>
+          </table>
         </div>
       ))}
     </div>
 
-    <div class="finder-actions">
-      <a class="button" href="/anmalan/"><span>Boka kurs</span> <span class="arrow" aria-hidden="true"></span></a>
+    <p class="button-row actions">
+      <a class="button" href="/anmalan/">Boka kurs <span class="arrow" aria-hidden="true"></span></a>
       <a class="text-link" href="/schema/">Hela schemat och tävlingsschemat <span class="arrow" aria-hidden="true"></span></a>
-    </div>
+    </p>
   </div>
 </section>
 
 <style>
-  .finder-top { display: grid; gap: 1rem; margin-bottom: 2.5rem; }
-  .finder-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2.5rem; }
-  .finder-tabs label { cursor: pointer; }
-  .finder-tabs input { position: absolute; opacity: 0; pointer-events: none; }
-  .finder-tabs span {
-    display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0.5rem 1rem;
-    box-shadow: inset 0 0 0 2px var(--white); font-weight: 500;
-    transition: background-color 150ms, color 150ms;
+  .finder-head { display: grid; gap: 0.5rem; margin-bottom: 2rem; }
+  .tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-bottom: 1.5rem; }
+  .tabs label { cursor: pointer; }
+  .tabs input { position: absolute; opacity: 0; pointer-events: none; }
+  .tabs span {
+    display: inline-flex; align-items: center; min-height: 2.5rem; padding: 0.4rem 0.95rem;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--white);
+    font-size: 0.9375rem; font-weight: 500; transition: background-color 150ms, color 150ms, border-color 150ms;
   }
-  .finder-tabs label:hover span { background: #2a2a2a; }
-  .finder-tabs input:checked + span { background: var(--red); box-shadow: inset 0 0 0 2px var(--red); }
-  .finder-tabs input:focus-visible + span { outline: 3px solid var(--white); outline-offset: 3px; }
+  .tabs label:hover span { border-color: var(--dark); }
+  .tabs input:checked + span { background: var(--red); border-color: var(--red); color: var(--white); }
+  .tabs input:focus-visible + span { outline: 2px solid var(--red); outline-offset: 2px; }
 
   /* Show only the chosen group. Without :has() support every group is listed. */
   @supports selector(:has(*)) {
-    .finder-panel { display: none; }
+    .panel { display: none; }
     .finder:has(input[value='0']:checked) [data-grupp='0'],
     .finder:has(input[value='1']:checked) [data-grupp='1'],
     .finder:has(input[value='2']:checked) [data-grupp='2'],
@@ -76,19 +81,20 @@ const grupper = schema.veckoschema.grupper;
     .finder:has(input[value='8']:checked) [data-grupp='8'],
     .finder:has(input[value='9']:checked) [data-grupp='9'] { display: block; }
   }
-
-  .poster-lines li {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.25rem;
-    padding-block: 0.6rem;
+  .panel { max-width: 46rem; margin-inline: auto; padding: 0.5rem 1.25rem; }
+  .panel + .panel { margin-top: 1rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
+  th { text-align: left; font-weight: 500; color: var(--muted); font-size: var(--fs-small); padding: 0.6rem 0.5rem; }
+  td { padding: 0.55rem 0.5rem; vertical-align: top; }
+  tr.new-day td { border-top: 1px solid var(--line); }
+  .day { font-weight: 500; width: 7.5rem; }
+  .time { white-space: nowrap; width: 7rem; }
+  @media (max-width: 40rem) {
+    .panel { padding-inline: 0.5rem; }
+    table { font-size: 0.875rem; }
+    .day { width: 5.25rem; }
+    .time { width: 5.5rem; }
+    td, th { padding-inline: 0.35rem; }
   }
-  .pl-name { font-size: clamp(1.375rem, 0.9rem + 2.4vw, 3rem); line-height: 0.95; transition: color 150ms; }
-  .pl-fact { font-size: var(--step-body); color: var(--muted); }
-  .poster-lines li:hover .pl-name { color: var(--red); filter: brightness(1.3); }
-  @media (min-width: 48rem) {
-    .poster-lines li { grid-template-columns: 1fr auto; align-items: baseline; gap: 2rem; }
-    .pl-fact { text-align: right; white-space: nowrap; }
-  }
-  .finder-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem 2.5rem; margin-top: 3rem; }
+  .actions { justify-content: center; margin-top: 2rem; }
 </style>

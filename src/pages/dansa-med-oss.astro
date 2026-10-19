@@ -11,6 +11,7 @@ import visionPhoto from '../assets/images/galleri/dsc03595.jpg';
 
 const strip = [
   { src: h1, alt: 'Dansare hos Wilson Dance Factory' },
+  { src: head, alt: 'Uppvisning hos Wilson Dance Factory' },
   { src: h3, alt: 'Danslektion hos Wilson Dance Factory' },
   { src: h4, alt: 'Dansare i rörelse' },
 ];
@@ -20,90 +21,75 @@ const strip = [
   title="Dansa med oss"
   description="Dansa med oss på Wilson Dance Factory i Helsingborg – över 20 dansstilar, 21 medarbetare och dans för alla åldrar och nivåer."
 >
-  <PageHead lines={['Dansa', 'med oss']} lead="Dansa med oss på Wilson Dance Factory!" image={head} imageAlt="Dansare hos Wilson Dance Factory" />
+  <PageHead title="Dansa med oss på Wilson Dance Factory!" image={head} />
 
-  <section class="trio" aria-label="Utforska">
-    <a class="trio-panel on-black" href="/dansstilar/" style="--w:10">
-      <h2 class="display head">Våra dansstilar</h2>
-      <p>På Wilson Dance Factory erbjuder vi över 20 st olika dansstilar i olika nivåer för alla åldersgrupper. Med andra ord så finns det dans för alla.</p>
-      <span class="text-link">Se alla våra dansstilar <span class="arrow" aria-hidden="true"></span></span>
-    </a>
-    <a class="trio-panel on-paper" href="/instruktorer/" style="--w:12">
-      <h2 class="display head">Våra instruktörer</h2>
-      <p>Med hela 21 medarbetare så kan vi erbjuda en kvalitativ helhetsupplevelse inom dans. Oavsett tävling eller fritidsdans.</p>
-      <span class="text-link">Träffa våra instruktörer <span class="arrow" aria-hidden="true"></span></span>
-    </a>
-    <a class="trio-panel on-red" href="/jobba-hos-oss/" style="--w:9">
-      <h2 class="display head">Jobba hos oss?</h2>
-      <p>Vi är alltid på jakt efter vår nästa medarbetare. Brinner du för dans eller känner du någon som vill jobba med dans, hör då av er till oss!</p>
-      <span class="text-link">Bli en del av WDF <span class="arrow" aria-hidden="true"></span></span>
-    </a>
-  </section>
-
-  <section class="vision on-white section">
-    <div class="wrap vision-grid">
-      <div class="reveal stack">
-        <h2 class="display head">Alla får dansa</h2>
-        <p class="lead">Alla får dansa på Wilson Dance Factory. Vår vision är att kunna erbjuda alla typer av dans till alla typer av människor.</p>
-        <p>Dans är ett sätt att uttrycka sina känslor fysiskt, därför tror vi att det alltid finns någon typ av dans för alla. Hos oss är vi alltid öppna för utveckling och vi försöker alltid följa med aktuella trender inom dans för att kunna nå ut till nästa generation.</p>
-        <p class="display vision-welcome">Välkommen in att dansa med oss!</p>
-      </div>
-      <div class="vision-photo tilt-l">
-        <Image src={visionPhoto} alt="Dansare på scen hos Wilson Dance Factory" widths={[480, 800, 1200]} sizes="(min-width: 60rem) 40vw, 90vw" class="photo" />
-      </div>
-    </div>
-  </section>
-
-  <section class="see on-black section" aria-labelledby="see-title">
-    <div class="wrap see-grid">
-      <div class="reveal stack">
-        <h2 id="see-title" class="display head">Hos oss</h2>
-        <p class="lead">Se hur vi har det hos oss.</p>
-        <p>Vi är stolta över den energin vi har skapat med Wilson Dance Factory. Detta är något vi gärna visar upp, så om ni vill se hur vi har det hos oss så kan ni gå till vårt bildbibliotek.</p>
-        <p><a class="button" href="/aktuellt/#bilder"><span>Se alla bilder</span> <span class="arrow" aria-hidden="true"></span></a></p>
-      </div>
-      <ul role="list" class="see-strip">
-        {strip.map((s) => <li><Image src={s.src} alt={s.alt} widths={[400, 700]} sizes="(min-width: 60rem) 18vw, 30vw" class="photo" /></li>)}
+  <section class="section">
+    <div class="container">
+      <ul role="list" class="cards">
+        <li class="on-dark-2 reveal">
+          <h2 class="h3">Våra dansstilar</h2>
+          <p>På Wilson Dance Factory erbjuder vi över 20 st olika dansstilar i olika nivåer för alla åldersgrupper. Med andra ord så finns det dans för alla.</p>
+          <a class="button" href="/dansstilar/">Se alla våra dansstilar <span class="arrow" aria-hidden="true"></span></a>
+        </li>
+        <li class="on-dark reveal">
+          <h2 class="h3">Våra instruktörer</h2>
+          <p>Med hela 21 medarbetare så kan vi erbjuda en kvalitativ helhetsupplevelse inom dans. Oavsett tävling eller fritidsdans.</p>
+          <a class="button" href="/instruktorer/">Träffa våra instruktörer <span class="arrow" aria-hidden="true"></span></a>
+        </li>
+        <li class="on-red reveal">
+          <h2 class="h3">Jobba hos oss?</h2>
+          <p>Vi är alltid på jakt efter vår nästa medarbetare. Brinner du för dans eller känner du någon som vill jobba med dans, hör då av er till oss!</p>
+          <a class="button" href="/jobba-hos-oss/">Bli en del av WDF <span class="arrow" aria-hidden="true"></span></a>
+        </li>
       </ul>
     </div>
-    <div class="wrap follow">
-      <h3 class="display follow-h">Vill du se mer av oss?</h3>
+  </section>
+
+  <section class="section on-light">
+    <div class="container split">
+      <div class="stack reveal">
+        <h2>Alla får dansa på Wilson Dance Factory</h2>
+        <p>Vår vision är att kunna erbjuda alla typer av dans till alla typer av människor. Dans är ett sätt att uttrycka sina känslor fysiskt, därför tror vi att det alltid finns någon typ av dans för alla. Hos oss är vi alltid öppna för utveckling och vi försöker alltid följa med aktuella trender inom dans för att kunna nå ut till nästa generation.</p>
+        <p class="h4">Välkommen in att dansa med oss!</p>
+      </div>
+      <Image src={visionPhoto} alt="Dansare på scen hos Wilson Dance Factory" widths={[480, 800, 1200]} sizes="(min-width: 64rem) 34rem, 100vw" class="photo rounded split-photo" />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container center stack">
+      <h2>Se hur vi har det hos oss</h2>
+      <p class="intro">Vi är stolta över den energin vi har skapat med Wilson Dance Factory. Detta är något vi gärna visar upp, så om ni vill se hur vi har det hos oss så kan ni gå till vårt bildbibliotek.</p>
+      <ul role="list" class="strip">
+        {strip.map((s) => <li><Image src={s.src} alt={s.alt} widths={[400, 700]} sizes="(min-width: 64rem) 17rem, 45vw" class="photo rounded" /></li>)}
+      </ul>
+      <p class="button-row"><a class="button" href="/aktuellt/#bilder">Se alla bilder <span class="arrow" aria-hidden="true"></span></a></p>
+    </div>
+  </section>
+
+  <section class="section on-dark">
+    <div class="container center stack">
+      <h2>Vill du se mer av oss?</h2>
       <p>Följ oss på Facebook och Instagram för att hänga med i vår vardag!</p>
-      <p class="follow-links">
-        <a class="button" href={site.sociala.facebook} rel="noopener"><span>Facebook</span></a>
-        <a class="button" href={site.sociala.instagram} rel="noopener"><span>Instagram</span></a>
+      <p class="button-row">
+        <a class="button" href={site.sociala.facebook} rel="noopener">Facebook <span class="arrow" aria-hidden="true"></span></a>
+        <a class="button" href={site.sociala.instagram} rel="noopener">Instagram <span class="arrow" aria-hidden="true"></span></a>
       </p>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .trio { display: grid; }
-  .trio-panel {
-    display: grid; align-content: space-between; gap: 1.5rem; min-height: 24rem;
-    padding: clamp(4rem, 3rem + 2vw, 5rem) var(--margin) clamp(2rem, 1.5rem + 2vw, 3.5rem); text-decoration: none;
-    container-type: inline-size;
-  }
-  .trio-panel .head { font-size: min(4.5rem, calc(100cqi / (var(--w) * 1.08))); }
-  .trio-panel p { max-width: 34ch; }
-  .trio-panel:hover .text-link { text-decoration: underline; }
-  @media (min-width: 60rem) {
-    .trio { grid-template-columns: minmax(0, 4fr) minmax(0, 3fr) minmax(0, 5fr); }
-    .trio-panel { min-height: 32rem; padding-inline: clamp(1.5rem, 1rem + 2vw, 3rem); }
-  }
+  .cards { display: grid; border-radius: var(--radius); overflow: hidden; box-shadow: 0 16px 36px rgb(0 0 0 / 0.14); }
+  .cards li { padding: 2rem clamp(1.25rem, 1rem + 1.5vw, 2rem); display: grid; gap: 1rem; align-content: start; justify-items: start; }
+  @media (min-width: 64rem) { .cards { grid-template-columns: repeat(3, 1fr); } .cards li { grid-template-rows: auto 1fr auto; } }
 
-  .vision-grid { display: grid; gap: 3.5rem; align-items: center; }
-  .vision-welcome { font-size: clamp(1.375rem, 1rem + 1.6vw, 2.25rem); color: var(--red); }
-  .vision-photo { width: min(100%, 34rem); justify-self: center; }
-  .vision-photo :global(img) { aspect-ratio: 4 / 5; }
-  @media (min-width: 60rem) { .vision-grid { grid-template-columns: 6fr 5fr; } }
+  .split { display: grid; gap: 2.5rem; align-items: center; }
+  .split-photo { aspect-ratio: 4 / 3; }
+  @media (min-width: 64rem) { .split { grid-template-columns: 1fr 1fr; gap: 4rem; } }
 
-  .see-grid { display: grid; gap: 3rem; align-items: center; }
-  .see-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
-  .see-strip :global(img) { aspect-ratio: 3 / 4; }
-  .see-strip li:nth-child(2) { translate: 0 2rem; }
-  @media (min-width: 60rem) { .see-grid { grid-template-columns: 5fr 7fr; } }
-  .follow { margin-top: clamp(4rem, 3rem + 4vw, 7rem); display: grid; gap: 1rem; justify-items: start; }
-  .follow-h { font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.5rem); }
-  .follow-links { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .intro { max-width: 46rem; margin-inline: auto; }
+  .strip { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-block: 2rem !important; }
+  .strip :global(img) { aspect-ratio: 4 / 3; }
+  @media (min-width: 64rem) { .strip { grid-template-columns: repeat(4, 1fr); } }
 </style>

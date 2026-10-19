@@ -3,16 +3,18 @@ import { Image } from 'astro:assets';
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHead from '../components/PageHead.astro';
-import head from '../assets/images/miljo/miljo-7.jpg';
+import Icon from '../components/Icon.astro';
+import head from '../assets/images/headers/header-2.jpg';
 import logo from '../assets/images/brand/logo.png';
+import teamPhoto from '../assets/images/miljo/miljo-5.jpg';
 
 const people = (await getCollection('instruktorer')).sort((a, b) => a.data.ordning - b.data.ordning);
 
 // The card shows the start of the biography; the whole text opens in a popover.
 const excerpt = (body = '') => {
   const first = body.trim().split(/\n\s*\n/)[0]?.replace(/\s+/g, ' ') ?? '';
-  if (first.length <= 130) return first;
-  return first.slice(0, first.lastIndexOf(' ', 130)) + '…';
+  if (first.length <= 120) return first;
+  return first.slice(0, first.lastIndexOf(' ', 120)) + '…';
 };
 
 const cards = await Promise.all(
@@ -29,48 +31,48 @@ const cards = await Promise.all(
   title="Våra instruktörer"
   description="Träffa instruktörerna på Wilson Dance Factory i Helsingborg – landslagsdansare, EM- och VM-finalister och erfarna danslärare."
 >
-  <PageHead
-    lines={['Våra', 'instruktörer']}
-    lead="Med hela 21 medarbetare så kan vi erbjuda en kvalitativ helhetsupplevelse inom dans. Oavsett tävling eller fritidsdans."
-    image={head}
-    imageAlt="Danssal hos Wilson Dance Factory"
-  />
+  <PageHead title="Våra instruktörer" image={head} />
 
-  <section class="people on-paper section" aria-label="Instruktörer">
-    <ul role="list" class="wrap people-grid">
+  <section class="section">
+    <ul role="list" class="container people">
       {cards.map((p) => (
-        <li class="person reveal">
+        <li class="person card reveal">
           <div class="person-photo">
             {p.data.bild ? (
-              <Image src={p.data.bild} alt={`Porträtt av ${p.data.namn}`} widths={[320, 520]} sizes="(min-width: 75rem) 22vw, (min-width: 40rem) 45vw, 90vw" class="photo" />
+              <Image src={p.data.bild} alt={`Porträtt av ${p.data.namn}`} widths={[300, 500]} sizes="(min-width: 64rem) 16rem, 45vw" class="photo" />
             ) : (
-              <span class="no-photo on-red" title={`Bild på ${p.data.namn} kommer snart`}>
-                <Image src={logo} alt="" width={160} class="no-photo-mark" />
-              </span>
+              <span class="no-photo"><Image src={logo} alt="" width={120} /></span>
             )}
           </div>
-          <h2 class="person-name">{p.data.namn}</h2>
-          <p class="person-role muted">{p.data.roll}</p>
-          {p.hasBio ? <p class="person-excerpt">{p.utdrag}</p> : <p class="person-excerpt muted">Mer info snart</p>}
-          {p.data.dansstilar.length > 0 && (
-            <ul role="list" class="tags" aria-label="Dansstilar">
-              {p.data.dansstilar.map((d) => <li>{d}</li>)}
-            </ul>
-          )}
-          {p.hasBio && (
-            <button class="text-link more" type="button" popovertarget={`bio-${p.id}`}>
-              Läs mer<span class="visually-hidden"> om {p.data.namn}</span> <span class="arrow" aria-hidden="true"></span>
-            </button>
-          )}
+          <div class="person-body">
+            <h2 class="h4">{p.data.namn}</h2>
+            <p class="role small muted">{p.data.roll}</p>
+            {p.hasBio && <p class="excerpt small muted">{p.utdrag}</p>}
+            {p.data.dansstilar.length > 0 && (
+              <div class="styles">
+                <p class="styles-label">Dansstilar</p>
+                <ul role="list">
+                  {p.data.dansstilar.map((d) => <li><Icon name="note" size={13} />{d}</li>)}
+                </ul>
+              </div>
+            )}
+            {p.hasBio ? (
+              <button class="button more" type="button" popovertarget={`bio-${p.id}`}>
+                Läs mer<span class="visually-hidden"> om {p.data.namn}</span> <span class="arrow" aria-hidden="true"></span>
+              </button>
+            ) : (
+              <p class="soon small muted">Mer info snart</p>
+            )}
+          </div>
 
           {p.hasBio && (
-            <div id={`bio-${p.id}`} class="bio on-white" popover>
+            <div id={`bio-${p.id}`} class="bio" popover>
               <div class="bio-head">
                 <div>
-                  <p class="display bio-name">{p.data.namn}</p>
+                  <p class="h3">{p.data.namn}</p>
                   <p class="muted">{p.data.roll}</p>
                 </div>
-                <button class="bio-close" type="button" popovertarget={`bio-${p.id}`} popovertargetaction="hide">Stäng</button>
+                <button class="bio-close" type="button" popovertarget={`bio-${p.id}`} popovertargetaction="hide">Stäng ✕</button>
               </div>
               <div class="prose"><p.Content /></div>
               {p.data.dansstilar.length > 0 && (
@@ -83,46 +85,46 @@ const cards = await Promise.all(
     </ul>
   </section>
 
-  <section id="team" class="join on-red section">
-    <div class="wrap join-grid reveal">
-      <h2 class="display head">Vårt team</h2>
-      <div class="stack">
-        <p class="lead">Vill du också vara en del av vårt team?</p>
+  <section class="section on-light">
+    <div class="container split">
+      <div class="stack reveal">
+        <h2>Vill du också vara en del av vårt team?</h2>
         <p>Tveka då inte på att höra av dig till oss. Vår dörr är alltid öppen och vi letar ständigt efter nästa möjlighet i vår verksamhet. Om du gillar att dansa och lära ut dans till andra så är du varmt välkommen till oss på Wilson Dance Factory!</p>
-        <p><a class="button" href="/jobba-hos-oss/#jobba"><span>Skicka in din jobbansökan</span> <span class="arrow" aria-hidden="true"></span></a></p>
+        <p><a class="button" href="/jobba-hos-oss/#jobba">Skicka in din jobbansökan <span class="arrow" aria-hidden="true"></span></a></p>
       </div>
+      <Image src={teamPhoto} alt="Dansare hos Wilson Dance Factory" widths={[480, 800]} sizes="(min-width: 64rem) 30rem, 100vw" class="photo rounded split-photo" />
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  /* Two columns even on a phone: twenty people in one column is a very long scroll. */
-  .people-grid { display: grid; gap: 3.5rem var(--gap); grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  @media (min-width: 48rem) { .people-grid { grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 4.5rem var(--gap); } }
-  .person { display: grid; gap: 0.5rem; align-content: start; container-type: inline-size; }
-  .person-photo { aspect-ratio: 1; overflow: hidden; margin-bottom: 0.75rem; background: var(--white); }
-  .person-photo :global(img) { aspect-ratio: 1; }
-  .no-photo { display: grid; place-items: center; width: 100%; height: 100%; }
-  .no-photo-mark { width: 42%; filter: brightness(0) invert(1); }
-  .person-name { font-family: var(--font-display); text-transform: uppercase; font-size: min(1.25rem, 8.5cqi); line-height: 1.05; overflow-wrap: anywhere; }
-  .person-role { font-weight: 500; }
-  .person-excerpt { line-height: 1.5; }
-  @media (max-width: 47.99rem) { .person-excerpt { display: none; } }
-  .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.25rem; }
-  .tags li { background: var(--black); color: var(--white); font-size: var(--step-small); padding: 0.2rem 0.55rem; }
-  .more { justify-self: start; margin-top: 0.25rem; background: none; border: 0; padding: 0.5rem 0; cursor: pointer; }
+  .people { display: grid; gap: 1.5rem 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (min-width: 48rem) { .people { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (min-width: 64rem) { .people { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem 1.5rem; } }
+  .person { display: grid; grid-template-rows: auto 1fr; overflow: hidden; }
+  .person-photo { aspect-ratio: 1; background: var(--light); }
+  .person-photo :global(img.photo) { aspect-ratio: 1; }
+  .no-photo { display: grid; place-items: center; height: 100%; }
+  .no-photo :global(img) { width: 34%; opacity: 0.35; filter: grayscale(1); }
+  .person-body { display: grid; gap: 0.35rem; align-content: start; padding: 1rem 1rem 1.25rem; }
+  .person-body .h4 { font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.375rem); }
+  .excerpt { line-height: 1.5; display: none; }
+  @media (min-width: 48rem) { .excerpt { display: block; } }
+  .styles { margin-top: 0.4rem; }
+  .styles-label { font-weight: 500; font-size: 0.9375rem; }
+  .styles ul { display: grid; gap: 0.15rem; font-size: var(--fs-small); color: var(--muted); }
+  .styles li { display: flex; align-items: center; gap: 0.4rem; }
+  .styles :global(.icon) { color: var(--red); }
+  .more, .soon { justify-self: start; margin-top: 0.75rem; }
 
-  .bio {
-    width: min(92vw, 44rem); max-height: 88svh; overflow-y: auto;
-    margin: auto; border: 0; padding: clamp(1.5rem, 1rem + 2vw, 3rem);
-  }
-  .bio::backdrop { background: rgb(17 17 17 / 0.7); }
-  .bio-head { display: flex; justify-content: space-between; align-items: start; gap: 1rem; margin-bottom: 1.5rem; }
-  .bio-name { font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.5rem); line-height: 1; }
-  .bio-close { min-height: 2.75rem; padding: 0 1rem; border: 0; background: var(--black); color: var(--white); font-weight: 500; cursor: pointer; flex: none; }
-  .bio-close:hover { background: var(--red); }
-  .bio-styles { margin-top: 1.5rem; }
+  .bio { width: min(92vw, 42rem); max-height: 88svh; overflow-y: auto; margin: auto; border: 0; border-radius: var(--radius); padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); }
+  .bio::backdrop { background: rgb(32 31 31 / 0.75); }
+  .bio-head { display: flex; justify-content: space-between; align-items: start; gap: 1rem; margin-bottom: 1.25rem; }
+  .bio-close { border: 0; background: transparent; font-weight: 500; cursor: pointer; padding: 0.5rem 0; }
+  .bio-close:hover { color: var(--red); }
+  .bio-styles { margin-top: 1.25rem; }
 
-  .join-grid { display: grid; gap: 2rem; }
-  @media (min-width: 60rem) { .join-grid { grid-template-columns: 1fr 1fr; align-items: end; } }
+  .split { display: grid; gap: 2.5rem; align-items: center; }
+  .split-photo { aspect-ratio: 4 / 3; }
+  @media (min-width: 64rem) { .split { grid-template-columns: 1.2fr 1fr; gap: 4rem; } }
 </style>
