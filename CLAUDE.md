@@ -91,7 +91,7 @@ Steg för steg för GitHub, Netlify, Resend och DNS finns i **`PUBLICERING.md`**
 2. **Trustindex:** skapa en widget på trustindex.io och klistra in ID:t i `site.yaml` → `trustindex_widget`. Tills dess visas en länk till Google-recensionerna.
 3. **Integritetspolicyn** (`src/texter/integritetspolicy.md`) är ett utkast med `[platshållare]`. Den ska granskas innan lansering. Köpvillkoren har också platshållare från gamla sajten ("[t.ex. 3 dagar]").
 4. **Cookies:** Google Maps (Kontakt) och Trustindex kan sätta cookies från tredje part. Avgör om vi behöver en banner, eller om kartan ska laddas först efter ett klick.
-6. **Netlify:** koppla repot, peka domänen och kontrollera `sitemap-index.xml` i Google Search Console.
+5. **Netlify:** koppla repot, peka domänen och kontrollera `sitemap-index.xml` i Google Search Console.
 
 ## Kontakt / fakta
 Wilson Dance Factory, Kapplöpningsgatan 6, 252 30 Helsingborg · info@wilsondancefactory.se · 042-13 14 08 · Org.nr 559159-4873

@@ -7,8 +7,9 @@ dist/
 .astro/
 .netlify/
 
-# taste-skill working files
+# taste-skill working files and local comparison screenshots
 .taste-skill/
+jamforelse/
 
 # Environment / secrets
 .env
