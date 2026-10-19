@@ -63,8 +63,8 @@ uploads/            # rå WordPress-export – ENDAST källa, ignoreras av Git
 
 ## Formulär
 - **Butik:** `/shop/` skickar till `netlify/functions/order.mjs`. Funktionen läser produkter och priser från `/butik.json` (priser från webbläsaren ignoreras), validerar, skapar ett ordernummer (`WDF-ÅÅMMDD-XXXX`) och skickar mejl till kunden och till info@. Med JavaScript sker det via `fetch`. Utan JavaScript är det en vanlig POST som skickas vidare (303) till `/tack/?order=…&summa=…`. Formuläret har ett dolt fält mot spam.
-- **Miljövariabler** (Netlify → Site configuration → Environment variables, aldrig i repot): `RESEND_API_KEY`, `ORDER_FROM` (t.ex. `Wilson Dance Factory <order@send.wilsondancefactory.se>`), `ORDER_TO` (standard info@), `ORDER_DRY_RUN=1` för att bara logga. Se `.env.example`.
-- **E-posttjänst:** Resend, som skickar från subdomänen `send.wilsondancefactory.se`. DNS ligger hos Loopia, och Jon lägger in posterna.
+- **Miljövariabler** (Netlify → Site configuration → Environment variables, aldrig i repot): `RESEND_API_KEY`, `ORDER_FROM` (`Wilson Dance Factory <order@wilsondancefactory.se>`), `ORDER_TO` (standard info@), `ORDER_DRY_RUN=1` för att bara logga. Se `.env.example`.
+- **E-posttjänst:** Resend, region EU (eu-west-1), domänen `wilsondancefactory.se`. Resends DNS-poster ligger på `send` och `resend._domainkey` och rör inte Loopias MX eller SPF för info@. DNS ligger hos Loopia, och Jon lägger in posterna. Se `PUBLICERING.md`.
 - **Jobba hos oss:** inget formulär. En mejlknapp (`mailto:` med färdigt ämne och mall) räcker (beslut 3).
 
 ## Arbetssätt
@@ -86,7 +86,8 @@ npm run import-images  # plockar ut och optimerar bilder från uploads/
 ```
 
 ## Kvar att göra
-1. **Resend:** skapa konto, verifiera `send.wilsondancefactory.se` (DNS-poster hos Loopia) och lägg in miljövariablerna i Netlify. Testa en riktig beställning.
+Steg för steg för GitHub, Netlify, Resend och DNS finns i **`PUBLICERING.md`**.
+1. **Resend:** skapa konto, verifiera `wilsondancefactory.se` (DNS-poster hos Loopia) och lägg in miljövariablerna i Netlify. Testa en riktig beställning.
 2. **Trustindex:** skapa en widget på trustindex.io och klistra in ID:t i `site.yaml` → `trustindex_widget`. Tills dess visas en länk till Google-recensionerna.
 3. **Integritetspolicyn** (`src/texter/integritetspolicy.md`) är ett utkast med `[platshållare]`. Den ska granskas innan lansering. Köpvillkoren har också platshållare från gamla sajten ("[t.ex. 3 dagar]").
 4. **Cookies:** Google Maps (Kontakt) och Trustindex kan sätta cookies från tredje part. Avgör om vi behöver en banner, eller om kartan ska laddas först efter ett klick.

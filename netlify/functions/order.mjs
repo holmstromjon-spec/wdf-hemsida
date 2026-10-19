@@ -4,7 +4,7 @@
 //
 // Environment variables (Netlify → Site configuration → Environment variables):
 //   RESEND_API_KEY  API key from resend.com                     (required)
-//   ORDER_FROM      e.g. "Wilson Dance Factory <order@send.wilsondancefactory.se>" (required)
+//   ORDER_FROM      e.g. "Wilson Dance Factory <order@wilsondancefactory.se>" (required)
 //   ORDER_TO        where the school's copy goes (default info@wilsondancefactory.se)
 //   ORDER_DRY_RUN   "1" = log the mails instead of sending (for testing)
 
