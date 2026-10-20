@@ -7,7 +7,8 @@ Ny version av https://wilsondancefactory.se. Den gamla sajten är byggd i WordPr
 - [x] Sajten är byggd: alla 17 sidor, datafiler, bilder, butik och beställningsfunktion
 - [x] Publicerad på testadressen https://wilsondancefactory.netlify.app/ (Netlify, från `main` på github.com/holmstromjon-spec/wdf-hemsida)
 - [x] Kundens feedback, omgång 1 (2026-10-20): Yoga bort/HipHop in bland populära, informationsmötets datum "meddelas senare", text över bilder rättad. Kunden: "once these things are fixed its ok to release" (kan komma fler små saker).
-- [ ] Kvar före lansering: se **Kvar att göra** längst ned och `PUBLICERING.md`
+- [x] **Lanserad 2026-10-20** på https://wilsondancefactory.se (Netlify, DNS kvar hos Loopia: A `@` → 75.2.60.5, CNAME `www` → wilsondancefactory.netlify.app). HTTPS via Let's Encrypt. Beställningsmejl via Resend, testade och fungerar.
+- Gamla värden hos Loopia, om man måste backa till WordPress: A `93.188.2.51` och AAAA `2a02:250:0:8::55` på både `@` och `www`.
 
 ## Mål
 - **Samma URL:er som idag**, så att vi behåller rankingen på Google. Varje sida i `INVENTERING.md` §1 finns kvar med exakt samma sökväg, med avslutande `/` (`trailingSlash: 'always'`). Oanvända WP-sidor är borttagna helt, utan omdirigeringar (beslut 5). `npm run check-urls` kontrollerar detta.
@@ -96,8 +97,8 @@ npm run import-images  # plockar ut och optimerar bilder från uploads/
 
 ## Kvar att göra
 Steg för steg för GitHub, Netlify, Resend och DNS finns i **`PUBLICERING.md`**.
-1. **Resend:** skapa konto, verifiera `wilsondancefactory.se` (DNS-poster hos Loopia) och lägg in miljövariablerna i Netlify. Testa en riktig beställning.
-2. **Domänflytt:** stäng av Netlifys besöksskydd, peka domänen hos Loopia (PUBLICERING.md steg 5) och skicka in `sitemap-index.xml` i Google Search Console.
+1. **Google Search Console:** verifiera domänen och skicka in `https://wilsondancefactory.se/sitemap-index.xml` (Jon).
+2. **WordPress-webbhotellet:** säg upp det först när den nya sajten har fungerat ett tag, och spara en backup av WP-databasen innan.
 3. *(Valfritt)* **Trustindex:** skapa en widget på trustindex.io och klistra in ID:t i `site.yaml` → `trustindex_widget`. Tills dess visas en länk till Google-recensionerna. **Uppdatera då även cookieavsnittet i integritetspolicyn**, eftersom Trustindex laddar innehåll från tredje part.
 
 Klart 2026-10-20: köpvillkoren (3 dagar för betalning, 10 arbetsdagars leverans) och integritetspolicyn är ifyllda med kundens svar (lagringstider 12/6 månader, samtycke till bilder vid anmälan, Nordea, Rosenberg & Partners Redovisningsbyrå). Google-kartan på Kontakt laddas först efter klick, så ingen cookie-banner behövs.

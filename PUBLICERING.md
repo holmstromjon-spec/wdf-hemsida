@@ -1,5 +1,7 @@
 # Publicering – steg för steg
 
+> ✅ **Lanserad 2026-10-20.** Steg 1–5 är klara. Kvar: steg 6.2 (Search Console) och 6.3 (säga upp WordPress). Erfarenheter: Loopia publicerade DNS-ändringar efter 30–45 minuter, och ns1 låg efter ns2. Loopia tillåter bara en A-post per namn, så den gamla måste tas bort först. HTTPS-certifikatet kom inom några minuter efter att DNS hade slagit om.
+
 Ordningen är vald så att den gamla WordPress-sajten och e-posten fungerar hela tiden. Domänen flyttas först i steg 5, när allt är testat på en tillfällig Netlify-adress.
 
 **Vem gör vad:** ✋ = Jon (kräver inloggning eller beslut) · 🤖 = Claude
