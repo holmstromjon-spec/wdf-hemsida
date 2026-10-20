@@ -35,6 +35,21 @@ import head from '../assets/images/galleri/dsc03422.jpg';
   </section>
 </BaseLayout>
 
+<script>
+  // dans.se labels its availability filter "?". Rename the button label only (not the content)
+  // once dans.se has drawn the list, and again if it redraws.
+  const embed = document.querySelector('.cw-embed');
+  if (embed) {
+    const rename = () => {
+      embed.querySelectorAll('.cwShopAvailabilityHelpLabel .cwShopFilterLabelBase').forEach((el) => {
+        if (el.textContent?.trim() === '?') el.textContent = 'Tillgänglighet';
+      });
+    };
+    new MutationObserver(rename).observe(embed, { childList: true, subtree: true });
+    rename();
+  }
+</script>
+
 <style>
   .intro { max-width: 52rem; margin: 0.75rem 0 1.5rem; }
   .cw-embed { margin-top: 2.5rem; min-height: 4rem; }
