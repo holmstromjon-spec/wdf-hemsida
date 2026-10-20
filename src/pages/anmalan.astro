@@ -38,5 +38,11 @@ import head from '../assets/images/galleri/dsc03422.jpg';
 <style>
   .intro { max-width: 52rem; margin: 0.75rem 0 1.5rem; }
   .cw-embed { margin-top: 2.5rem; min-height: 4rem; }
+  /* dans.se's filter buttons in the site's red, as on the old site. Styling only – content is dans.se's. */
+  .cw-embed :global(.cwShopFilterLabel) {
+    background: var(--red); color: var(--white); border: 0; border-radius: var(--radius);
+    font-family: var(--font); font-weight: 600; padding: 0.5rem 0.9rem; cursor: pointer;
+  }
+  .cw-embed :global(.cwShopFilterLabel:hover) { background: var(--red-dark); }
   .terms-wrap { margin: 2rem 0; }
 </style>

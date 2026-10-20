@@ -43,5 +43,10 @@ trustindex_widget: ""
 
 # Anmälan via dans.se (CogWork). Vi bäddar bara in – innehållet ägs av dans.se.
 dans_se:
-  shop: https://dans.se/wilsondancefactory/shop/
-  script: https://dans.se/api/init.js
+  # listFormat=list ger dans.se:s nya kurslista med filter (Ålder, Kategori, Dag, Ledare, Sök) –
+  # samma som WordPress-pluginen visade. Utan den laddas en äldre lista utan filter.
+  shop: https://dans.se/wilsondancefactory/shop/?listFormat=list
+  # Skriptets slutliga adress. dans.se:s egen kortadress (/api/init.js) omdirigerar hit, men då
+  # laddas filtren från /api/shop_filter.js, som webbläsare blockerar (omdirigeringen saknar CORS).
+  # Från den här adressen hämtas filtren från samma mapp, där CORS fungerar.
+  script: https://dans.se/files/prod/js/lib.js
