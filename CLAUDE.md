@@ -6,7 +6,7 @@ Ny version av https://wilsondancefactory.se. Den gamla sajten är byggd i WordPr
 - [x] Inventering av nuvarande sajt: se `INVENTERING.md` (godkänd av Jon 2026-10-19, beslut i §6)
 - [x] Sajten är byggd: alla 17 sidor, datafiler, bilder, butik och beställningsfunktion
 - [x] Publicerad på testadressen https://wilsondancefactory.netlify.app/ (Netlify, från `main` på github.com/holmstromjon-spec/wdf-hemsida)
-- [ ] Kundens feedback på testversionen (Jon visar den för kunden 2026-10-20)
+- [x] Kundens feedback, omgång 1 (2026-10-20): Yoga bort/HipHop in bland populära, informationsmötets datum "meddelas senare", text över bilder rättad. Kunden: "once these things are fixed its ok to release" (kan komma fler små saker).
 - [ ] Kvar före lansering: se **Kvar att göra** längst ned och `PUBLICERING.md`
 
 ## Mål
