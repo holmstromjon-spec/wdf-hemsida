@@ -35,15 +35,16 @@ Ordningen är vald så att den gamla WordPress-sajten och e-posten fungerar hela
 ## 3. Resend (mejl från butiken)
 1. ✋ Skapa konto på <https://resend.com> (gratis upp till 3 000 mejl/månad).
 2. ✋ **Domains → Add domain** → `wilsondancefactory.se`, **region: Ireland (eu-west-1)** (EU, bättre för GDPR).
-3. Resend visar 3 DNS-poster att lägga in hos Loopia (steg 4). Ungefär så här, men **använd exakt de värden Resend visar**:
+3. ✅ **Klart 2026-10-20.** De här posterna ligger hos Loopia och är verifierade av Resend (kopiera alltid värden med Resends kopieringsknapp, eftersom skärmen visar dem avkortade):
 
-   | Typ | Namn (host) | Värde | Prio |
-   |---|---|---|---|
-   | TXT | `resend._domainkey` | `p=MIGf…` (lång nyckel) | – |
-   | MX | `send` | `feedback-smtp.eu-west-1.amazonses.com` | 10 |
-   | TXT | `send` | `v=spf1 include:amazonses.com ~all` | – |
+   | Typ | Subdomän | Värde |
+   |---|---|---|
+   | TXT | `resend._domainkey` | `p=MIGfMA0…kS2sklQIDAQAB` (216 tecken efter `p=`) |
+   | CNAME | `rsend` | `rsend-euw1.forge.rmta.net.` |
+   | CNAME | `send` | `send.forge.rmta.net.` |
+   | TXT | `_dmarc` | `v=DMARC1; p=none;` |
 
-   Posterna ligger på `send` och `resend._domainkey`. De **ändrar inte** MX eller SPF för `wilsondancefactory.se`, så info@-mejlen hos Loopia påverkas inte.
+   Posterna ligger på underdomäner och **ändrar inte** MX eller SPF för `wilsondancefactory.se`, så info@-mejlen hos Loopia påverkas inte. Loopia publicerade dem gradvis, och det tog cirka 30 minuter.
 4. ✋ När domänen är verifierad: **API Keys → Create API key** (behörighet: *Sending access*, domän: wilsondancefactory.se). Kopiera nyckeln direkt, eftersom den bara visas en gång.
 5. ✋ Lägg in nyckeln som `RESEND_API_KEY` i Netlify, **ta bort** `ORDER_DRY_RUN` och gör en ny deploy.
 6. ✋ Testa: lägg en beställning på `…netlify.app/shop/` med din egen e-post. Du ska få en orderbekräftelse, och info@ ska få en kopia. Svara på kundmejlet för att kontrollera att svaret går till info@.
