@@ -221,7 +221,7 @@ const fakta = [
   @media (min-width: 64rem) { .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem 1.5rem; } }
   .tile a { display: grid; gap: 0.75rem; text-decoration: none; }
   .tile-photo { position: relative; display: block; aspect-ratio: 4 / 5; isolation: isolate; }
-  .tile-photo :global(img) { position: absolute; inset: 0; transition: transform 500ms var(--ease); }
+  .tile-photo :global(img) { position: absolute; inset: 0; height: 100%; transition: transform 500ms var(--ease); }
   .tile-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 50%, rgb(32 31 31 / 0.75)); }
   .tile a:hover :global(img) { transform: scale(1.05); }
   .tile-name { position: absolute; left: 1rem; bottom: 0.85rem; z-index: 1; color: var(--white); font-size: var(--fs-h3); font-weight: 300; }

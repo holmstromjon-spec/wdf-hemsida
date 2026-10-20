@@ -40,7 +40,6 @@ const images = [
     ['HipHop', 'hiphop'],
     ['Jazz_And_Modernt', 'jazz-modernt'],
     ['Commercial_HipHop', 'commercial-hiphop'],
-    ['Yoga', 'yoga'],
   ].map(([src, name]) => [`2023/02/Wilson_Dance_Factory_${src}.jpg`, 'dansstilar', name]),
   ...Array.from({ length: 11 }, (_, i) => [
     `2023/04/Wilson_Dance_Factory_Miljobild_${i + 1}.jpg`,

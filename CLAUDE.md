@@ -66,7 +66,7 @@ uploads/            # rå WordPress-export – ENDAST källa, ignoreras av Git
   - **Inte valt:** kraftiga rubriker i fet versal.
 - Den djärva första versionen finns i Git-historiken (commit `d7719ab`). Den helt lugna kopian av gamla sajten finns på grenen `lugn-design`.
 - Kort med knappar (dansstilar, instruktörer) har knappen nedtryckt med `margin-top: auto`, så att knapparna ligger i linje i varje rad. Jon märker sådant, så håll det.
-- Yoga har inget eget foto. Det är en tillfällig bild (`dsc03595`) som kunden bör byta ut. Bugg har en miljöbild (`miljo-6`).
+- Bugg har en miljöbild (`miljo-6`) i stället för ett eget foto. Yoga är borttagen (kunden har inte yoga längre, 2026-10-20). De "populära" på startsidan är Balett, TikTok, Disco och HipHop.
 - Taste-skillen (`.claude/skills/design-taste-frontend/`) användes för första versionen. Dess inspektör (`scripts/inspect.mjs <url>`) är fortfarande bra för skärmdumpar i tre bredder och för att hitta horisontell scroll. Dess stilregler (tunga rubriker, rörelsekrav, minst fyra bilder per sida) gäller **inte** för den valda riktningen.
 - Använd WDF:s **egna** bilder i första hand. Bilder från öppna arkiv används bara efter godkännande. Faktainnehåll ändras aldrig av designskäl.
 
