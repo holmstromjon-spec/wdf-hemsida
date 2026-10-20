@@ -51,24 +51,29 @@ const kr = (n: number) => `${n.toLocaleString('sv-SE')} kr`;
 
           <fieldset class="lines">
             <legend class="h4 legend">Produkter *</legend>
+            <!-- Fixed columns (product | price | quantity | size) so every row lines up. -->
+            <div class="line line-head small muted" aria-hidden="true">
+              <span>Produkt</span><span class="col-price">Pris</span><span>Antal</span><span>Storlek</span>
+            </div>
             {butik.produkter.map((p) => (
               <div class="line" data-pris={p.pris}>
-                <label class="line-name" for={`antal-${p.id}`}>{p.namn} <span class="muted tabular">{kr(p.pris)}</span></label>
-                <div class="line-fields">
-                  <label>
-                    <span class="small">Antal</span>
-                    <input id={`antal-${p.id}`} name={`antal_${p.id}`} type="number" inputmode="numeric" min="0" max="20" value="0" data-antal />
+                <label class="line-name" for={`antal-${p.id}`}>{p.namn}</label>
+                <span class="col-price tabular">{kr(p.pris)}</span>
+                <label class="field">
+                  <span class="field-label small">Antal</span>
+                  <input id={`antal-${p.id}`} name={`antal_${p.id}`} type="number" inputmode="numeric" min="0" max="20" value="0" data-antal />
+                </label>
+                {p.storlek !== 'ingen' ? (
+                  <label class="field">
+                    <span class="field-label small">Storlek</span>
+                    <select name={`storlek_${p.id}`}>
+                      <option value="">Välj storlek</option>
+                      {butik.storlekar[p.storlek].map((s) => <option value={s}>{p.storlek === 'vuxen' ? 'Vuxen' : 'Junior'}: {s}</option>)}
+                    </select>
                   </label>
-                  {p.storlek !== 'ingen' && (
-                    <label>
-                      <span class="small">Storlek</span>
-                      <select name={`storlek_${p.id}`}>
-                        <option value="">Välj</option>
-                        {butik.storlekar[p.storlek].map((s) => <option value={s}>{p.storlek === 'vuxen' ? 'Vuxen' : 'Junior'}: {s}</option>)}
-                      </select>
-                    </label>
-                  )}
-                </div>
+                ) : (
+                  <span class="no-size small muted">En storlek</span>
+                )}
               </div>
             ))}
             <p class="total" aria-live="polite">Totalt: <strong class="tabular" data-total>0 kr</strong></p>
@@ -113,7 +118,7 @@ const kr = (n: number) => `${n.toLocaleString('sv-SE')} kr`;
     const totalEl = form.querySelector('[data-total]')!;
     const errorEl = form.querySelector<HTMLElement>('[data-error]')!;
     const button = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
-    const lines = [...form.querySelectorAll<HTMLElement>('.line')];
+    const lines = [...form.querySelectorAll<HTMLElement>('.line[data-pris]')];
 
     const update = () => {
       const sum = lines.reduce((s, l) => {
@@ -138,7 +143,7 @@ const kr = (n: number) => `${n.toLocaleString('sv-SE')} kr`;
       if (chosen.length === 0) return fail('Välj minst en produkt (ange antal).', lines[0]?.querySelector('input'));
       for (const l of chosen) {
         const size = l.querySelector('select');
-        if (size && !size.value) return fail(`Välj storlek för ${l.querySelector('.line-name')!.firstChild!.textContent!.trim()}.`, size);
+        if (size && !size.value) return fail(`Välj storlek för ${l.querySelector('.line-name')!.textContent!.trim()}.`, size);
       }
       for (const name of ['namn', 'epost', 'namntryck']) {
         const field = form.elements.namedItem(name) as HTMLInputElement;
@@ -168,7 +173,8 @@ const kr = (n: number) => `${n.toLocaleString('sv-SE')} kr`;
 <style>
   .notice { font-weight: 500; font-style: italic; }
   .intro { margin: 0.5rem 0 2rem; max-width: 52ch; }
-  .products { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 12rem), 1fr)); }
+  .products { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (min-width: 48rem) { .products { grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: 1.25rem; } }
   .product { display: grid; gap: 0.25rem; align-content: start; padding: 0 0 1rem; overflow: hidden; }
   .product-photo { margin-bottom: 0.5rem; background: var(--white); }
   .product-photo :global(img) { aspect-ratio: 1; object-fit: contain; }
@@ -180,12 +186,28 @@ const kr = (n: number) => `${n.toLocaleString('sv-SE')} kr`;
   .order { display: grid; gap: 2rem; max-width: 56rem; margin-top: 1.5rem; }
   fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
   .legend { margin-bottom: 0.5rem; padding: 0; }
-  .line { display: grid; gap: 0.75rem; padding-block: 1rem; border-bottom: 1px solid var(--line); }
-  .line-name { font-weight: 500; }
-  .line-name .muted { font-weight: 400; margin-left: 0.5rem; }
-  .line-fields { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; }
-  .line-fields label { display: grid; gap: 0.25rem; }
-  @media (min-width: 48rem) { .line { grid-template-columns: 1fr auto; align-items: center; } }
+  /* Phone: name and price on top, then quantity and size side by side, with labels.
+     Wider: one row per product in fixed columns under a header row. */
+  .line {
+    display: grid; grid-template-columns: 6rem minmax(0, 1fr); gap: 0.5rem 1rem; align-items: end;
+    padding-block: 1rem; border-bottom: 1px solid var(--line);
+  }
+  .line-name { grid-column: 1 / -1; font-weight: 500; }
+  .col-price { grid-column: 1 / -1; color: var(--muted); }
+  .line .col-price { margin-top: -0.4rem; }
+  .field { display: grid; gap: 0.25rem; }
+  .field input, .field select { width: 100%; }
+  .no-size { align-self: center; padding-top: 1.4rem; }
+  .line-head { display: none; }
+  @media (min-width: 48rem) {
+    .line { grid-template-columns: minmax(0, 1fr) 6rem 6rem 12rem; align-items: center; gap: 1.5rem; }
+    .line-name, .col-price { grid-column: auto; }
+    .line .col-price { margin-top: 0; text-align: right; }
+    .line-head { display: grid; padding-block: 0.5rem; font-weight: 500; }
+    .line-head .col-price { text-align: right; }
+    .field-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .no-size { padding-top: 0; }
+  }
   .total { margin-top: 1rem; font-size: var(--fs-lead); }
   .fields { display: grid; gap: 1.25rem 1.5rem; }
   .fields label { display: grid; gap: 0.35rem; }
