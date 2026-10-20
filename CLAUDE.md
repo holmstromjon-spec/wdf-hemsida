@@ -97,10 +97,10 @@ npm run import-images  # plockar ut och optimerar bilder från uploads/
 ## Kvar att göra
 Steg för steg för GitHub, Netlify, Resend och DNS finns i **`PUBLICERING.md`**.
 1. **Resend:** skapa konto, verifiera `wilsondancefactory.se` (DNS-poster hos Loopia) och lägg in miljövariablerna i Netlify. Testa en riktig beställning.
-2. **Trustindex:** skapa en widget på trustindex.io och klistra in ID:t i `site.yaml` → `trustindex_widget`. Tills dess visas en länk till Google-recensionerna.
-3. **Integritetspolicyn** (`src/texter/integritetspolicy.md`) är ett utkast med `[platshållare]`. Den ska granskas innan lansering. Köpvillkoren har också platshållare från gamla sajten ("[t.ex. 3 dagar]").
-4. **Cookies:** Google Maps (Kontakt) och Trustindex kan sätta cookies från tredje part. Avgör om vi behöver en banner, eller om kartan ska laddas först efter ett klick.
-5. **Netlify:** koppla repot, peka domänen och kontrollera `sitemap-index.xml` i Google Search Console.
+2. **Domänflytt:** stäng av Netlifys besöksskydd, peka domänen hos Loopia (PUBLICERING.md steg 5) och skicka in `sitemap-index.xml` i Google Search Console.
+3. *(Valfritt)* **Trustindex:** skapa en widget på trustindex.io och klistra in ID:t i `site.yaml` → `trustindex_widget`. Tills dess visas en länk till Google-recensionerna. **Uppdatera då även cookieavsnittet i integritetspolicyn**, eftersom Trustindex laddar innehåll från tredje part.
+
+Klart 2026-10-20: köpvillkoren (3 dagar för betalning, 10 arbetsdagars leverans) och integritetspolicyn är ifyllda med kundens svar (lagringstider 12/6 månader, samtycke till bilder vid anmälan, Nordea, Rosenberg & Partners Redovisningsbyrå). Google-kartan på Kontakt laddas först efter klick, så ingen cookie-banner behövs.
 
 ## Kontakt / fakta
 Wilson Dance Factory, Kapplöpningsgatan 6, 252 30 Helsingborg · info@wilsondancefactory.se · 042-13 14 08 · Org.nr 559159-4873

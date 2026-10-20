@@ -22,7 +22,7 @@ Betalning sker via Swish till vårt Swishnummer: 123 453 16 04
 
 Ange alltid ditt ordernummer som meddelande vid betalning. Beställningen börjar behandlas först när vi har mottagit din Swish-betalning.
 
-Om betalning inte inkommit inom [t.ex. 3 dagar] förbehåller vi oss rätten att annullera din beställning.
+Om betalning inte inkommit inom 3 dagar förbehåller vi oss rätten att annullera din beställning.
 
 ## Priser
 
@@ -30,7 +30,7 @@ Alla priser anges i svenska kronor (SEK) och inkluderar gällande moms om inte a
 
 ## Leverans
 
-Leverans sker enligt den information som anges i samband med din beställning, t.ex. utlämning på dansskolan eller annan överenskommen plats. Beräknad leveranstid är normalt [t.ex. 2–4 veckor] från mottagen betalning, beroende på produkt och tryck.
+Leverans sker enligt den information som anges i samband med din beställning, t.ex. utlämning på dansskolan eller annan överenskommen plats. Beräknad leveranstid är normalt 10 arbetsdagar från mottagen betalning, beroende på produkt och tryck.
 
 Vid försening meddelar vi dig via e-post så snart som möjligt.
 
