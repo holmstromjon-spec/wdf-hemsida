@@ -106,7 +106,8 @@ const cards = await Promise.all(
   .person-photo :global(img.photo) { aspect-ratio: 1; }
   .no-photo { display: grid; place-items: center; height: 100%; }
   .no-photo :global(img) { width: 34%; opacity: 0.35; filter: grayscale(1); }
-  .person-body { display: grid; gap: 0.35rem; align-content: start; padding: 1rem 1rem 1.25rem; }
+  /* Column layout with the button pushed to the bottom, so buttons line up across a row. */
+  .person-body { display: flex; flex-direction: column; align-items: flex-start; gap: 0.35rem; padding: 1rem 1rem 1.25rem; }
   .person-body .h4 { font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.375rem); }
   .excerpt { line-height: 1.5; display: none; }
   @media (min-width: 48rem) { .excerpt { display: block; } }
@@ -115,7 +116,9 @@ const cards = await Promise.all(
   .styles ul { display: grid; gap: 0.15rem; font-size: var(--fs-small); color: var(--muted); }
   .styles li { display: flex; align-items: center; gap: 0.4rem; }
   .styles :global(.icon) { color: var(--red); }
-  .more, .soon { justify-self: start; margin-top: 0.75rem; }
+  .more, .soon { margin-top: auto; }
+  .styles { margin-bottom: 0.75rem; }
+  .person-body > :nth-last-child(2) { margin-bottom: 0.75rem; }
 
   .bio { width: min(92vw, 42rem); max-height: 88svh; overflow-y: auto; margin: auto; border: 0; border-radius: var(--radius); padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); }
   .bio::backdrop { background: rgb(32 31 31 / 0.75); }
