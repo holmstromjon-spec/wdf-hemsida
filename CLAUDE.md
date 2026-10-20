@@ -5,7 +5,9 @@ Ny version av https://wilsondancefactory.se. Den gamla sajten är byggd i WordPr
 ## Status
 - [x] Inventering av nuvarande sajt: se `INVENTERING.md` (godkänd av Jon 2026-10-19, beslut i §6)
 - [x] Sajten är byggd: alla 17 sidor, datafiler, bilder, butik och beställningsfunktion
-- [ ] Kvar före lansering: se **Kvar att göra** längst ned
+- [x] Publicerad på testadressen https://wilsondancefactory.netlify.app/ (Netlify, från `main` på github.com/holmstromjon-spec/wdf-hemsida)
+- [ ] Kundens feedback på testversionen (Jon visar den för kunden 2026-10-20)
+- [ ] Kvar före lansering: se **Kvar att göra** längst ned och `PUBLICERING.md`
 
 ## Mål
 - **Samma URL:er som idag**, så att vi behåller rankingen på Google. Varje sida i `INVENTERING.md` §1 finns kvar med exakt samma sökväg, med avslutande `/` (`trailingSlash: 'always'`). Oanvända WP-sidor är borttagna helt, utan omdirigeringar (beslut 5). `npm run check-urls` kontrollerar detta.
@@ -40,8 +42,9 @@ src/
   layouts/          # BaseLayout (head, SEO, meny, sidfot, rörelse)
   lib/              # data.ts (laddar + validerar YAML), nav.ts (menyn)
   pages/            # en fil per URL; butik.json.ts publicerar produktlistan för ordefunktionen
-  styles/global.css # tokens, typografi, knappar, rörelse
-public/fonts/       # Panchang + Switzer (Fontshare, self-hostade)
+  styles/global.css # tokens, typografi, knappar, kort, rörelse
+public/fonts/       # Outfit (Google Fonts, OFL, self-hostad)
+public/video/       # startsidans video (npm run compress-video)
 netlify/functions/  # order.mjs – beställningsmejl via Resend
 scripts/            # import-images.mjs, check-urls.mjs, test-order.mjs
 uploads/            # rå WordPress-export – ENDAST källa, ignoreras av Git
@@ -55,11 +58,15 @@ uploads/            # rå WordPress-export – ENDAST källa, ignoreras av Git
 - **Videon på startsidan är viktig för Jon.** Den ligger överst på startsidan, i full bredd och utan ljud, i loop, precis som på gamla sajten. Texten "WILSON DANCE FACTORY" är inbränd i videon. `npm run compress-video` gör `public/video/startsida-1920.mp4` (12 MB), `-1280.mp4` (6,6 MB) och en stillbild från originalet (53 MB) med `ffmpeg-static`. På mobil visas hela 16:9-bilden, så att texten inte klipps. Om användaren valt "minska rörelse" visas stillbilden, och det finns alltid en pausknapp.
 
 ## Design
-- Riktningen kommer från skillen `design-taste-frontend` (taste-skill, MIT, i `.claude/skills/`): **"Loud and flat"**, platta paneler i loggans röda (`#D60008`), svart och vitt. Panchang 700 (versaler) används för rubriker och Switzer för text. Riktningen sparas i `.taste-skill/direction.json` (committas inte).
-- Idén: veckans riktiga schema blir affischens line-up. Det levande inslaget är **"Hitta din klass"** på startsidan (`ClassFinder.astro`): man väljer ålder och ser passen. Det fungerar utan JavaScript.
-- Panchang tar cirka 1 em per versal. Rubriker skalas därför efter sin behållare (`.head` med `--w` = antal tecken i längsta ordet). Rader skrivs ut manuellt, och rubriker hålls till högst två rader.
-- Kontrollera med `node .claude/skills/design-taste-frontend/scripts/inspect.mjs http://localhost:4321/<sida>/` (kräver att `npm run dev` körs). Alla innehållssidor ger 0 FAIL. Kvarvarande FAIL gäller `/kopvillkor/`, `/integritetspolicy/` och `/tack/` (för få bilder eller för lite rörelse), och är ett medvetet val för text- och kvittosidor.
-- Använd WDF:s **egna** bilder i första hand. Bilder från öppna arkiv används bara efter godkännande. Reglerna i den här filen gäller före skillens regler, och faktainnehåll ändras aldrig av designskäl.
+- **Vald riktning: "balansversionen"** (Jon, 2026-10-20). Grunden är gamla sajtens känsla, och några grepp är hämtade från en första, djärvare version. Jon tyckte att den djärva var "too much" och att en ren kopia av den gamla var för lite. Ändra inte riktningen utan att fråga.
+  - **Från gamla sajten:** mörkt sidhuvud med diamantloggan, videon överst på startsidan, mörka fotoband som rubrik på undersidor, Outfit (fri ersättare för Hero New, Adobe Fonts) i tunn vikt 300 och vanlig skiftläge, rött `#C42A20` som accent, små knappar med 4 px rundning och en pil i en ring, vita kort med tunn ram, vit footer med diamanten centrerad och ett rött band längst ned.
+  - **Nytt:** ljusare och luftigare (fler vita sektioner), ett rött faktaband på startsidan (1000+ medlemmar · 800+ kvm · 20+ dansstilar · Från 2 år), riktiga scenfoton för dansstilarna (fältet `foto` i `src/content/dansstilar/*.md`, i stället för de gamla textrutorna) och **"Hitta din klass"** som affisch på svart botten (`ClassFinder.astro`, fungerar utan JavaScript).
+  - **Inte valt:** kraftiga rubriker i fet versal.
+- Den djärva första versionen finns i Git-historiken (commit `d7719ab`). Den helt lugna kopian av gamla sajten finns på grenen `lugn-design`.
+- Kort med knappar (dansstilar, instruktörer) har knappen nedtryckt med `margin-top: auto`, så att knapparna ligger i linje i varje rad. Jon märker sådant, så håll det.
+- Yoga har inget eget foto. Det är en tillfällig bild (`dsc03595`) som kunden bör byta ut. Bugg har en miljöbild (`miljo-6`).
+- Taste-skillen (`.claude/skills/design-taste-frontend/`) användes för första versionen. Dess inspektör (`scripts/inspect.mjs <url>`) är fortfarande bra för skärmdumpar i tre bredder och för att hitta horisontell scroll. Dess stilregler (tunga rubriker, rörelsekrav, minst fyra bilder per sida) gäller **inte** för den valda riktningen.
+- Använd WDF:s **egna** bilder i första hand. Bilder från öppna arkiv används bara efter godkännande. Faktainnehåll ändras aldrig av designskäl.
 
 ## Formulär
 - **Butik:** `/shop/` skickar till `netlify/functions/order.mjs`. Funktionen läser produkter och priser från `/butik.json` (priser från webbläsaren ignoreras), validerar, skapar ett ordernummer (`WDF-ÅÅMMDD-XXXX`) och skickar mejl till kunden och till info@. Med JavaScript sker det via `fetch`. Utan JavaScript är det en vanlig POST som skickas vidare (303) till `/tack/?order=…&summa=…`. Formuläret har ett dolt fält mot spam.
@@ -70,7 +77,7 @@ uploads/            # rå WordPress-export – ENDAST källa, ignoreras av Git
 ## Arbetssätt
 - Allt innehåll på sajten är på **svenska**. Kod, variabelnamn och commit-meddelanden får vara på engelska.
 - Ändra inte faktainnehåll (priser, tider, namn, villkor, kvm, dansstilar). Innehållet flyttas med som det är, även där det motsäger sig självt (beslut 4). Bara rent tekniska fel rättas, som trasiga länkar och bilder som saknas.
-- Långa rubriker från gamla sajten har kortats till ett par ord i Panchang. Hela den ursprungliga meningen står kvar i ingressen direkt under.
+- Rubrikerna är desamma som på gamla sajten.
 - Små, avgränsade ändringar. Innan något räknas som klart: `npm run build && npm run check-urls` (och `npm run test-order` om butiken eller funktionen ändrats).
 - Externa skript (dans.se, Trustindex, Google Maps) laddas bara på de sidor som behöver dem.
 - Windows PowerShell 5.1 skriver UTF-8 **med BOM** via `Set-Content`. Redigera filer med editorn, inte med `Set-Content`.
