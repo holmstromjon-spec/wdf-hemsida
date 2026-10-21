@@ -60,5 +60,16 @@ import head from '../assets/images/galleri/dsc03422.jpg';
     font-family: var(--font); font-weight: 600; padding: 0.5rem 0.9rem; cursor: pointer;
   }
   .cw-embed :global(.cwShopFilterLabel:hover) { background: var(--red-dark); }
+  /* "Färgförklaring" only explains the dots, so it must not look like a red filter:
+     white with a dark frame, like the Bokningsvillkor button. Covers the label wherever dans.se nests it. */
+  .cw-embed :global(.cwShopFilterLabel.cwShopAvailabilityHelpLabel),
+  .cw-embed :global(.cwShopAvailabilityHelpLabel .cwShopFilterLabel),
+  .cw-embed :global(.cwShopFilterLabel:has(.cwShopAvailabilityHelpLabel)) {
+    background: var(--white); color: var(--dark); box-shadow: inset 0 0 0 1px var(--dark);
+  }
+  .cw-embed :global(.cwShopFilterLabel.cwShopAvailabilityHelpLabel:hover),
+  .cw-embed :global(.cwShopAvailabilityHelpLabel .cwShopFilterLabel:hover),
+  .cw-embed :global(.cwShopFilterLabel:has(.cwShopAvailabilityHelpLabel):hover) { background: var(--light); }
+  .cw-embed :global(.cwShopAvailabilityHelpLabel *) { color: var(--dark); }
   .terms-wrap { margin: 2rem 0; }
 </style>
