@@ -6,12 +6,22 @@ import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 
 process.env.ORDER_DRY_RUN = '1';
+process.env.ORDER_STORE = 'memory';
 const butik = readFileSync('dist/butik.json', 'utf8');
 const realFetch = globalThis.fetch;
+// Resend is simulated: resendStatus decides what the "API" answers when dry run is off.
+let resendStatus = 200;
+const resendCalls = [];
 globalThis.fetch = async (url, init) => {
   if (String(url).endsWith('/butik.json')) return new Response(butik);
+  if (String(url).startsWith('https://api.resend.com/')) {
+    resendCalls.push(JSON.parse(init.body));
+    return new Response(resendStatus === 200 ? '{"id":"x"}' : 'simulated failure', { status: resendStatus });
+  }
   return realFetch(url, init);
 };
+const { listOrders } = await import('../netlify/lib/orders.mjs');
+const { default: ordersPage } = await import('../netlify/functions/bestallningar.mjs');
 const logs = [];
 console.log = (...a) => logs.push(a.join(' '));
 console.error = () => {};
@@ -109,6 +119,70 @@ await check('HTML in fields is escaped in the mail', async () => {
   const last = JSON.parse(logs.filter((l) => l.startsWith('[ORDER_DRY_RUN]')).at(-1).slice(16));
   assert.doesNotMatch(last.html, /<script>/);
   assert.match(last.html, /&lt;script&gt;/);
+});
+
+await check('every confirmed order is saved, with mail status', async () => {
+  const data = await (await post(valid)).json();
+  const saved = (await listOrders()).find((o) => o.nr === data.order);
+  assert.ok(saved, 'order saved');
+  assert.equal(saved.summa, 1400);
+  assert.equal(saved.rader.length, 2);
+  assert.equal(saved.namntryck, 'ALVA');
+  assert.deepEqual(saved.mejl, { kund: 'skickat', skolan: 'skickat' });
+});
+
+await check('rejected orders are not saved', async () => {
+  const before = (await listOrders()).length;
+  await post({ ...valid, epost: 'nope' });
+  assert.equal((await listOrders()).length, before);
+});
+
+await check('school copy goes to every address in ORDER_TO', async () => {
+  process.env.ORDER_DRY_RUN = '0';
+  process.env.RESEND_API_KEY = 're_test';
+  process.env.ORDER_FROM = 'Wilson Dance Factory <order@wilsondancefactory.se>';
+  process.env.ORDER_TO = 'info@wilsondancefactory.se, paul@example.com';
+  resendStatus = 200;
+  resendCalls.length = 0;
+  await post(valid);
+  const school = resendCalls.find((m) => m.subject.startsWith('Ny beställning'));
+  assert.deepEqual(school.to, ['info@wilsondancefactory.se', 'paul@example.com']);
+  const customer = resendCalls.find((m) => m.subject.startsWith('Orderbekräftelse'));
+  assert.equal(customer.reply_to, 'info@wilsondancefactory.se');
+});
+
+await check('if Resend fails, the order is still saved and the customer is told', async () => {
+  resendStatus = 500;
+  const res = await post(valid);
+  const data = await res.json();
+  assert.equal(res.status, 200);
+  assert.equal(data.ok, true);
+  assert.equal(data.kundmejl, false);
+  const saved = (await listOrders()).find((o) => o.nr === data.order);
+  assert.match(saved.mejl.kund, /^misslyckades/);
+  assert.match(saved.mejl.skolan, /^misslyckades/);
+  const redirect = await post(valid, false);
+  assert.match(redirect.headers.get('location'), /mejl=0/);
+  resendStatus = 200;
+  process.env.ORDER_DRY_RUN = '1';
+});
+
+await check('order list: off without ORDERS_PASSWORD, locked without login, shows orders with it', async () => {
+  const url = 'https://wilsondancefactory.se/admin/bestallningar/';
+  delete process.env.ORDERS_PASSWORD;
+  assert.equal((await ordersPage(new Request(url))).status, 503);
+  process.env.ORDERS_PASSWORD = 'hemligt';
+  assert.equal((await ordersPage(new Request(url))).status, 401);
+  const wrong = new Request(url, { headers: { Authorization: 'Basic ' + Buffer.from('x:fel').toString('base64') } });
+  assert.equal((await ordersPage(wrong)).status, 401);
+  const right = new Request(url, { headers: { Authorization: 'Basic ' + Buffer.from('paul:hemligt').toString('base64') } });
+  const res = await ordersPage(right);
+  assert.equal(res.status, 200);
+  const html = await res.text();
+  const nr = (await listOrders())[0].nr;
+  assert.ok(html.includes(nr), 'newest order listed');
+  assert.ok(html.includes('Vuxen Hoodie svart med zip'));
+  assert.doesNotMatch(html, /<script>x<\/script>/, 'customer text is escaped');
 });
 
 await check('GET → 405', async () => {

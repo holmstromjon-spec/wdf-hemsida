@@ -1,12 +1,17 @@
 // Receives an order from /shop/, validates it against the published product list
-// (/butik.json – prices are never taken from the browser), creates an order number and
-// sends a confirmation to the customer and a copy to the school via Resend.
+// (/butik.json – prices are never taken from the browser), creates an order number,
+// SAVES the order (Netlify Blobs, listed at /admin/bestallningar/), and then sends a
+// confirmation to the customer and a copy to the school via Resend.
 //
 // Environment variables (Netlify → Site configuration → Environment variables):
 //   RESEND_API_KEY  API key from resend.com                     (required)
 //   ORDER_FROM      e.g. "Wilson Dance Factory <order@wilsondancefactory.se>" (required)
-//   ORDER_TO        where the school's copy goes (default info@wilsondancefactory.se)
+//   ORDER_TO        where the school's copy goes, comma-separated for several addresses
+//                   (default info@wilsondancefactory.se)
 //   ORDER_DRY_RUN   "1" = log the mails instead of sending (for testing)
+//   ORDER_STORE     "memory" = keep orders in memory instead of Netlify Blobs (tests)
+
+import { saveOrder, updateOrder } from '../lib/orders.mjs';
 
 const json = (status, body) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
@@ -147,18 +152,37 @@ export default async (req) => {
   }
 
   const nr = orderNumber();
-  const to = process.env.ORDER_TO || butik.epost;
+  // ORDER_TO may list several addresses, comma-separated (e.g. the reception and Paul).
+  const schoolTo = (process.env.ORDER_TO || butik.epost).split(',').map((s) => s.trim()).filter(Boolean);
   const from = process.env.ORDER_FROM || 'Wilson Dance Factory <test@example.com>';
-  const customer = renderMail(order, nr, butik, false);
-  const school = renderMail(order, nr, butik, true);
 
+  // 1. Save the order first. If that fails the customer gets an error, never a confirmation,
+  //    so an order cannot be "confirmed but lost". The list is at /admin/bestallningar/.
   try {
-    await send({ from, to: [order.epost], reply_to: to, subject: `Orderbekräftelse ${nr} – Wilson Dance Factory`, ...customer });
-    await send({ from, to: [to], reply_to: order.epost, subject: `Ny beställning ${nr} – ${order.namn}`, ...school });
+    await saveOrder({ nr, skapad: new Date().toISOString(), ...order, mejl: { kund: 'väntar', skolan: 'väntar' } });
   } catch (err) {
-    console.error('Sending order mail failed', err);
-    return reply(502, { ok: false, error: 'Beställningen kunde inte skickas just nu.' });
+    console.error('Saving order failed', err);
+    return reply(500, { ok: false, error: 'Beställningen kunde inte tas emot just nu.' });
   }
 
-  return reply(200, { ok: true, order: nr, summa: order.summa }, `/tack/?order=${nr}&summa=${order.summa}`);
+  // 2. Then the mails. A failed mail no longer loses the order – it is recorded on the order.
+  const result = async (mail) => {
+    try {
+      await send(mail);
+      return 'skickat';
+    } catch (err) {
+      console.error(`Mail to ${mail.to.join(', ')} failed`, err);
+      return `misslyckades: ${String(err.message).slice(0, 200)}`;
+    }
+  };
+  const kund = await result({ from, to: [order.epost], reply_to: schoolTo[0], subject: `Orderbekräftelse ${nr} – Wilson Dance Factory`, ...renderMail(order, nr, butik, false) });
+  const skolan = await result({ from, to: schoolTo, reply_to: order.epost, subject: `Ny beställning ${nr} – ${order.namn}`, ...renderMail(order, nr, butik, true) });
+  try {
+    await updateOrder(nr, { mejl: { kund, skolan } });
+  } catch (err) {
+    console.error('Updating mail status failed', err);
+  }
+
+  const mailOk = kund === 'skickat' ? '' : '&mejl=0';
+  return reply(200, { ok: true, order: nr, summa: order.summa, kundmejl: kund === 'skickat' }, `/tack/?order=${nr}&summa=${order.summa}${mailOk}`);
 };

@@ -13,7 +13,7 @@ import swish from '../assets/images/brand/swish.png';
     <div class="container center stack">
       <h2 class="h3">Vi kommer att behandla din beställning när vi ser att betalning har kommit in</h2>
       <p data-order hidden class="lead">Ditt ordernummer: <strong class="tabular" data-order-nr></strong><span data-sum hidden> · Att betala: <strong class="tabular" data-sum-nr></strong></span></p>
-      <p>Det går att betala via Swish eller i receptionen i vår dansstudio. Ange ditt ordernummer som meddelande när du betalar med Swish. En orderbekräftelse har skickats till din e-post.</p>
+      <p>Det går att betala via Swish eller i receptionen i vår dansstudio. Ange ditt ordernummer som meddelande när du betalar med Swish. <span data-mail-ok>En orderbekräftelse har skickats till din e-post.</span><span data-mail-fail hidden>Vi kunde tyvärr inte skicka orderbekräftelsen till din e-post, men din beställning är mottagen. Spara ordernumret ovan.</span></p>
     </div>
   </section>
 
@@ -32,6 +32,10 @@ import swish from '../assets/images/brand/swish.png';
   if (order && /^[A-Z0-9-]{6,30}$/.test(order)) {
     document.querySelector('[data-order-nr]')!.textContent = order;
     document.querySelector<HTMLElement>('[data-order]')!.hidden = false;
+    if (q.get('mejl') === '0') {
+      document.querySelector<HTMLElement>('[data-mail-ok]')!.hidden = true;
+      document.querySelector<HTMLElement>('[data-mail-fail]')!.hidden = false;
+    }
     const sum = Number(q.get('summa'));
     if (sum > 0) {
       document.querySelector('[data-sum-nr]')!.textContent = `${sum.toLocaleString('sv-SE')} kr`;
