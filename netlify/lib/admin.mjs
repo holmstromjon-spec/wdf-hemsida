@@ -38,7 +38,7 @@ export function guard(req, title) {
 
 export const respond = html;
 
-const nav = `<nav><a href="/admin/schema/">Schema</a><a href="/admin/bestallningar/">Beställningar</a><a href="/">Till hemsidan</a></nav>`;
+const nav = `<nav><a href="/admin/schema/">Schema</a><a href="/admin/bestallningar/">Beställningar</a><a href="/admin/ansokningar/">Jobbansökningar</a><a href="/">Till hemsidan</a></nav>`;
 
 export const page = (title, body, style = '') => `<!doctype html><html lang="sv"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">

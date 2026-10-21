@@ -6,10 +6,9 @@ import { site } from '../lib/data';
 import head from '../assets/images/headers/header-4.jpg';
 import photo from '../assets/images/galleri/dsc04118.jpg';
 
-// No form (decision 3): a mail button with a ready subject line and the points to include.
-const subject = encodeURIComponent('Jobbansökan – Wilson Dance Factory');
-const body = encodeURIComponent('Hej!\n\nJag vill söka jobb som (assistent / receptionist / danslärare):\n\nErfarenhet:\nÅlder:\nMotivering:\n\nNamn:\nTelefon:\n');
-const mailto = `mailto:${site.epost}?subject=${subject}&body=${body}`;
+// Application form (Jon 2026-10-21, replaces the mail button of decision 3). It posts to
+// netlify/functions/ansokan.mjs, which saves the application and mails it, files attached, to info@.
+const fileTypes = '.pdf,.doc,.docx,.odt,.rtf,.txt,.jpg,.jpeg,.png';
 ---
 
 <BaseLayout
@@ -36,13 +35,101 @@ const mailto = `mailto:${site.epost}?subject=${subject}&body=${body}`;
   </section>
 
   <section id="jobba" class="section on-dark">
-    <div class="container center stack">
-      <h2>Skicka in din jobbansökan</h2>
-      <p>Du mailar in din jobbansökan till oss på <a href={`mailto:${site.epost}`}>{site.epost}</a>. Knappen öppnar ett färdigt mejl med det vi vill veta.</p>
-      <p class="button-row"><a class="button" href={mailto}>Bli en del av WDF <span class="arrow" aria-hidden="true"></span></a></p>
+    <div class="container">
+      <div class="center stack">
+        <h2>Skicka in din jobbansökan</h2>
+        <p>Fyll i formuläret och bifoga gärna ditt CV. Ansökan går direkt till oss på {site.epost}.</p>
+      </div>
+
+      <form class="apply" method="post" action="/.netlify/functions/ansokan" enctype="multipart/form-data" data-apply-form novalidate>
+        <div class="fields">
+          <label>
+            <span>För- och efternamn *</span>
+            <input name="namn" type="text" autocomplete="name" required maxlength="100" />
+          </label>
+          <label>
+            <span>E-post *</span>
+            <input name="epost" type="email" autocomplete="email" required maxlength="200" />
+          </label>
+          <label>
+            <span>Telefon</span>
+            <input name="telefon" type="tel" autocomplete="tel" maxlength="40" />
+          </label>
+          <label>
+            <span>Ålder</span>
+            <input name="alder" type="text" inputmode="numeric" maxlength="20" />
+          </label>
+          <label class="full">
+            <span>Erfarenhet</span>
+            <textarea name="erfarenhet" rows="4" maxlength="4000" placeholder="Tidigare arbete, dansbakgrund eller annan relevant kompetens"></textarea>
+          </label>
+          <label class="full">
+            <span>Motivering</span>
+            <textarea name="motivering" rows="4" maxlength="4000" placeholder="Varför vill du arbeta hos oss och vad kan just du bidra med?"></textarea>
+          </label>
+          <label class="full">
+            <span>CV och andra bilagor <span class="small muted">(högst 3 filer, totalt 4 MB · PDF, Word eller bild)</span></span>
+            <input name="filer" type="file" multiple accept={fileTypes} data-files />
+          </label>
+          <label class="consent full">
+            <input name="samtycke" type="checkbox" value="ja" required />
+            <span>Jag godkänner att Wilson Dance Factory behandlar uppgifterna i min ansökan för att bedöma den. Ansökan sparas i högst 6 månader. Läs mer i vår <a href="/integritetspolicy/">integritetspolicy</a>. *</span>
+          </label>
+          <!-- Spam trap: people never see or fill this field. -->
+          <label class="trap" aria-hidden="true">
+            <span>Lämna tomt</span>
+            <input name="webbplats" type="text" tabindex="-1" autocomplete="off" />
+          </label>
+        </div>
+        <p class="form-error" role="alert" data-error hidden></p>
+        <button class="button" type="submit"><span>Skicka ansökan</span> <span class="arrow" aria-hidden="true"></span></button>
+      </form>
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-apply-form]');
+  if (form) {
+    const errorEl = form.querySelector<HTMLElement>('[data-error]')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+    const filesEl = form.querySelector<HTMLInputElement>('[data-files]')!;
+    const fail = (msg: string, focus?: HTMLElement | null) => {
+      errorEl.textContent = msg;
+      errorEl.hidden = false;
+      focus?.focus();
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorEl.hidden = true;
+      for (const name of ['namn', 'epost', 'samtycke']) {
+        const field = form.elements.namedItem(name) as HTMLInputElement;
+        if (!field.checkValidity()) {
+          return fail(name === 'samtycke' ? 'Du behöver godkänna att vi behandlar dina uppgifter.' : field.validationMessage || 'Fyll i alla obligatoriska fält.', field);
+        }
+      }
+      const files = [...(filesEl.files ?? [])];
+      if (files.length > 3) return fail('Du kan bifoga högst 3 filer.', filesEl);
+      if (files.reduce((n, f) => n + f.size, 0) > 4 * 1024 * 1024) {
+        return fail('Filerna är för stora tillsammans (högst 4 MB). Spara CV:t som PDF eller förminska bilderna.', filesEl);
+      }
+
+      button.disabled = true;
+      button.querySelector('span')!.textContent = 'Skickar…';
+      try {
+        const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) throw new Error(data.error || 'Något gick fel.');
+        location.href = '/tack-ansokan/';
+      } catch (err) {
+        fail(`${(err as Error).message} Försök igen, eller mejla din ansökan till info@wilsondancefactory.se.`);
+        button.disabled = false;
+        button.querySelector('span')!.textContent = 'Skicka ansökan';
+      }
+    });
+  }
+</script>
 
 <style>
   .split { display: grid; gap: 2.5rem; align-items: center; }
@@ -50,4 +137,25 @@ const mailto = `mailto:${site.epost}?subject=${subject}&body=${body}`;
   .list { padding-left: 1.2em; display: grid; gap: 0.4rem; }
   @media (min-width: 64rem) { .split { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
   #jobba a:not(.button) { color: inherit; }
+  .apply { display: grid; gap: 1.5rem; max-width: 46rem; margin: 2.5rem auto 0; }
+  .fields { display: grid; gap: 1.25rem 1.5rem; }
+  .fields label { display: grid; gap: 0.35rem; }
+  .fields > label > span:first-child { font-weight: 500; }
+  @media (min-width: 48rem) { .fields { grid-template-columns: 1fr 1fr; } .fields .full { grid-column: 1 / -1; } }
+  input:not([type='checkbox']), textarea {
+    min-height: 2.75rem; padding: 0.55rem 0.8rem; border: 1px solid #bdbaba; border-radius: var(--radius);
+    background: var(--white); color: var(--dark); width: 100%;
+  }
+  input[type='file'] { padding: 0.45rem 0.6rem; }
+  textarea { resize: vertical; }
+  input:focus-visible, textarea:focus-visible { outline: 2px solid var(--red); outline-offset: 1px; }
+  .consent { grid-template-columns: auto 1fr; align-items: start; gap: 0.75rem; }
+  .consent input { width: 1.25rem; height: 1.25rem; margin-top: 0.15rem; accent-color: var(--red); }
+  .fields > .consent > span:first-child { font-weight: 400; }
+  .consent a { text-decoration: underline; }
+  .muted { color: rgb(255 255 255 / 0.7); }
+  .trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .form-error { background: var(--red); color: var(--white); padding: 1rem 1.25rem; font-weight: 500; border-radius: var(--radius); }
+  .apply .button { justify-self: start; }
+  .apply .button:disabled { opacity: 0.6; cursor: wait; }
 </style>

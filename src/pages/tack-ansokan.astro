@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+---
+
+<BaseLayout title="Tack för din ansökan" description="Tack för din jobbansökan till Wilson Dance Factory." noindex>
+  <PageHead title="Tack för din ansökan!" />
+
+  <section class="section">
+    <div class="container center stack">
+      <h2 class="h3">Vi har tagit emot din ansökan</h2>
+      <p>Vi hör av oss när vi har gått igenom den. Du får också en bekräftelse till din e-post.</p>
+      <p class="button-row"><a class="button" href="/">Till startsidan <span class="arrow" aria-hidden="true"></span></a></p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .stack { max-width: 46rem; }
+</style>

@@ -12,12 +12,10 @@
 //   ORDER_STORE     "memory" = keep orders in memory instead of Netlify Blobs (tests)
 
 import { saveOrder, updateOrder } from '../lib/orders.mjs';
+import { escapeHtml, sendStatus } from '../lib/mail.mjs';
 
 const json = (status, body) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
-
-const escapeHtml = (s) =>
-  String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
 const kr = (n) => `${n.toLocaleString('sv-SE')} kr`;
 
@@ -109,19 +107,6 @@ function renderMail(order, nr, butik, forSchool) {
   return { html, text };
 }
 
-async function send(mail) {
-  if (process.env.ORDER_DRY_RUN === '1') {
-    console.log('[ORDER_DRY_RUN]', JSON.stringify(mail, null, 2));
-    return;
-  }
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(mail),
-  });
-  if (!res.ok) throw new Error(`Resend ${res.status}: ${await res.text()}`);
-}
-
 export default async (req) => {
   const wantsJson = (req.headers.get('accept') ?? '').includes('application/json');
   const reply = (status, body, redirect) =>
@@ -166,15 +151,7 @@ export default async (req) => {
   }
 
   // 2. Then the mails. A failed mail no longer loses the order – it is recorded on the order.
-  const result = async (mail) => {
-    try {
-      await send(mail);
-      return 'skickat';
-    } catch (err) {
-      console.error(`Mail to ${mail.to.join(', ')} failed`, err);
-      return `misslyckades: ${String(err.message).slice(0, 200)}`;
-    }
-  };
+  const result = sendStatus;
   const kund = await result({ from, to: [order.epost], reply_to: schoolTo[0], subject: `Orderbekräftelse ${nr} – Wilson Dance Factory`, ...renderMail(order, nr, butik, false) });
   const skolan = await result({ from, to: schoolTo, reply_to: order.epost, subject: `Ny beställning ${nr} – ${order.namn}`, ...renderMail(order, nr, butik, true) });
   try {

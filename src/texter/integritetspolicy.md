@@ -6,7 +6,7 @@ Det här är ingen juridisk rådgivning.
 
 # Integritetspolicy
 
-*Senast uppdaterad: 20 oktober 2026*
+*Senast uppdaterad: 21 oktober 2026*
 
 Wilson Dance Factory värnar om din integritet. Här beskriver vi vilka personuppgifter vi behandlar, varför vi gör det och vilka rättigheter du har.
 
@@ -38,9 +38,9 @@ Om du mejlar, ringer eller skriver till oss i sociala medier behandlar vi de upp
 - **Hur länge:** 12 månader efter att ärendet är avslutat.
 
 ### När du söker jobb hos oss
-Skickar du en ansökan till info@wilsondancefactory.se behandlar vi uppgifterna i ansökan (till exempel namn, kontaktuppgifter, ålder och erfarenhet) för att bedöma den.
-- **Rättslig grund:** berättigat intresse (att rekrytera).
-- **Hur länge:** 6 månader efter att rekryteringen är avslutad, om du inte godkänner att vi sparar ansökan längre.
+När du skickar en ansökan via formuläret på sidan Jobba hos oss, eller mejlar den till info@wilsondancefactory.se, behandlar vi uppgifterna i ansökan (namn, kontaktuppgifter, ålder, erfarenhet, motivering och bifogade filer som ditt CV) för att bedöma den. Ansökningar från formuläret skickas till vår e-post och sparas också i ett lösenordsskyddat arkiv hos vår webbleverantör Netlify, där bara vi kommer åt dem.
+- **Rättslig grund:** berättigat intresse (att rekrytera). Du godkänner behandlingen när du skickar formuläret.
+- **Hur länge:** ansökningar i formulärarkivet raderas automatiskt 6 månader efter att de kom in. Övriga kopior raderas senast 6 månader efter att rekryteringen är avslutad, om du inte godkänner att vi sparar ansökan längre.
 
 ### Bilder och film
 Vi fotograferar och filmar ibland på lektioner, uppvisningar och tävlingar och publicerar materialet på vår webbplats och i sociala medier.
@@ -55,8 +55,8 @@ Många av våra dansare är barn. Uppgifter om barn lämnas och hanteras via vå
 ## Vem vi delar uppgifter med
 Vi säljer aldrig dina personuppgifter. Vi delar dem bara med leverantörer som hjälper oss att driva verksamheten, och de får bara använda uppgifterna för vår räkning:
 - **dans.se (CogWork):** kursanmälan och medlemsregister
-- **Netlify:** driftar webbplatsen
-- **Resend:** skickar orderbekräftelser via e-post
+- **Netlify:** driftar webbplatsen och lagrar beställningar och jobbansökningar från formulären
+- **Resend:** skickar orderbekräftelser och jobbansökningar via e-post
 - **Loopia:** vår e-post och domän
 - **Nordea:** betalningar, bland annat Swish
 - **Rosenberg & Partners Redovisningsbyrå:** bokföring

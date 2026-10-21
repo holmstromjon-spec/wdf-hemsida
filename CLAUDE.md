@@ -84,9 +84,10 @@ uploads/            # rå WordPress-export – ENDAST källa, ignoreras av Git
 - **Butik:** `/shop/` skickar till `netlify/functions/order.mjs`. Funktionen läser produkter och priser från `/butik.json` (priser från webbläsaren ignoreras), validerar, skapar ett ordernummer (`WDF-ÅÅMMDD-XXXX`) och skickar mejl till kunden och till info@. Med JavaScript sker det via `fetch`. Utan JavaScript är det en vanlig POST som skickas vidare (303) till `/tack/?order=…&summa=…`. Formuläret har ett dolt fält mot spam.
 - **Varje order sparas innan mejlen skickas** (Netlify Blobs, store `orders`, `netlify/lib/orders.mjs`). Om sparandet misslyckas får kunden ett fel, aldrig en bekräftelse. Misslyckade mejl sparas som status på ordern, och tacksidan säger då ärligt att bekräftelsemejlet inte gick fram. Infört 2026-10-21, efter att en riktig hoodie-order bara fanns som mejl och mejlet till info@ fastnade i Loopias spamfilter (Resend sa "Delivered").
 - **Orderlistan:** https://wilsondancefactory.se/admin/bestallningar/ (`netlify/functions/bestallningar.mjs`). Lösenordet ligger i `ADMIN_PASSWORD` och gäller för alla sidor under `/admin/` (det äldre namnet `ORDERS_PASSWORD` fungerar också). Användarnamnet kan vara vad som helst. Här ser receptionen alla beställningar med mejlstatus och matchar Swish mot ordernumret. Ordrar från före 2026-10-21 finns bara i Resends logg (resend.com/emails).
-- **Miljövariabler** (Netlify → Site configuration → Environment variables, aldrig i repot): `RESEND_API_KEY`, `ORDER_FROM` (`Wilson Dance Factory <order@wilsondancefactory.se>`), `ORDER_TO` (standard info@; flera adresser kommaseparerade), `ADMIN_PASSWORD` (adminsidorna), `SCHEMA_BUILD_HOOK` (build hooken som Publicera på `/admin/schema/` anropar), `ORDER_DRY_RUN=1` för att bara logga. Se `.env.example`.
+- **Miljövariabler** (Netlify → Site configuration → Environment variables, aldrig i repot): `RESEND_API_KEY`, `ORDER_FROM` (`Wilson Dance Factory <order@wilsondancefactory.se>`), `ORDER_TO` (standard info@; flera adresser kommaseparerade), `ADMIN_PASSWORD` (adminsidorna), `JOBS_TO` (jobbansökningar, standard info@), `SCHEMA_BUILD_HOOK` (build hooken som Publicera på `/admin/schema/` anropar), `ORDER_DRY_RUN=1` för att bara logga. Se `.env.example`.
 - **E-posttjänst:** Resend, region EU (eu-west-1), domänen `wilsondancefactory.se`. Resends DNS-poster ligger på `send` och `resend._domainkey` och rör inte Loopias MX eller SPF för info@. DNS ligger hos Loopia, och Jon lägger in posterna. Se `PUBLICERING.md`.
-- **Jobba hos oss:** inget formulär. En mejlknapp (`mailto:` med färdigt ämne och mall) räcker (beslut 3).
+- **Jobba hos oss** (formulär sedan 2026-10-21; Jon ändrade beslut 3): `/jobba-hos-oss/#jobba` skickar till `netlify/functions/ansokan.mjs`. Fälten är namn, e-post, telefon, ålder, erfarenhet, motivering, högst 3 bilagor på totalt 4 MB (PDF, Word eller bild) och ett obligatoriskt samtycke. Ansökan **sparas först** (Blobs, store `ansokningar`, `netlify/lib/applications.mjs`). Därefter mejlas den till `JOBS_TO` (standard info@) med bilagorna, och den sökande får ett kvitto. Tacksidan är `/tack-ansokan/`.
+- **Ansökningslistan:** https://wilsondancefactory.se/admin/ansokningar/ (samma lösenord). Här finns nedladdning av bilagor och en knapp för att radera. Ansökningar **raderas automatiskt efter 6 månader** (`ansokningar-rensa.mjs` körs dagligen, och rensning sker även när listan öppnas), vilket integritetspolicyn lovar.
 
 ## Arbetssätt
 - Allt innehåll på sajten är på **svenska**. Kod, variabelnamn och commit-meddelanden får vara på engelska.
@@ -104,6 +105,7 @@ npm run preview        # förhandsgranskar bygget
 npm run check-urls     # alla gamla URL:er, ankare och interna länkar (efter build)
 npm run test-order     # testar beställningsfunktionen utan att skicka mejl (efter build)
 npm run test-schema    # testar schemaimporten från Google-arket och /admin/schema/
+npm run test-ansokan   # testar jobbformulärets funktion och /admin/ansokningar/
 npm run import-images  # plockar ut och optimerar bilder från uploads/
 ```
 

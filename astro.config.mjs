@@ -9,7 +9,7 @@ export default defineConfig({
   build: { format: 'directory' },
   integrations: [
     sitemap({
-      filter: (page) => !page.includes('/tack/'),
+      filter: (page) => !page.includes('/tack/') && !page.includes('/tack-ansokan/'),
     }),
   ],
 });

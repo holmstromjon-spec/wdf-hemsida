@@ -11,6 +11,7 @@
     "check-urls": "node scripts/check-urls.mjs",
     "test-order": "node scripts/test-order.mjs",
     "test-schema": "node scripts/test-schema.mjs",
+    "test-ansokan": "node scripts/test-ansokan.mjs",
     "compress-video": "node scripts/compress-video.mjs"
   },
   "dependencies": {
