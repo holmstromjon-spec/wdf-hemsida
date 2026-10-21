@@ -5,6 +5,11 @@
 import { schema } from '../lib/data';
 
 const grupper = schema.veckoschema.grupper;
+// One rule per group (the number of groups comes from the Google Sheet).
+const showChosen = `@supports selector(:has(*)) {
+  .finder .panel { display: none; }
+  ${grupper.map((_, i) => `.finder:has(input[value='${i}']:checked) [data-grupp='${i}']`).join(',\n  ')} { display: block; }
+}`;
 ---
 
 <section class="finder on-dark section" aria-labelledby="finder-title">
@@ -48,6 +53,9 @@ const grupper = schema.veckoschema.grupper;
   </div>
 </section>
 
+<!-- Show only the chosen group. Without :has() support every group is listed. -->
+<style is:inline set:html={showChosen}></style>
+
 <style>
   .finder { background: #141313; }
   .finder-head { display: grid; gap: 0.5rem; margin-bottom: 2rem; }
@@ -62,21 +70,6 @@ const grupper = schema.veckoschema.grupper;
   .tabs label:hover span { border-color: var(--white); }
   .tabs input:checked + span { background: var(--red); border-color: var(--red); }
   .tabs input:focus-visible + span { outline: 2px solid var(--white); outline-offset: 2px; }
-
-  /* Show only the chosen group. Without :has() support every group is listed. */
-  @supports selector(:has(*)) {
-    .panel { display: none; }
-    .finder:has(input[value='0']:checked) [data-grupp='0'],
-    .finder:has(input[value='1']:checked) [data-grupp='1'],
-    .finder:has(input[value='2']:checked) [data-grupp='2'],
-    .finder:has(input[value='3']:checked) [data-grupp='3'],
-    .finder:has(input[value='4']:checked) [data-grupp='4'],
-    .finder:has(input[value='5']:checked) [data-grupp='5'],
-    .finder:has(input[value='6']:checked) [data-grupp='6'],
-    .finder:has(input[value='7']:checked) [data-grupp='7'],
-    .finder:has(input[value='8']:checked) [data-grupp='8'],
-    .finder:has(input[value='9']:checked) [data-grupp='9'] { display: block; }
-  }
 
   /* Poster lines */
   .lines li {

@@ -10,6 +10,7 @@
     "import-images": "node scripts/import-images.mjs",
     "check-urls": "node scripts/check-urls.mjs",
     "test-order": "node scripts/test-order.mjs",
+    "test-schema": "node scripts/test-schema.mjs",
     "compress-video": "node scripts/compress-video.mjs"
   },
   "dependencies": {

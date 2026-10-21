@@ -2,6 +2,7 @@
 // fails the build with a clear message instead of breaking a page silently.
 import { parse } from 'yaml';
 import { z } from 'astro/zod';
+import { fetchSchedule } from './schema-sheet.mjs';
 
 import siteRaw from '../data/site.yaml?raw';
 import terminRaw from '../data/termin.yaml?raw';
@@ -63,12 +64,47 @@ const Schemagrupp = z.object({
   ),
 });
 const Schemadel = z.object({ intro: z.string(), grupper: z.array(Schemagrupp) });
+const Schema = z.object({ veckoschema: Schemadel, tavlingsschema: Schemadel });
 
-export const schema = load(
-  'schema',
-  schemaRaw,
-  z.object({ veckoschema: Schemadel, tavlingsschema: Schemadel }),
-);
+const schemaFil = load('schema', schemaRaw, Schema);
+
+/**
+ * The schedule comes from the Google Sheet (see schema-sheet.mjs). If Google does not answer
+ * or the sheet cannot be read, the build keeps the schedule that is live on the site now
+ * (/schema.json), and only as a last resort uses the copy in src/data/schema.yaml.
+ * The intro texts always come from schema.yaml. SCHEMA_SOURCE=fil skips the network.
+ */
+async function loadSchema() {
+  const intro = (grupper: { veckoschema: Schemagrupp[]; tavlingsschema: Schemagrupp[] }, kalla: string) => ({
+    veckoschema: { intro: schemaFil.veckoschema.intro, grupper: grupper.veckoschema },
+    tavlingsschema: { intro: schemaFil.tavlingsschema.intro, grupper: grupper.tavlingsschema },
+    kalla,
+  });
+  const fromFile = () => intro({ veckoschema: schemaFil.veckoschema.grupper, tavlingsschema: schemaFil.tavlingsschema.grupper }, 'src/data/schema.yaml');
+  if (process.env.SCHEMA_SOURCE === 'fil') return fromFile();
+
+  try {
+    const sheet = await fetchSchedule();
+    if (!sheet.fel.length) return intro(sheet, 'Google-arket');
+    console.warn(`[schema] Google-arket har fel och används inte:\n- ${sheet.fel.join('\n- ')}`);
+  } catch (err) {
+    console.warn(`[schema] Kunde inte hämta Google-arket: ${(err as Error).message}`);
+  }
+  try {
+    const res = await fetch(PUBLISHED_SCHEMA_URL, { signal: AbortSignal.timeout(15000) });
+    const live = Schema.parse(await res.json());
+    console.warn('[schema] Använder schemat som redan är publicerat på sajten.');
+    return intro({ veckoschema: live.veckoschema.grupper, tavlingsschema: live.tavlingsschema.grupper }, 'senast publicerade');
+  } catch (err) {
+    console.warn(`[schema] Kunde inte heller hämta ${PUBLISHED_SCHEMA_URL} (${(err as Error).message}). Använder src/data/schema.yaml.`);
+    return fromFile();
+  }
+}
+
+type Schemagrupp = z.infer<typeof Schemagrupp>;
+const PUBLISHED_SCHEMA_URL = 'https://wilsondancefactory.se/schema.json';
+
+export const schema = await loadSchema();
 
 const Prisrad = z.object({ namn: z.string(), pris: z.string(), info: z.string() });
 

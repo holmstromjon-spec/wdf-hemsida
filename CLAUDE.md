@@ -23,7 +23,8 @@ Ny version av https://wilsondancefactory.se. Den gamla sajten är byggd i WordPr
 |---|---|
 | Kontakt, öppettider, sociala medier, värdegrundscitat, Trustindex-ID | `src/data/site.yaml` |
 | Priser, presentkort, prisvillkor | `src/data/priser.yaml` |
-| Veckoschema och tävlingsschema | `src/data/schema.yaml` |
+| Veckoschema och tävlingsschema (passen och grupprubrikerna) | **Google-arket**, fliken "Hemsida schema". Kunden publicerar själv via `/admin/schema/` (se **Schemat** nedan) |
+| Introtexterna till schemat | `src/data/schema.yaml` |
 | Termin (rubrik, datum, öppnar-text) | `src/data/termin.yaml` |
 | Bokningsvillkor på Anmälan | `src/data/bokningsvillkor.yaml` |
 | Butik: öppen/stängd, produkter, priser, storlekar | `src/data/butik.yaml` (bilder i `src/assets/images/butik/`) |
@@ -48,8 +49,9 @@ src/
   styles/global.css # tokens, typografi, knappar, kort, rörelse
 public/fonts/       # Outfit (Google Fonts, OFL, self-hostad)
 public/video/       # startsidans video (npm run compress-video)
-netlify/functions/  # order.mjs – beställningsmejl via Resend
-scripts/            # import-images.mjs, check-urls.mjs, test-order.mjs
+netlify/functions/  # order.mjs (beställningsmejl via Resend), bestallningar.mjs och schema-admin.mjs (/admin/)
+netlify/lib/        # orders.mjs (Blobs), admin.mjs (lösenord och sidmall för /admin/)
+scripts/            # import-images.mjs, check-urls.mjs, test-order.mjs, test-schema.mjs
 uploads/            # rå WordPress-export – ENDAST källa, ignoreras av Git
 ```
 
@@ -71,11 +73,18 @@ uploads/            # rå WordPress-export – ENDAST källa, ignoreras av Git
 - Taste-skillen (`.claude/skills/design-taste-frontend/`) användes för första versionen. Dess inspektör (`scripts/inspect.mjs <url>`) är fortfarande bra för skärmdumpar i tre bredder och för att hitta horisontell scroll. Dess stilregler (tunga rubriker, rörelsekrav, minst fyra bilder per sida) gäller **inte** för den valda riktningen.
 - Använd WDF:s **egna** bilder i första hand. Bilder från öppna arkiv används bara efter godkännande. Faktainnehåll ändras aldrig av designskäl.
 
+## Schemat (från Google Sheets, sedan 2026-10-21)
+- WDF har schemat i ett eget Google-ark. Fliken **"Hemsida schema"** är publicerad som CSV (Arkiv → Dela → Publicera på webben). Adressen står i `src/lib/schema-sheet.mjs` (`SHEET_CSV_URL`). **Läs bara den fliken.** De andra flikarna (elevnoteringar, coacher med mera) innehåller personuppgifter och ska aldrig hämtas, laddas upp eller committas.
+- `src/lib/schema-sheet.mjs` tolkar arket på samma sätt i bygget (`src/lib/data.ts`) och på adminsidan. Upplägget: kolumnparen A/B, D/E och G/H, där en grupprubrik är text utan något till höger, en veckodag ger en ny dag, och tid till vänster plus klass till höger ger ett pass. Raden "TÄVLINGSDANS" startar tävlingsschemat. Grupprubriker i versaler skrivs om till vanlig skiftläge, dagar blir "Måndagar" och så vidare, tider skrivs `16.00-16.30` och dubbla mellanslag tas bort. Inget annat ändras, så det som står i arket är det som syns på sajten.
+- **Säkerhetsnät i bygget:** om Google inte svarar, eller om arket har fel, används schemat som redan är publicerat (`/schema.json`). Om inte heller det går att hämta används reservkopian i `schema.yaml`. Varje fallback skrivs som `[schema]`-varning i byggloggen. `SCHEMA_SOURCE=fil` hoppar över nätet.
+- **`/admin/schema/`** (`netlify/functions/schema-admin.mjs`) skyddas av samma lösenord som orderlistan. Sidan visar förhandsvisningen, felen med cellreferens (till exempel "A40: tiden … saknar klass i B40") och vad som skiljer sig från sajten. Knappen **Publicera** startar ett Netlify-bygge via build hooken i `SCHEMA_BUILD_HOOK`, men bara om arket saknar fel. Google uppdaterar den publicerade CSV:n med upp till cirka 5 minuters fördröjning.
+- Testerna i `npm run test-schema` använder `scripts/fixtures/hemsida-schema.csv`, fliken som den såg ut 2026-10-21.
+
 ## Formulär
 - **Butik:** `/shop/` skickar till `netlify/functions/order.mjs`. Funktionen läser produkter och priser från `/butik.json` (priser från webbläsaren ignoreras), validerar, skapar ett ordernummer (`WDF-ÅÅMMDD-XXXX`) och skickar mejl till kunden och till info@. Med JavaScript sker det via `fetch`. Utan JavaScript är det en vanlig POST som skickas vidare (303) till `/tack/?order=…&summa=…`. Formuläret har ett dolt fält mot spam.
 - **Varje order sparas innan mejlen skickas** (Netlify Blobs, store `orders`, `netlify/lib/orders.mjs`). Om sparandet misslyckas får kunden ett fel, aldrig en bekräftelse. Misslyckade mejl sparas som status på ordern, och tacksidan säger då ärligt att bekräftelsemejlet inte gick fram. Infört 2026-10-21, efter att en riktig hoodie-order bara fanns som mejl och mejlet till info@ fastnade i Loopias spamfilter (Resend sa "Delivered").
-- **Orderlistan:** https://wilsondancefactory.se/admin/bestallningar/ (`netlify/functions/bestallningar.mjs`). Lösenordet ligger i `ORDERS_PASSWORD`, och användarnamnet kan vara vad som helst. Här ser receptionen alla beställningar med mejlstatus och matchar Swish mot ordernumret. Ordrar från före 2026-10-21 finns bara i Resends logg (resend.com/emails).
-- **Miljövariabler** (Netlify → Site configuration → Environment variables, aldrig i repot): `RESEND_API_KEY`, `ORDER_FROM` (`Wilson Dance Factory <order@wilsondancefactory.se>`), `ORDER_TO` (standard info@; flera adresser kommaseparerade), `ORDERS_PASSWORD` (orderlistan), `ORDER_DRY_RUN=1` för att bara logga. Se `.env.example`.
+- **Orderlistan:** https://wilsondancefactory.se/admin/bestallningar/ (`netlify/functions/bestallningar.mjs`). Lösenordet ligger i `ADMIN_PASSWORD` och gäller för alla sidor under `/admin/` (det äldre namnet `ORDERS_PASSWORD` fungerar också). Användarnamnet kan vara vad som helst. Här ser receptionen alla beställningar med mejlstatus och matchar Swish mot ordernumret. Ordrar från före 2026-10-21 finns bara i Resends logg (resend.com/emails).
+- **Miljövariabler** (Netlify → Site configuration → Environment variables, aldrig i repot): `RESEND_API_KEY`, `ORDER_FROM` (`Wilson Dance Factory <order@wilsondancefactory.se>`), `ORDER_TO` (standard info@; flera adresser kommaseparerade), `ADMIN_PASSWORD` (adminsidorna), `SCHEMA_BUILD_HOOK` (build hooken som Publicera på `/admin/schema/` anropar), `ORDER_DRY_RUN=1` för att bara logga. Se `.env.example`.
 - **E-posttjänst:** Resend, region EU (eu-west-1), domänen `wilsondancefactory.se`. Resends DNS-poster ligger på `send` och `resend._domainkey` och rör inte Loopias MX eller SPF för info@. DNS ligger hos Loopia, och Jon lägger in posterna. Se `PUBLICERING.md`.
 - **Jobba hos oss:** inget formulär. En mejlknapp (`mailto:` med färdigt ämne och mall) räcker (beslut 3).
 
@@ -94,6 +103,7 @@ npm run build          # astro check + bygge till dist/
 npm run preview        # förhandsgranskar bygget
 npm run check-urls     # alla gamla URL:er, ankare och interna länkar (efter build)
 npm run test-order     # testar beställningsfunktionen utan att skicka mejl (efter build)
+npm run test-schema    # testar schemaimporten från Google-arket och /admin/schema/
 npm run import-images  # plockar ut och optimerar bilder från uploads/
 ```
 

@@ -1,5 +1,8 @@
 # Veckoschema och tävlingsschema på /schema/.
-# Struktur: grupp → dagar → pass (tid + klass). Texten är kopierad som den står på gamla sajten.
+# Passen hämtas från Google-arket (fliken "Hemsida schema", se src/lib/schema-sheet.mjs) varje
+# gång sajten byggs. Här styrs bara introtexterna. Grupperna nedan är en reservkopia som bara
+# används om varken Google-arket eller det publicerade schemat (/schema.json) går att hämta.
+# Struktur: grupp → dagar → pass (tid + klass).
 
 veckoschema:
   intro: Detta är vårt ordinarie veckoschema och det gäller varje vecka under hela terminen

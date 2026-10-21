@@ -167,11 +167,12 @@ await check('if Resend fails, the order is still saved and the customer is told'
   process.env.ORDER_DRY_RUN = '1';
 });
 
-await check('order list: off without ORDERS_PASSWORD, locked without login, shows orders with it', async () => {
+await check('order list: off without ADMIN_PASSWORD, locked without login, shows orders with it', async () => {
   const url = 'https://wilsondancefactory.se/admin/bestallningar/';
+  delete process.env.ADMIN_PASSWORD;
   delete process.env.ORDERS_PASSWORD;
   assert.equal((await ordersPage(new Request(url))).status, 503);
-  process.env.ORDERS_PASSWORD = 'hemligt';
+  process.env.ADMIN_PASSWORD = 'hemligt';
   assert.equal((await ordersPage(new Request(url))).status, 401);
   const wrong = new Request(url, { headers: { Authorization: 'Basic ' + Buffer.from('x:fel').toString('base64') } });
   assert.equal((await ordersPage(wrong)).status, 401);
