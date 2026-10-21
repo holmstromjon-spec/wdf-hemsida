@@ -36,13 +36,14 @@ import head from '../assets/images/galleri/dsc03422.jpg';
 </BaseLayout>
 
 <script>
-  // dans.se labels its availability filter "?". Rename the button label only (not the content)
+  // dans.se labels its availability help "?". It only explains the colour dots (it is not a filter),
+  // so it is called "Färgförklaring". Rename the button label only (not the content)
   // once dans.se has drawn the list, and again if it redraws.
   const embed = document.querySelector('.cw-embed');
   if (embed) {
     const rename = () => {
       embed.querySelectorAll('.cwShopAvailabilityHelpLabel .cwShopFilterLabelBase').forEach((el) => {
-        if (el.textContent?.trim() === '?') el.textContent = 'Tillgänglighet';
+        if (el.textContent?.trim() === '?') el.textContent = 'Färgförklaring';
       });
     };
     new MutationObserver(rename).observe(embed, { childList: true, subtree: true });
