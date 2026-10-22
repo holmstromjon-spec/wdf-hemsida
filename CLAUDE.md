@@ -110,6 +110,12 @@ npm run test-ansokan   # testar jobbformulärets funktion och /admin/ansokningar
 npm run import-images  # plockar ut och optimerar bilder från uploads/
 ```
 
+## Var allt finns (backup)
+- **Koden** och allt i Git finns på GitHub (holmstromjon-spec/wdf-hemsida). Varje ändring pushas, så GitHub är alltid komplett.
+- **`uploads/`** (WordPress-exporten, inklusive originalvideon `2026/04/Strike-a-4.mp4`) committas inte. En komplett kopia finns i Jons Dropbox: `Dropbox\wdf-hemsida\uploads` (1 271 filer).
+- **Ordrar, ansökningar och miljövariabler** finns i Netlify (Blobs och Environment variables). **Schemat** finns i WDF:s Google-ark.
+- **Ny dator:** installera Node 24 och Git, kör `git clone https://github.com/holmstromjon-spec/wdf-hemsida.git` och sedan `npm install`. Kopiera `uploads/` från Dropbox bara om bilder eller video ska importeras på nytt. Lägg inte projektmappen i OneDrive eller Dropbox, eftersom synkningen krockar med `.git` och `node_modules`.
+
 ## Kvar att göra
 Steg för steg för GitHub, Netlify, Resend och DNS finns i **`PUBLICERING.md`**.
 1. **Google Search Console:** verifiera domänen och skicka in `https://wilsondancefactory.se/sitemap-index.xml` (Jon).
