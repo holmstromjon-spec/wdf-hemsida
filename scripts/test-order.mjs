@@ -186,6 +186,28 @@ await check('order list: off without ADMIN_PASSWORD, locked without login, shows
   assert.doesNotMatch(html, /<script>x<\/script>/, 'customer text is escaped');
 });
 
+await check('order list: add an order by hand, refuse duplicates, delete', async () => {
+  const url = 'https://wilsondancefactory.se/admin/bestallningar/';
+  const auth = { Authorization: 'Basic ' + Buffer.from('paul:hemligt').toString('base64'), Origin: 'https://wilsondancefactory.se' };
+  const postForm = (fields) => ordersPage(new Request(url, { method: 'POST', body: new URLSearchParams(fields), headers: auth }));
+  const manual = { nr: 'WDF-261020-8NVX', datum: '2026-10-20', namn: 'Kund Kundsson', epost: 'k@example.com', produkter: '1 × Junior Hoodie (Junior: 150-160)', namntryck: 'Stella', summa: '600' };
+  const res = await postForm(manual);
+  assert.equal(res.status, 303);
+  assert.doesNotMatch(res.headers.get('location'), /fel=/);
+  const saved = (await listOrders()).find((o) => o.nr === 'WDF-261020-8NVX');
+  assert.equal(saved.summa, 600);
+  assert.equal(saved.manuell, true);
+  assert.equal(saved.skapad.slice(0, 10), '2026-10-20');
+  assert.match(decodeURIComponent((await postForm(manual)).headers.get('location')), /finns redan/);
+  assert.match(decodeURIComponent((await postForm({ ...manual, nr: 'fel' })).headers.get('location')), /ska se ut som/);
+  const html = await (await ordersPage(new Request(url, { headers: auth }))).text();
+  assert.match(html, /Manuellt inlagd/);
+  assert.match(html, /1 × Junior Hoodie \(Junior: 150-160\)/);
+  await postForm({ radera: 'WDF-261020-8NVX' });
+  assert.ok(!(await listOrders()).some((o) => o.nr === 'WDF-261020-8NVX'));
+  assert.equal((await ordersPage(new Request(url, { method: 'POST', body: new URLSearchParams({ radera: 'WDF-261020-8NVX' }), headers: { ...auth, Origin: 'https://evil.example' } }))).status, 403);
+});
+
 await check('GET → 405', async () => {
   const res = await handler(new Request('https://x.se/.netlify/functions/order'));
   assert.equal(res.status, 405);

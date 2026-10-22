@@ -13,6 +13,7 @@ function store() {
       setJSON: async (key, value) => void memory.set(key, structuredClone(value)),
       get: async (key) => structuredClone(memory.get(key) ?? null),
       list: async () => ({ blobs: [...memory.keys()].map((key) => ({ key })) }),
+      delete: async (key) => void memory.delete(key),
     };
   }
   return getStore({ name: 'orders', consistency: 'strong' });
@@ -26,6 +27,14 @@ export async function updateOrder(nr, changes) {
   const s = store();
   const current = (await s.get(nr, { type: 'json' })) ?? {};
   await s.setJSON(nr, { ...current, ...changes });
+}
+
+export async function getOrder(nr) {
+  return store().get(nr, { type: 'json' });
+}
+
+export async function deleteOrder(nr) {
+  await store().delete(nr);
 }
 
 export async function listOrders() {
