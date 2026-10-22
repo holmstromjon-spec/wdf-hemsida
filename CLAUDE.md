@@ -27,7 +27,7 @@ Ny version av https://wilsondancefactory.se. Den gamla sajten är byggd i WordPr
 | Introtexterna till schemat | `src/data/schema.yaml` |
 | Termin (rubrik, datum, öppnar-text) | `src/data/termin.yaml` |
 | Bokningsvillkor på Anmälan | `src/data/bokningsvillkor.yaml` |
-| Butik: öppen/stängd, produkter, priser, storlekar | `src/data/butik.yaml` (bilder i `src/assets/images/butik/`) |
+| Butik: öppen/stängd, produkter, priser, storlekar | `src/data/butik.yaml` (bilder i `src/assets/images/butik/`: kvadratiska, vit bakgrund och utan inbränd text, eftersom namn och pris visas på kortet. Nya bilder från Jon har namn och pris i en grå ruta. Kör `node scripts/crop-shop-images.mjs <fil>`, som beskär till produkten.) |
 | Instruktörer | `src/content/instruktorer/<namn>.md` (frontmatter + biografi) |
 | Dansstilar (+ "populära" på startsidan) | `src/content/dansstilar/<stil>.md` |
 | Nyheter på Aktuellt | `src/content/aktuellt/` – kopiera `_MALL.md` |
