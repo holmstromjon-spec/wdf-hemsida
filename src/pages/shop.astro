@@ -174,8 +174,12 @@ const kr = (n: number) => `${n.toLocaleString('sv-SE')} kr`;
   .notice { font-weight: 500; font-style: italic; }
   .intro { margin: 0.5rem 0 2rem; max-width: 52ch; }
   .products { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  @media (min-width: 48rem) { .products { grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: 1.25rem; } }
-  .product { display: grid; gap: 0.25rem; align-content: start; padding: 0 0 1rem; overflow: hidden; }
+  /* Fixed column counts so the seven products split evenly (4 + 3 on desktop, not 5 + 2). */
+  @media (min-width: 48rem) { .products { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; } }
+  @media (min-width: 64rem) { .products { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  /* The price sits at the bottom of the card, so prices line up even when a name wraps to two lines. */
+  .product { display: flex; flex-direction: column; gap: 0.25rem; padding: 0 0 1rem; overflow: hidden; }
+  .product-price { margin-top: auto; }
   .product-photo { margin-bottom: 0.5rem; background: var(--white); }
   .product-photo :global(img) { aspect-ratio: 1; object-fit: contain; }
   .product-name, .product-price { padding-inline: 1rem; }
