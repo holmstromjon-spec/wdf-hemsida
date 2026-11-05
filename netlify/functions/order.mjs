@@ -13,6 +13,7 @@
 
 import { saveOrder, updateOrder } from '../lib/orders.mjs';
 import { escapeHtml, sendStatus } from '../lib/mail.mjs';
+import { qrPng } from '../lib/swish.mjs';
 
 const json = (status, body) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
@@ -64,7 +65,22 @@ export function validate(form, butik) {
   return { errors, order: { namn, epost, namntryck, info, rader, summa } };
 }
 
-function renderMail(order, nr, butik, forSchool) {
+// The customer's payment block: Swish QR code (for those reading on a computer) and a button
+// that opens the Swish app (for those reading on their phone), both prefilled and locked.
+function swishBlock(order, nr, butik, { qr, payUrl }) {
+  const button = `<p style="margin:16px 0"><a href="${escapeHtml(payUrl)}" style="display:inline-block;background:#C42A20;color:#fff;text-decoration:none;font-weight:bold;padding:12px 22px;border-radius:4px">Betala med Swish</a></p>`;
+  const code = qr
+    ? `<p style="margin:16px 0 4px"><img src="cid:swish-qr" width="200" height="200" alt="Swish QR-kod för order ${nr}" style="display:block;border:0"></p>
+       <p style="margin:0;color:#666;font-size:13px">Läser du på datorn? Skanna koden med Swish-appen.</p>`
+    : '';
+  return `<div style="margin:24px 0;padding:16px 20px;border:1px solid #ddd;border-radius:4px">
+    <p style="margin:0"><strong>Betala ${kr(order.summa)} med Swish</strong> – nummer, belopp och ordernummer fylls i automatiskt.</p>
+    ${button}${code}
+    <p style="margin:16px 0 0;font-size:14px">Eller swisha till ${escapeHtml(butik.swish)} och ange <strong>${nr}</strong> som meddelande, eller betala i receptionen.</p>
+  </div>`;
+}
+
+function renderMail(order, nr, butik, forSchool, swish = {}) {
   const rows = order.rader
     .map(
       (r) =>
@@ -76,7 +92,7 @@ function renderMail(order, nr, butik, forSchool) {
     : `<p>Hej ${escapeHtml(order.namn)}!</p><p>Tack för din beställning hos Wilson Dance Factory. Vi behandlar den när betalningen har kommit in.</p>`;
   const pay = forSchool
     ? ''
-    : `<p><strong>Betala ${kr(order.summa)} med Swish till ${escapeHtml(butik.swish)}</strong> och ange <strong>${nr}</strong> som meddelande – eller betala i receptionen.</p>
+    : `${swishBlock(order, nr, butik, swish)}
        <p>Alla produkter levereras med namntryck. Läs våra köpvillkor på <a href="https://wilsondancefactory.se/kopvillkor/">wilsondancefactory.se/kopvillkor/</a>.</p>
        <p>Frågor? Svara på det här mejlet eller ring ${escapeHtml(butik.telefon)}.</p>`;
 
@@ -101,7 +117,9 @@ function renderMail(order, nr, butik, forSchool) {
     `Totalt: ${kr(order.summa)}`,
     `Namntryck: ${order.namntryck}`,
     order.info ? `Övrig info: ${order.info}` : '',
-    forSchool ? '' : `\nBetala ${kr(order.summa)} med Swish till ${butik.swish} och ange ${nr} som meddelande – eller betala i receptionen.`,
+    forSchool
+      ? ''
+      : `\nBetala ${kr(order.summa)} med Swish till ${butik.swish} och ange ${nr} som meddelande – eller betala i receptionen.\nÖppna Swish med allt ifyllt (i mobilen): ${swish.payUrl}`,
   ].join('\n');
 
   return { html, text };
@@ -151,8 +169,19 @@ export default async (req) => {
   }
 
   // 2. Then the mails. A failed mail no longer loses the order – it is recorded on the order.
+  //    The customer's mail carries the Swish QR code as an inline image (remote images are often
+  //    blocked by mail programs). If Swish's QR service is down, the mail goes without it.
   const result = sendStatus;
-  const kund = await result({ from, to: [order.epost], reply_to: schoolTo[0], subject: `Orderbekräftelse ${nr} – Wilson Dance Factory`, ...renderMail(order, nr, butik, false) });
+  const qr = await qrPng(butik.swish, order.summa, nr);
+  const payUrl = new URL(`/swish/betala?order=${nr}`, req.url).href;
+  const kund = await result({
+    from,
+    to: [order.epost],
+    reply_to: schoolTo[0],
+    subject: `Orderbekräftelse ${nr} – Wilson Dance Factory`,
+    ...renderMail(order, nr, butik, false, { qr: Boolean(qr), payUrl }),
+    ...(qr ? { attachments: [{ filename: `swish-${nr}.png`, content: qr.toString('base64'), content_id: 'swish-qr' }] } : {}),
+  });
   const skolan = await result({ from, to: schoolTo, reply_to: order.epost, subject: `Ny beställning ${nr} – ${order.namn}`, ...renderMail(order, nr, butik, true) });
   try {
     await updateOrder(nr, { mejl: { kund, skolan } });

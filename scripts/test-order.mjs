@@ -12,8 +12,15 @@ const realFetch = globalThis.fetch;
 // Resend is simulated: resendStatus decides what the "API" answers when dry run is off.
 let resendStatus = 200;
 const resendCalls = [];
+// Swish's QR service is simulated too: swishUp decides whether it answers.
+let swishUp = true;
+const swishCalls = [];
 globalThis.fetch = async (url, init) => {
   if (String(url).endsWith('/butik.json')) return new Response(butik);
+  if (String(url).startsWith('https://mpc.getswish.net/')) {
+    swishCalls.push(JSON.parse(init.body));
+    return swishUp ? new Response(new Uint8Array([137, 80, 78, 71]), { headers: { 'Content-Type': 'image/png' } }) : new Response('down', { status: 503 });
+  }
   if (String(url).startsWith('https://api.resend.com/')) {
     resendCalls.push(JSON.parse(init.body));
     return new Response(resendStatus === 200 ? '{"id":"x"}' : 'simulated failure', { status: resendStatus });
@@ -206,6 +213,56 @@ await check('order list: add an order by hand, refuse duplicates, delete', async
   await postForm({ radera: 'WDF-261020-8NVX' });
   assert.ok(!(await listOrders()).some((o) => o.nr === 'WDF-261020-8NVX'));
   assert.equal((await ordersPage(new Request(url, { method: 'POST', body: new URLSearchParams({ radera: 'WDF-261020-8NVX' }), headers: { ...auth, Origin: 'https://evil.example' } }))).status, 403);
+});
+
+const lastCustomerMail = () =>
+  logs.filter((l) => l.startsWith('[ORDER_DRY_RUN]')).map((l) => JSON.parse(l.slice(16))).filter((m) => m.subject.startsWith('Orderbekräftelse')).at(-1);
+
+await check('customer mail: locked Swish QR code inline, and a pay button', async () => {
+  swishCalls.length = 0;
+  const data = await (await post(valid)).json();
+  assert.deepEqual(swishCalls.at(-1), {
+    format: 'png', size: 300,
+    payee: { value: '1234531604', editable: false },
+    amount: { value: 1400, editable: false },
+    message: { value: data.order, editable: false },
+  });
+  const mail = lastCustomerMail();
+  assert.equal(mail.attachments.length, 1);
+  assert.equal(mail.attachments[0].content_id, 'swish-qr');
+  assert.match(mail.html, /src="cid:swish-qr"/);
+  assert.ok(mail.html.includes(`https://wilsondancefactory.se/swish/betala?order=${data.order}`));
+  assert.ok(mail.text.includes(`/swish/betala?order=${data.order}`));
+});
+
+await check('Swish QR service down → mail still sent, without the code', async () => {
+  swishUp = false;
+  const data = await (await post(valid)).json();
+  assert.equal(data.ok, true);
+  const mail = lastCustomerMail();
+  assert.equal(mail.attachments, undefined);
+  assert.doesNotMatch(mail.html, /cid:swish-qr/);
+  assert.match(mail.html, /Betala med Swish/);
+  swishUp = true;
+});
+
+await check('/swish/qr and /swish/betala use the saved order, not the URL', async () => {
+  const { default: swish } = await import('../netlify/functions/swish.mjs');
+  const data = await (await post(valid)).json();
+  const qr = await swish(new Request(`https://wilsondancefactory.se/swish/qr?order=${data.order}&summa=1`));
+  assert.equal(qr.status, 200);
+  assert.equal(qr.headers.get('content-type'), 'image/png');
+  assert.equal(swishCalls.at(-1).amount.value, 1400);
+  const go = await swish(new Request(`https://wilsondancefactory.se/swish/betala?order=${data.order}`));
+  assert.equal(go.status, 302);
+  const link = go.headers.get('location');
+  assert.match(link, /^swish:\/\/payment\?data=/);
+  const payload = JSON.parse(decodeURIComponent(link.split('data=')[1]));
+  assert.equal(payload.amount.value, 1400);
+  assert.equal(payload.message.value, data.order);
+  assert.equal(payload.payee.value, '1234531604');
+  assert.equal((await swish(new Request('https://wilsondancefactory.se/swish/qr?order=WDF-000000-NONE'))).status, 404);
+  assert.equal((await swish(new Request('https://wilsondancefactory.se/swish/qr?order=<x>'))).status, 400);
 });
 
 await check('GET → 405', async () => {

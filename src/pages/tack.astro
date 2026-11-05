@@ -19,6 +19,18 @@ import swish from '../assets/images/brand/swish.png';
 
   <section class="section on-dark">
     <div class="container center stack">
+      <!-- Shown when the page knows the order: Swish opens with number, amount and order number
+           filled in (button on phones, QR code on computers). See netlify/functions/swish.mjs. -->
+      <div class="pay" data-pay hidden>
+        <h2>Betala med Swish</h2>
+        <p>Nummer, belopp och ordernummer fylls i automatiskt.</p>
+        <a class="button" data-pay-link href="#"><span>Öppna Swish</span> <span class="arrow" aria-hidden="true"></span></a>
+        <figure class="qr" data-qr>
+          <img data-qr-img alt="Swish QR-kod för din beställning" width="240" height="240" />
+          <figcaption class="small">Skanna med Swish-appen i mobilen.</figcaption>
+        </figure>
+        <p class="small or">Eller swisha till numret nedan och ange ordernumret som meddelande.</p>
+      </div>
       <h2>Vårt Swish nummer:</h2>
       <p class="h1">{site.swish}</p>
       <Image src={swish} alt="Swish" width={280} class="swish" />
@@ -36,6 +48,12 @@ import swish from '../assets/images/brand/swish.png';
       document.querySelector<HTMLElement>('[data-mail-ok]')!.hidden = true;
       document.querySelector<HTMLElement>('[data-mail-fail]')!.hidden = false;
     }
+    const pay = document.querySelector<HTMLElement>('[data-pay]')!;
+    const img = pay.querySelector<HTMLImageElement>('[data-qr-img]')!;
+    pay.querySelector<HTMLAnchorElement>('[data-pay-link]')!.href = `/swish/betala?order=${order}`;
+    img.addEventListener('error', () => (pay.querySelector<HTMLElement>('[data-qr]')!.hidden = true));
+    img.src = `/swish/qr?order=${order}`;
+    pay.hidden = false;
     const sum = Number(q.get('summa'));
     if (sum > 0) {
       document.querySelector('[data-sum-nr]')!.textContent = `${sum.toLocaleString('sv-SE')} kr`;
@@ -46,5 +64,12 @@ import swish from '../assets/images/brand/swish.png';
 
 <style>
   .stack { max-width: 46rem; }
+  .pay { display: grid; justify-items: center; gap: 1rem; padding-bottom: 2.5rem; margin-bottom: 2.5rem; border-bottom: 1px solid rgb(255 255 255 / 0.2); }
+  .pay[hidden], .qr[hidden] { display: none; }
+  .qr { margin: 0.5rem 0 0; display: grid; gap: 0.5rem; justify-items: center; }
+  .qr img { width: 15rem; height: 15rem; background: #fff; border-radius: var(--radius); }
+  .or { opacity: 0.8; }
+  /* On a phone the QR code cannot be scanned from the same screen; the button does the job. */
+  @media (hover: none) and (pointer: coarse) { .qr { display: none; } }
   .swish { width: min(70%, 16rem); margin: 1.5rem auto 0 !important; }
 </style>
